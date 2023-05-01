@@ -1,5 +1,6 @@
 package com.github.linyimin.profiler.core.http;
 
+import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import com.github.linyimin.profiler.core.container.IocContainer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -23,7 +24,7 @@ public class SimpleHttpServer {
     }
 
     public static void start() {
-        int serverPort = 8065;
+        int serverPort = Integer.parseInt(ProfilerSettings.getProperty("java-profiler.admin.http.server.port", "8065"));
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(serverPort), 0);
             server.createContext("/", new RootHandler());

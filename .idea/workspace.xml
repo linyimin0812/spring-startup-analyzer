@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="" />
+    <list default="true" id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-api/src/main/java/com/github/linyimin/profiler/api/event/AtExitEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-api/src/main/java/com/github/linyimin/profiler/api/event/AtExitEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/jaeger/Jaeger.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/jaeger/Jaeger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/container/IocContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/container/IocContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/http/SimpleHttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/http/SimpleHttpServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/resources/java-profiler.properties" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/resources/java-profiler.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/invoke/WholeChainListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/invoke/WholeChainListener.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -241,7 +249,8 @@
       <workItem from="1682653208861" duration="122000" />
       <workItem from="1682658537422" duration="5258000" />
       <workItem from="1682765950836" duration="21501000" />
-      <workItem from="1682952244751" duration="4409000" />
+      <workItem from="1682952244751" duration="4877000" />
+      <workItem from="1682964229712" duration="586000" />
     </task>
     <servers />
   </component>

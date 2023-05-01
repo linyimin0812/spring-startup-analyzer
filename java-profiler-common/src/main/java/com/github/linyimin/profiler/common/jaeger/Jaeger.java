@@ -35,10 +35,12 @@ public class Jaeger implements Startable {
         SpanExporter exporter = JaegerGrpcSpanExporter.builder().setEndpoint(grpcEndpoint).build();
 
         Resource resource = Resource.getDefault().merge(Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, getServiceName())));
+
+        long minSampleDuration = Long.parseLong(ProfilerSettings.getProperty("java-profiler.jaeger.span.min.sample.duration.millis", "10"));
+
         SpanProcessor spanProcessor = BatchSpanBasedDurationProcessor
-                // TODO: 可配置化
                 .builder(exporter)
-                .setMinSampleDurationMillis(10)
+                .setMinSampleDurationMillis(minSampleDuration)
                 .build();
 
         provider = SdkTracerProvider.builder()

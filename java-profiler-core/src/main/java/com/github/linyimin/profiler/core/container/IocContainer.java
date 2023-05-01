@@ -1,7 +1,6 @@
 package com.github.linyimin.profiler.core.container;
 
 import com.github.linyimin.profiler.common.markdown.MarkdownWriter;
-import com.github.linyimin.profiler.common.upload.FileUploader;
 import com.github.linyimin.profiler.core.http.SimpleHttpServer;
 import com.github.linyimin.profiler.core.monitor.StartupMonitor;
 import com.github.linyimin.profiler.api.EventListener;

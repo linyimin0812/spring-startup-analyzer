@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import com.github.linyimin.profiler.api.event.InvokeEvent;
 import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.common.jaeger.Jaeger;
+import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import com.github.linyimin.profiler.extension.container.IocContainerHolder;
 import com.github.linyimin.profiler.api.EventListener;
 import com.github.linyimin.profiler.api.event.AtEnterEvent;
@@ -26,8 +27,7 @@ public class WholeChainListener implements EventListener {
     private final Logger logger = LogFactory.getStartupLogger();
 
     private final List<String> PACKAGE_LIST = Arrays.asList(
-//            "com.alibaba.global.usergrowth", "com.alibaba.global.ug.clc.sme", "com.aliexpress.usertouch",
-//            ".hsf."
+            ProfilerSettings.getProperty("java-profiler.invoke.chain.packages", "").split(",")
     );
 
     private Tracer tracer;
