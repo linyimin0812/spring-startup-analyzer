@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="JUnit5 Test Class" />
+        <option value="JUnit4 Test Class" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file:///usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$USER_HOME$/apache-maven-3.8.1" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="2OPmfD0VsKUsbJOmB0lpc2uNrui" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.format.on.save.advertiser.fired&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;aspect.path.notification.shown&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/banzhe/IdeaProjects/project/spring-profiler-boost/spring-profiler-agent/src/main/java/com/github/linyimin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/banzhe/IdeaProjects/project/java-profiler-boost/java-profiler-extension/src/main/resources&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.67126435&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;b887afcad792c50eef35491a2c8f4cfc&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/resources" />
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/asyncprofiler/one/converter/one" />
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/asyncprofiler/one" />
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/asyncprofiler/one/converter" />
+      <recent name="$PROJECT_DIR$/java-profiler-common/src/main/resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/resources" />
+      <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/resources/assembly" />
+      <recent name="$PROJECT_DIR$/java-profiler-extension" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.github.linyimin.profiler" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.github.linyimin.profiler.common.settings" />
+      <recent name="com.github.linyimin.profiler.common.utils" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.github.linyimin.profiler.common.logger" />
+      <recent name="com.github.linyimin.profiler" />
+      <recent name="com.github.linyimin.extension.utils" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.main">
+    <configuration name="SimpleHttpServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.extension.http.SimpleHttpServer" />
+      <module name="java-profiler-extension" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.linyimin.profiler.extension.http.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.github.linyimin.profiler.common.upload.FileUploader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.common.upload.FileUploader" />
+      <module name="java-profiler-extension" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.linyimin.profiler.common.upload.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.github.linyimin.profiler.extension.enhance.asyncprofiler.Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.extension.enhance.asyncprofiler.Main" />
+      <module name="java-profiler-extension" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.linyimin.profiler.common.upload.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="jfr2flame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.extension.enhance.asyncprofiler.one.converter.jfr2flame" />
+      <module name="java-profiler-extension" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.linyimin.profiler.extension.enhance.asyncprofiler.one.converter.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.core.main" />
+      <module name="java-profiler-core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.linyimin.profiler.core.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="Remote" nameIsGenerated="true">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.com.github.linyimin.profiler.common.upload.FileUploader" />
+      <item itemvalue="Application.com.github.linyimin.profiler.extension.enhance.asyncprofiler.Main" />
+      <item itemvalue="Application.main" />
+      <item itemvalue="Application.SimpleHttpServer" />
+      <item itemvalue="Application.jfr2flame" />
+      <item itemvalue="Remote JVM Debug.Unnamed" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.main" />
+        <item itemvalue="Application.com.github.linyimin.profiler.common.upload.FileUploader" />
+        <item itemvalue="Application.SimpleHttpServer" />
+        <item itemvalue="Application.jfr2flame" />
+        <item itemvalue="Application.com.github.linyimin.profiler.extension.enhance.asyncprofiler.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="" />
+      <created>1681470693563</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681470693563</updated>
+      <workItem from="1681470695473" duration="7766000" />
+      <workItem from="1681635144524" duration="383000" />
+      <workItem from="1681636067491" duration="128000" />
+      <workItem from="1681636217289" duration="7591000" />
+      <workItem from="1681710951928" duration="13622000" />
+      <workItem from="1681735562239" duration="304000" />
+      <workItem from="1681736092419" duration="29364000" />
+      <workItem from="1681822618816" duration="52313000" />
+      <workItem from="1682057822993" duration="902000" />
+      <workItem from="1682058771913" duration="3591000" />
+      <workItem from="1682063134592" duration="3771000" />
+      <workItem from="1682066980762" duration="27000" />
+      <workItem from="1682067016160" duration="7738000" />
+      <workItem from="1682076892710" duration="1330000" />
+      <workItem from="1682078232882" duration="53159000" />
+      <workItem from="1682257606736" duration="7620000" />
+      <workItem from="1682267663443" duration="19657000" />
+      <workItem from="1682330503136" duration="242000" />
+      <workItem from="1682330753649" duration="12097000" />
+      <workItem from="1682415391913" duration="19036000" />
+      <workItem from="1682489333070" duration="27758000" />
+      <workItem from="1682653208861" duration="122000" />
+      <workItem from="1682658537422" duration="5258000" />
+      <workItem from="1682765950836" duration="21501000" />
+      <workItem from="1682952244751" duration="4409000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.settings" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/java-boost/src/main/java/com/github/linyimin/App.java</url>
+          <line>10</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
