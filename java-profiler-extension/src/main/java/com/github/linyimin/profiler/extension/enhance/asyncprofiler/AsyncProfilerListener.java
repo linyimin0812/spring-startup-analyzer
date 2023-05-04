@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import com.github.linyimin.profiler.api.EventListener;
 import com.github.linyimin.profiler.api.event.Event;
 import com.github.linyimin.profiler.common.logger.LogFactory;
+import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import com.github.linyimin.profiler.common.upload.FileUploader;
 import com.github.linyimin.profiler.common.utils.OSUtil;
 import com.github.linyimin.profiler.extension.enhance.asyncprofiler.one.profiler.AsyncProfiler;
@@ -46,7 +47,9 @@ public class AsyncProfilerListener implements EventListener {
     public void start() {
         logger.info("==============AsyncProfilerListener start========================");
 
-        String command = "start,event=wall,threads,total,line";
+        long interval = Long.parseLong(ProfilerSettings.getProperty("java-profiler.async.profiler.interval.millis", "10")) * 1000_000;
+
+        String command = String.format("start,event=wall,threads,interval=%s,total,line", interval);
 
         try {
             String result = AsyncProfiler.getInstance(getProfilerSoPath()).execute(command);

@@ -1,10 +1,10 @@
-package com.github.linyimin.profiler.core.unused;
+package com.github.linyimin.profiler.extension.enhance.unused;
 
 import ch.qos.logback.classic.Logger;
 import com.github.linyimin.profiler.api.Lifecycle;
 import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.common.markdown.MarkdownWriter;
-import com.github.linyimin.profiler.core.enhance.InstrumentationHolder;
+import com.github.linyimin.profiler.common.instruction.InstrumentationHolder;
 import org.kohsuke.MetaInfServices;
 
 import java.lang.instrument.Instrumentation;
@@ -97,17 +97,20 @@ public class UnusedJarCollector implements Lifecycle {
     public void stop() {
         logger.info("=======================UnusedJarCollector stop=======================");
         Map<ClassLoader, Set<String>> map =collect();
-        StringBuilder unusedJar = new StringBuilder("# Unused JARs\n").append("---").append("\n");
+        StringBuilder unusedJar = new StringBuilder("<details open>\n")
+                .append("<summary><h1 style='display: inline'>Unused JARs</h1></summary>\n")
+                .append("<hr/>\n");
 
         for (Map.Entry<ClassLoader, Set<String>> entry : map.entrySet()) {
-            unusedJar.append("## ").append(entry.getKey()).append("\n");
-            StringBuilder urls = new StringBuilder();
+            unusedJar.append("<details>\n")
+                    .append("<summary style='margin-left: 12px'><h2 style='display: inline'>").append(entry.getKey()).append("</h2></summary>\n");
+            unusedJar.append("<ul>\n");
             for (String url : entry.getValue()) {
-                urls.append("- ").append(url).append("\n");
+                unusedJar.append("<li>").append(url).append("</li>\n");
             }
-
-            unusedJar.append(urls).append("\n");
+            unusedJar.append("</ul>\n").append("</details>");
         }
-        MarkdownWriter.write(unusedJar.toString());
+        unusedJar.append("</details>\n");
+        MarkdownWriter.write(Integer.MAX_VALUE, unusedJar.toString());
     }
 }

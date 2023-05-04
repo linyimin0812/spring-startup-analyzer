@@ -11,6 +11,7 @@ import com.alibaba.deps.org.objectweb.asm.Type;
 import com.alibaba.deps.org.objectweb.asm.tree.ClassNode;
 import com.alibaba.deps.org.objectweb.asm.tree.MethodNode;
 import com.github.linyimin.Bridge;
+import com.github.linyimin.profiler.common.instruction.InstrumentationHolder;
 import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.core.container.IocContainer;
 
@@ -52,7 +53,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
         }
 
         // 排除系统类及spring中的动态代理类
-        if (className.contains("sun/") || className.contains("java/") || className.contains("CGLIB")) {
+        if (className.contains("sun/") || className.contains("java/") || className.contains("javax/") || className.contains("CGLIB")) {
             return null;
         }
 

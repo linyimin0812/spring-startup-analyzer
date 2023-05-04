@@ -21,7 +21,6 @@ import static com.alibaba.deps.org.objectweb.asm.Opcodes.*;
 public class Matcher {
 
     private final static Set<String> FILTER_METHODS = new HashSet<>();
-    private final static Set<String> FILTER_PACKAGE = new HashSet<>();
 
     static {
         // 不对类实例初始化方法注入
@@ -33,9 +32,6 @@ public class Matcher {
         for (Method method : methods) {
             FILTER_METHODS.add(method.getName());
         }
-
-        FILTER_PACKAGE.add("com/github/linyimin/profiler");
-        FILTER_PACKAGE.add("javax/");
     }
 
     public static boolean isJavaProfilerFamily(ClassNode classNode) {
@@ -52,12 +48,6 @@ public class Matcher {
     }
 
     public static boolean isMatchClass(ClassNode classNode) {
-
-        for (String skip : FILTER_PACKAGE) {
-            if (classNode.name.startsWith(skip)) {
-                return false;
-            }
-        }
 
         String className = StringUtils.replaceAll(classNode.name, "/", ".");
 

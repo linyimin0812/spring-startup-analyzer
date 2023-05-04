@@ -5,13 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/markdown/MarkdownContent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/invoke/InvokeDetailListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-profiler-api/src/main/java/com/github/linyimin/profiler/api/event/AtExitEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-api/src/main/java/com/github/linyimin/profiler/api/event/AtExitEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/jaeger/Jaeger.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/jaeger/Jaeger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/container/IocContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/container/IocContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/http/SimpleHttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/http/SimpleHttpServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/markdown/MarkdownWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/markdown/MarkdownWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/enhance/InstrumentationHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-common/src/main/java/com/github/linyimin/profiler/common/instruction/InstrumentationHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/enhance/Matcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/enhance/Matcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/enhance/ProfilerClassFileTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/enhance/ProfilerClassFileTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/java/com/github/linyimin/profiler/core/unused/UnusedJarCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/unused/UnusedJarCollector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/java-profiler-core/src/main/resources/java-profiler.properties" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-core/src/main/resources/java-profiler.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/invoke/WholeChainListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/invoke/WholeChainListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/asyncprofiler/AsyncProfilerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/java-profiler-extension/src/main/java/com/github/linyimin/profiler/extension/enhance/asyncprofiler/AsyncProfilerListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +53,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="$USER_HOME$/apache-maven-3.8.1" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../../../Shared/apache-maven-3.6.3" />
         <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
@@ -64,33 +69,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.format.on.save.advertiser.fired&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;aspect.path.notification.shown&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;last_directory_selection&quot;: &quot;/Users/banzhe/IdeaProjects/project/spring-profiler-boost/spring-profiler-agent/src/main/java/com/github/linyimin&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/banzhe/IdeaProjects/project/java-profiler-boost/java-profiler-extension/src/main/resources&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.67126435&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;b887afcad792c50eef35491a2c8f4cfc&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/java-profiler-extension/src/main/resources" />
@@ -120,7 +103,7 @@
       <recent name="com.github.linyimin.extension.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.main">
+  <component name="RunManager" selected="Remote JVM Debug.Unnamed">
     <configuration name="SimpleHttpServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.github.linyimin.profiler.extension.http.SimpleHttpServer" />
       <module name="java-profiler-extension" />
@@ -207,17 +190,11 @@
       <item itemvalue="Application.jfr2flame" />
       <item itemvalue="Remote JVM Debug.Unnamed" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.main" />
-        <item itemvalue="Application.com.github.linyimin.profiler.common.upload.FileUploader" />
-        <item itemvalue="Application.SimpleHttpServer" />
-        <item itemvalue="Application.jfr2flame" />
-        <item itemvalue="Application.com.github.linyimin.profiler.extension.enhance.asyncprofiler.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="5abfcc87-cdf5-4a8a-bd3c-e172e9e183d4" name="Changes" comment="" />
@@ -251,6 +228,9 @@
       <workItem from="1682765950836" duration="21501000" />
       <workItem from="1682952244751" duration="4877000" />
       <workItem from="1682964229712" duration="586000" />
+      <workItem from="1683107493054" duration="10411000" />
+      <workItem from="1683180356804" duration="3000" />
+      <workItem from="1683215930889" duration="11000" />
     </task>
     <servers />
   </component>
@@ -277,16 +257,5 @@
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/java-boost/src/main/java/com/github/linyimin/App.java</url>
-          <line>10</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

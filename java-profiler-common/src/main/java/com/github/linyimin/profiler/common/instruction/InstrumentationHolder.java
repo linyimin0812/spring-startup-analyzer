@@ -1,4 +1,4 @@
-package com.github.linyimin.profiler.core.enhance;
+package com.github.linyimin.profiler.common.instruction;
 
 import java.lang.instrument.Instrumentation;
 
