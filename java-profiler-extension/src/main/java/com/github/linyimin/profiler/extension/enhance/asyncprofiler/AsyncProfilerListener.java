@@ -53,9 +53,9 @@ public class AsyncProfilerListener implements EventListener {
 
         String sampleThreadNames = ProfilerSettings.getProperty("java-profiler.async.profiler.sample.thread.names");
         if (sampleThreadNames == null || sampleThreadNames.length() == 0) {
-            command = String.format("start,event=wall,threads,interval=%s,total,threadnames=%s", interval, sampleThreadNames);
-        } else {
             command = String.format("start,event=wall,threads,interval=%s,total", interval);
+        } else {
+            command = String.format("start,event=wall,threads,interval=%s,total,threadnames=%s", interval, sampleThreadNames);
         }
 
         try {
