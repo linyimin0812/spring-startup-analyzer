@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +46,13 @@ public class ProfilerAgentBoostrap {
             agentLoader = createAgentClassLoader();
             Class<?> transFormer = agentLoader.loadClass("com.github.linyimin.profiler.core.enhance.ProfilerClassFileTransformer");
             Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, String.class);
+            Method retransform = transFormer.getDeclaredMethod("retransformLoadedClass");
             Object instance = constructor.newInstance(instrumentation, args);
-            instrumentation.addTransformer((ClassFileTransformer) instance);
+
+            instrumentation.addTransformer((ClassFileTransformer) instance, true);
+
+            retransform.invoke(instance);
+
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

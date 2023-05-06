@@ -18,6 +18,7 @@ import com.github.linyimin.profiler.core.container.IocContainer;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
         }
 
         // 排除系统类及spring中的动态代理类
-        if (className.contains("sun/") || className.contains("java/") || className.contains("javax/") || className.contains("CGLIB")) {
+        if (classBeingRedefined == null && (className.contains("sun/") || className.contains("java/") || className.contains("javax/") || className.contains("CGLIB"))) {
             return null;
         }
 
@@ -106,6 +107,21 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
 
     }
 
+    public void retransformLoadedClass() {
+        Instrumentation instrumentation = InstrumentationHolder.getInstrumentation();
+
+        for (Class<?> loadedClass : instrumentation.getAllLoadedClasses()) {
+            if (Matcher.isMatchClass(loadedClass.getName())) {
+                try {
+                    instrumentation.retransformClasses(loadedClass);
+                    logger.info("re-transform class: {}", loadedClass.getName());
+                } catch (UnmodifiableClassException e) {
+                    logger.error("re-transform class error.", e);
+                }
+            }
+        }
+    }
+
     private void cacheEnhanceObject(ClassLoader loader, ClassNode classNode, MethodNode methodNode) {
         enhancedObject.put(getCacheKey(loader, classNode, methodNode), DUMMY);
     }
@@ -116,7 +132,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
 
     private String getCacheKey(ClassLoader loader, ClassNode classNode, MethodNode methodNode) {
 
-        String loaderName = loader.getClass().getName();
+        String loaderName = loader == null ? "Bootstrap" : loader.getClass().getName();
         String className = classNode.name;
         String methodName = methodNode.name;
 

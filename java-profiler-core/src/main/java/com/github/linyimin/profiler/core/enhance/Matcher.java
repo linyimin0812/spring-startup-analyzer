@@ -50,6 +50,10 @@ public class Matcher {
     public static boolean isMatchClass(ClassNode classNode) {
 
         String className = StringUtils.replaceAll(classNode.name, "/", ".");
+        return isMatchClass(className);
+    }
+
+    public static boolean isMatchClass(String className) {
 
         for (EventListener listener : IocContainer.getComponents(EventListener.class)) {
             if (listener.filter(className)) {

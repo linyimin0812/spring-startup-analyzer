@@ -32,7 +32,7 @@ public class InvokeDetailListener implements EventListener {
 
     @Override
     public boolean filter(String className) {
-        return methodQualifiers.stream().anyMatch(qualifier -> qualifier.startsWith(className));
+        return methodQualifiers.stream().anyMatch(qualifier -> qualifier.startsWith(className + "."));
     }
 
     @Override
