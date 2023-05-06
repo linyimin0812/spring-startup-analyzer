@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class PersistentThreadLocal<T> extends ThreadLocal<T> {
 
     final Map<Thread, T> allValues;
-    final Supplier<? extends T> valueGeter;
+    final Supplier<? extends T> valueGetter;
 
     public PersistentThreadLocal(Supplier<? extends T> initialValue) {
         this(0, initialValue);
@@ -25,12 +25,12 @@ public class PersistentThreadLocal<T> extends ThreadLocal<T> {
                 numThread > 0 ? new HashMap<>(numThread) : new HashMap<>()
         );
 
-        valueGeter = initialValue;
+        valueGetter = initialValue;
     }
 
     @Override
     protected T initialValue() {
-        T value = valueGeter != null ? valueGeter.get() : super.initialValue();
+        T value = valueGetter != null ? valueGetter.get() : super.initialValue();
         allValues.put(Thread.currentThread(), value);
         return value;
     }
