@@ -112,9 +112,9 @@ public class InvokeDetailListener implements EventListener {
 
             invokeDetailTable.append("<tr>")
                     .append(String.format("<td>%s</td>\n", buildTopCostInvokeInfo(invokeDetails)))
-                    .append(String.format("<td>%s</td>\n", count))
-                    .append(String.format("<td>%s</td>\n", totalCost))
-                    .append(String.format("<td>%s</td>\n", String.format("%.2f", averageCost)))
+                    .append(String.format("<td style='text-align: center;'>%s</td>\n", count))
+                    .append(String.format("<td style='text-align: center;'>%s</td>\n", totalCost))
+                    .append(String.format("<td style='text-align: center;'>%s</td>\n", String.format("%.2f", averageCost)))
                     .append("</tr>\n");
         }
 
@@ -153,7 +153,7 @@ public class InvokeDetailListener implements EventListener {
                 topDetails.append("</ul>\n").append("</td>\n");
             }
 
-            topDetails.append(String.format("<td>%s</td>\n", detail.endMillis - detail.startMillis));
+            topDetails.append(String.format("<td style='text-align: center;'>%s</td>\n", detail.endMillis - detail.startMillis));
 
             topDetails.append("</tr>\n");
         }
