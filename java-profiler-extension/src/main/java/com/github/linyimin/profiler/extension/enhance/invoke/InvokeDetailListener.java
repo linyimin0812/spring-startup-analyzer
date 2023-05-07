@@ -7,6 +7,7 @@ import com.github.linyimin.profiler.api.event.AtExitEvent;
 import com.github.linyimin.profiler.api.event.Event;
 import com.github.linyimin.profiler.api.event.InvokeEvent;
 import com.github.linyimin.profiler.common.logger.LogFactory;
+import com.github.linyimin.profiler.common.markdown.MarkdownStatistics;
 import com.github.linyimin.profiler.common.markdown.MarkdownWriter;
 import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,8 @@ public class InvokeDetailListener implements EventListener {
     private final Map<String /* processId_invokeId */, InvokeDetail> INVOKE_DETAIL_MAP = new ConcurrentHashMap<>();
 
     private List<String> methodQualifiers = new ArrayList<>();
+
+    private long start;
 
     @Override
     public boolean filter(String className) {
@@ -83,15 +86,28 @@ public class InvokeDetailListener implements EventListener {
                 ProfilerSettings.getProperty("java-profiler.invoke.count.methods", "").split("\\|")
         ).map(StringUtils::trim).collect(Collectors.toList());
 
+        start = System.currentTimeMillis();
+
     }
 
     @Override
     public void stop() {
         logger.info("===============InvokeCountListener stop==================");
 
-        StringBuilder invokeDetailTable = new StringBuilder()
-                .append("# Invoke Details\n")
-                .append("---\n")
+        reportInvokeDetail();
+
+        INVOKE_DETAIL_MAP.clear();
+    }
+
+    private void reportInvokeDetail() {
+
+        if (INVOKE_DETAIL_MAP.isEmpty()) {
+            return;
+        }
+
+        StringBuilder invokeDetailTable = new StringBuilder("<details open>\n")
+                .append("<summary><h1 style='display: inline'>Invoke Details</h1></summary>\n")
+                .append("<hr/>\n")
                 .append("<table>\n")
                 .append("<tr>\n")
                 .append("<th>Method</th>\n")
@@ -118,11 +134,11 @@ public class InvokeDetailListener implements EventListener {
                     .append("</tr>\n");
         }
 
-        invokeDetailTable.append("</table>\n");
+        invokeDetailTable.append("</table>\n").append("</details>\n\n");
 
         MarkdownWriter.write(invokeDetailTable.toString());
 
-        INVOKE_DETAIL_MAP.clear();
+        MarkdownStatistics.write(0, "Startup Time(S)", String.format("%.2f", (System.currentTimeMillis() - start) / 1000D));
     }
 
     private String buildTopCostInvokeInfo(List<InvokeDetail> details) {

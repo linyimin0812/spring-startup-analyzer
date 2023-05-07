@@ -20,47 +20,14 @@ import java.util.*;
  * @date 2023/04/18 17:05
  **/
 @MetaInfServices(EventListener.class)
-public class BeanLoadListener implements EventListener {
+public class BeanCreateListener extends BeanListener {
 
     private final Logger logger = LogFactory.getStartupLogger();
-
-    private final String className = "org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory";
-    private final String methodName = "createBean";
-    private final String[] methodTypes = new String[] {
-        "java.lang.String",
-        "org.springframework.beans.factory.support.RootBeanDefinition",
-        "java.lang.Object[]"
-    };
 
     private Tracer tracer;
     private Span ancestorSpan;
 
     private static final PersistentThreadLocal<Stack<Span>> parentStackThreadLocal = new PersistentThreadLocal<>(Stack::new);
-
-
-    @Override
-    public boolean filter(String className) {
-        return this.className.equals(className);
-    }
-
-    @Override
-    public boolean filter(String methodName, String[] methodTypes) {
-        if (!this.methodName.equals(methodName)) {
-            return false;
-        }
-
-        if (methodTypes == null || this.methodTypes.length != methodTypes.length) {
-            return false;
-        }
-
-        for (int i = 0; i < this.methodTypes.length; i++) {
-            if (!this.methodTypes[i].equals(methodTypes[i])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     @Override
     public void onEvent(Event event) {
@@ -95,20 +62,29 @@ public class BeanLoadListener implements EventListener {
     }
 
     @Override
-    public List<Event.Type> listen() {
-        return Arrays.asList(Event.Type.AT_ENTER, Event.Type.AT_EXIT);
+    public String getMethodName() {
+        return "createBean";
+    }
+
+    @Override
+    public String[] getMethodTypes() {
+        return new String[] {
+                "java.lang.String",
+                "org.springframework.beans.factory.support.RootBeanDefinition",
+                "java.lang.Object[]"
+        };
     }
 
     @Override
     public void start() {
-        logger.info("============BeanLoadListener start=============");
+        logger.info("============BeanCreateListener start=============");
         tracer = IocContainerHolder.getContainer().getComponent(Jaeger.class).createTracer("spring-bean-load-tracer");
         ancestorSpan = tracer.spanBuilder("bean-create-span").startSpan();
     }
 
     @Override
     public void stop() {
-        logger.info("============BeanLoadListener stop=============");
+        logger.info("============BeanCreateListener stop=============");
         ancestorSpan.end();
     }
 }

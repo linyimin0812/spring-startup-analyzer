@@ -5,7 +5,6 @@ import com.github.linyimin.profiler.common.jaeger.Jaeger;
 import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.common.upload.FileUploader;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,12 +31,17 @@ public class MarkdownWriter {
 
     public static void upload() {
 
+        String statistics = MarkdownStatistics.statistics();
+        if (statistics.length() > 0) {
+            contents.add(new MarkdownContent(0, statistics));
+        }
+
         if (contents.size() == 0) {
             logger.info("markdown is empty.");
             return;
         }
 
-        Collections.sort(contents);
+        contents.sort(MarkdownContent::compareTo);
 
         StringBuilder contentBuilder = new StringBuilder();
         for (MarkdownContent content : contents) {

@@ -101,16 +101,32 @@ public class UnusedJarCollector implements Lifecycle {
                 .append("<summary><h1 style='display: inline'>Unused JARs</h1></summary>\n")
                 .append("<hr/>\n");
 
-        for (Map.Entry<ClassLoader, Set<String>> entry : map.entrySet()) {
-            unusedJar.append("<details>\n")
-                    .append("<summary style='margin-left: 12px'><h2 style='display: inline'>").append(entry.getKey()).append("</h2></summary>\n");
-            unusedJar.append("<ul>\n");
+        unusedJar.append("<table>\n")
+                .append("<tr>\n")
+                .append("<th>ClassLoader</th>\n")
+                .append("<th>Unused Jar Count</th>\n")
+                .append("</tr>");
+
+        List<Map.Entry<ClassLoader, Set<String>>> entryList = new ArrayList<>(map.entrySet());
+        entryList.sort((o1, o2) -> o2.getValue().size() - o1.getValue().size());
+
+        for (Map.Entry<ClassLoader, Set<String>> entry : entryList) {
+
+            StringBuilder unusedJarUl = new StringBuilder("<details>\n")
+                    .append("<summary>").append(entry.getKey()).append("</summary>\n")
+                    .append("<ul>\n");
+
             for (String url : entry.getValue()) {
-                unusedJar.append("<li>").append(url).append("</li>\n");
+                unusedJarUl.append("<li>").append(url).append("</li>\n");
             }
-            unusedJar.append("</ul>\n").append("</details>");
+            unusedJarUl.append("</ul>\n").append("</details>\n");
+
+            unusedJar.append("<tr>\n")
+                    .append(String.format("<td>%s</td>\n", unusedJarUl))
+                    .append(String.format("<td style='text-align: center;'>%s</td>\n", entry.getValue().size()))
+                    .append("</tr>\n");
         }
-        unusedJar.append("</details>\n");
+        unusedJar.append("</table>").append("</details>\n");
         MarkdownWriter.write(Integer.MAX_VALUE, unusedJar.toString());
     }
 }
