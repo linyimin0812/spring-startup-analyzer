@@ -115,9 +115,9 @@ public class BeanInitializeListener extends BeanListener {
                 .append("<hr/>\n")
                 .append("<table>\n")
                 .append("<tr>\n")
-                .append(String.format("<th>%s</th>\n", "BeanName"))
+                .append(String.format("<th>%s</th>\n", "Bean Name"))
                 .append(String.format("<th>%s</th>\n", "Cost(ms)"))
-                .append(String.format("<th>%s</th>\n", "ClassName"))
+                .append(String.format("<th>%s</th>\n", "Class Name"))
                 .append("</tr>\n")
                 ;
         for (BeanInitializeResult result : list) {
