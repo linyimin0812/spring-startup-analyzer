@@ -2,6 +2,7 @@ package com.github.linyimin.profiler.common.jaeger;
 
 import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import com.github.linyimin.profiler.common.utils.AppNameUtil;
+import com.github.linyimin.profiler.common.utils.IpUtil;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
@@ -63,7 +64,7 @@ public class Jaeger implements Startable {
 
         if (serviceName == null) {
             String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            serviceName = AppNameUtil.getAppName() + "-" + currentTime;
+            serviceName = String.format("%s-%s-%s", AppNameUtil.getAppName(), currentTime, IpUtil.getIp());
         }
 
         return serviceName;
