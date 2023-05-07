@@ -111,20 +111,20 @@ public class BeanInitializeListener extends BeanListener {
         }
 
         StringBuilder topBeanBuilder = new StringBuilder("<details open>\n")
-                .append(String.format("<summary><h1 style='display: inline'>Detail of Beans(>= %s ms)</h1></summary>\n", minCost))
+                .append(String.format("<summary><h1 style='display: inline'>Details of Bean(>= %s ms)</h1></summary>\n", minCost))
                 .append("<hr/>\n")
                 .append("<table>\n")
                 .append("<tr>\n")
                 .append(String.format("<th>%s</th>\n", "BeanName"))
-                .append(String.format("<th>%s</th>\n", "ClassName"))
                 .append(String.format("<th>%s</th>\n", "Cost(ms)"))
+                .append(String.format("<th>%s</th>\n", "ClassName"))
                 .append("</tr>\n")
                 ;
         for (BeanInitializeResult result : list) {
             topBeanBuilder.append("<tr>\n")
                     .append(String.format("<td>%s</td>\n", result.beanName))
-                    .append(String.format("<td>%s</td>\n", result.className))
                     .append(String.format("<td style='text-align: center;'>%s</td>\n", result.endMillis - result.startMillis))
+                    .append(String.format("<td>%s</td>\n", result.className))
                     .append("</tr>\n");
         }
 

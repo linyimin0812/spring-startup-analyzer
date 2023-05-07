@@ -106,7 +106,7 @@ public class InvokeDetailListener implements EventListener {
         }
 
         StringBuilder invokeDetailTable = new StringBuilder("<details open>\n")
-                .append("<summary><h1 style='display: inline'>Invoke Details</h1></summary>\n")
+                .append("<summary><h1 style='display: inline'>Details of Method Invoke</h1></summary>\n")
                 .append("<hr/>\n")
                 .append("<table>\n")
                 .append("<tr>\n")
@@ -118,7 +118,9 @@ public class InvokeDetailListener implements EventListener {
 
         Map<String, List<InvokeDetail>> map = INVOKE_DETAIL_MAP.values().stream().collect(Collectors.groupingBy(detail -> detail.methodQualifier));
 
-        for (List<InvokeDetail> list : map.values()) {
+        Collection<List<InvokeDetail>> entries = map.values().stream().sorted((o1, o2) -> o2.size() - o1.size()).collect(Collectors.toList());
+
+        for (List<InvokeDetail> list : entries) {
 
             List<InvokeDetail> invokeDetails = list.stream().filter(detail -> detail.endMillis > 0).collect(Collectors.toList());
 
@@ -138,7 +140,7 @@ public class InvokeDetailListener implements EventListener {
 
         MarkdownWriter.write(invokeDetailTable.toString());
 
-        MarkdownStatistics.write(0, "Startup Time(S)", String.format("%.2f", (System.currentTimeMillis() - start) / 1000D));
+        MarkdownStatistics.write(0, "Startup Time(s)", String.format("%.2f", (System.currentTimeMillis() - start) / 1000D));
     }
 
     private String buildTopCostInvokeInfo(List<InvokeDetail> details) {
