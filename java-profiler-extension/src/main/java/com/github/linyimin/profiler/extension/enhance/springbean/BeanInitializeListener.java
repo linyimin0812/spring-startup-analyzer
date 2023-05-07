@@ -128,7 +128,7 @@ public class BeanInitializeListener extends BeanListener {
                     .append("</tr>\n");
         }
 
-        topBeanBuilder.append("</table>\n").append("</details>\n\n");
+        topBeanBuilder.append("</table>\n").append("</details>\n\n").append("<hr/>\n");
 
         MarkdownWriter.write(1, topBeanBuilder.toString());
 

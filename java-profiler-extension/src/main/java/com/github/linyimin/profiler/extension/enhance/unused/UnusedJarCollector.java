@@ -126,7 +126,7 @@ public class UnusedJarCollector implements Lifecycle {
                     .append(String.format("<td style='text-align: center;'>%s</td>\n", entry.getValue().size()))
                     .append("</tr>\n");
         }
-        unusedJar.append("</table>").append("</details>\n");
+        unusedJar.append("</table>").append("</details>\n").append("<hr/>\n");
         MarkdownWriter.write(Integer.MAX_VALUE, unusedJar.toString());
     }
 }

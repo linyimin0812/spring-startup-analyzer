@@ -136,7 +136,7 @@ public class InvokeDetailListener implements EventListener {
                     .append("</tr>\n");
         }
 
-        invokeDetailTable.append("</table>\n").append("</details>\n\n");
+        invokeDetailTable.append("</table>\n").append("</details>\n\n").append("<hr/>\n");
 
         MarkdownWriter.write(invokeDetailTable.toString());
 
