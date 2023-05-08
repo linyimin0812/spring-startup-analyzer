@@ -3,6 +3,7 @@ package com.github.linyimin.profiler.extension.enhance.unused;
 import ch.qos.logback.classic.Logger;
 import com.github.linyimin.profiler.api.Lifecycle;
 import com.github.linyimin.profiler.common.logger.LogFactory;
+import com.github.linyimin.profiler.common.markdown.MarkdownStatistics;
 import com.github.linyimin.profiler.common.markdown.MarkdownWriter;
 import com.github.linyimin.profiler.common.instruction.InstrumentationHolder;
 import org.kohsuke.MetaInfServices;
@@ -17,16 +18,20 @@ import java.util.*;
 /**
  * @author linyimin
  * @date 2023/05/01 12:18
- * @description Collect unused Jar files under the classloader
+ * @description Collect Jar files under the classloader
  **/
 @MetaInfServices(Lifecycle.class)
-public class UnusedJarCollector implements Lifecycle {
+public class JarCollector implements Lifecycle {
 
     private static final Logger logger = LogFactory.getStartupLogger();
 
-    private Map<ClassLoader, Set<String>> collect() {
+    private Map<ClassLoader, Set<String>> usedJarMap;
+    private Map<ClassLoader, Set<String>> unusedJarMap;
 
-        Map<ClassLoader, Set<String>> usedJarMap = new HashMap<>();
+    private void collect() {
+
+        usedJarMap = new HashMap<>();
+        unusedJarMap = new HashMap<>();
 
         Instrumentation instrumentation = InstrumentationHolder.getInstrumentation();
 
@@ -50,7 +55,6 @@ public class UnusedJarCollector implements Lifecycle {
             urls.add(location.toString());
         }
 
-        Map<ClassLoader, Set<String>> unusedJarMap = new HashMap<>();
 
         for (Map.Entry<ClassLoader, Set<String>> entry : usedJarMap.entrySet()) {
             ClassLoader loader = entry.getKey();
@@ -70,7 +74,6 @@ public class UnusedJarCollector implements Lifecycle {
                 unusedJarMap.put(loader, unusedUrls);
             }
         }
-        return unusedJarMap;
     }
 
     private List<String> getClassLoaderUrls(ClassLoader loader) {
@@ -96,7 +99,28 @@ public class UnusedJarCollector implements Lifecycle {
     @Override
     public void stop() {
         logger.info("=======================UnusedJarCollector stop=======================");
-        Map<ClassLoader, Set<String>> map =collect();
+
+        collect();
+
+        reportJarStatistics();
+
+        reportUnusedJarDetails();
+    }
+
+    private void reportJarStatistics() {
+
+        long usedCount = usedJarMap.values().stream().mapToLong(Collection::size).sum();
+        long unusedCount = unusedJarMap.values().stream().mapToLong(Collection::size).sum();
+
+        MarkdownStatistics.write("Used/Total Jars", String.format("%s/%s", usedCount, usedCount + unusedCount));
+        MarkdownStatistics.write("Unused/Total Jars", String.format("%s/%s", unusedCount, usedCount + unusedCount));
+
+        MarkdownStatistics.write("ClassLoader Count", String.valueOf(usedJarMap.size()));
+
+    }
+
+    private void reportUnusedJarDetails() {
+
         StringBuilder unusedJar = new StringBuilder("<details open>\n")
                 .append("<summary><h1 style='display: inline'>Unused JARs</h1></summary>\n")
                 .append("<hr/>\n");
@@ -107,7 +131,7 @@ public class UnusedJarCollector implements Lifecycle {
                 .append("<th>Unused Jar Count</th>\n")
                 .append("</tr>");
 
-        List<Map.Entry<ClassLoader, Set<String>>> entryList = new ArrayList<>(map.entrySet());
+        List<Map.Entry<ClassLoader, Set<String>>> entryList = new ArrayList<>(unusedJarMap.entrySet());
         entryList.sort((o1, o2) -> o2.getValue().size() - o1.getValue().size());
 
         for (Map.Entry<ClassLoader, Set<String>> entry : entryList) {
