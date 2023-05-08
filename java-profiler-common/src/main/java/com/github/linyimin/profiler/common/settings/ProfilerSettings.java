@@ -49,4 +49,8 @@ public class ProfilerSettings {
         return properties.getProperty(key);
     }
 
+    public static boolean contains(String key) {
+        return properties.containsKey(key);
+    }
+
 }

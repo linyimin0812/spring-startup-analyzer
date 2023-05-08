@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author banzhe
+ * @author linyimin
  * @date 2023/05/07 14:51
  **/
 public abstract class BeanListener implements EventListener {

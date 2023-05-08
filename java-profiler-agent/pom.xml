@@ -25,7 +25,7 @@
                         <manifestEntries>
                             <!-- 注册premain的class -->
                             <Premain-Class>com.github.linyimin.agent.ProfilerAgentBoostrap</Premain-Class>
-==                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
                     </archive>

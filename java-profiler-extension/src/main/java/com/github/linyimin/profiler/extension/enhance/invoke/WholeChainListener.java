@@ -5,6 +5,7 @@ import com.github.linyimin.profiler.api.event.InvokeEvent;
 import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.common.jaeger.Jaeger;
 import com.github.linyimin.profiler.common.settings.ProfilerSettings;
+import com.github.linyimin.profiler.common.utils.MainClassUtil;
 import com.github.linyimin.profiler.extension.container.IocContainerHolder;
 import com.github.linyimin.profiler.api.EventListener;
 import com.github.linyimin.profiler.api.event.AtEnterEvent;
@@ -26,7 +27,7 @@ public class WholeChainListener implements EventListener {
 
     private final Logger logger = LogFactory.getStartupLogger();
 
-    private final List<String> PACKAGE_LIST = Arrays.asList(
+    private List<String> listenPackages = Arrays.asList(
             ProfilerSettings.getProperty("java-profiler.invoke.chain.packages", "").split(",")
     );
 
@@ -38,11 +39,11 @@ public class WholeChainListener implements EventListener {
     @Override
     public boolean filter(String className) {
 
-        if (PACKAGE_LIST.isEmpty()) {
+        if (listenPackages.isEmpty()) {
             return false;
         }
 
-        for (String packagePath : PACKAGE_LIST) {
+        for (String packagePath : listenPackages) {
             if (className.contains(packagePath)) {
                 return true;
             }
@@ -101,8 +102,20 @@ public class WholeChainListener implements EventListener {
     public void start() {
         logger.info("===============WholeChainListener start==================");
 
-        if (PACKAGE_LIST.isEmpty()) {
-            logger.warn("WholeChainListener PACKAGE_LIST is empty.");
+        if (ProfilerSettings.contains("java-profiler.invoke.chain.packages")) {
+
+            String packages = ProfilerSettings.getProperty("java-profiler.invoke.chain.packages", "");
+            if (packages != null && packages.length() > 0) {
+                listenPackages = Arrays.asList(packages.split(","));
+            }
+        } else {
+            listenPackages = new ArrayList<>(MainClassUtil.getPackages());
+        }
+
+        if (listenPackages.isEmpty()) {
+            logger.warn("WholeChainListener listen packages is empty.");
+        } else {
+            logger.info("WholeChainListener listen packages: {}", String.join(",", listenPackages));
         }
 
         tracer = IocContainerHolder.getContainer().getComponent(Jaeger.class).createTracer("app-start-up");

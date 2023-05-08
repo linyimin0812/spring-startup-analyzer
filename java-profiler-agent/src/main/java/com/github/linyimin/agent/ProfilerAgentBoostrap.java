@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarFile;
 
@@ -24,8 +25,6 @@ public class ProfilerAgentBoostrap {
     private static final String EXTENSION_HOME = LIB_HOME + "extension" + File.separator;
 
     public static void premain(String args, Instrumentation instrumentation) {
-
-        System.out.println("command: " + System.getProperty("sun.java.command"));
 
         // bridge.jar
         File spyJarFile = new File(LIB_HOME + BRIDGE_JAR);
@@ -45,15 +44,16 @@ public class ProfilerAgentBoostrap {
         try {
             agentLoader = createAgentClassLoader();
             Class<?> transFormer = agentLoader.loadClass("com.github.linyimin.profiler.core.enhance.ProfilerClassFileTransformer");
-            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, String.class);
+            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, String.class, List.class);
             Method retransform = transFormer.getDeclaredMethod("retransformLoadedClass");
-            Object instance = constructor.newInstance(instrumentation, args);
+            Object instance = constructor.newInstance(instrumentation, args, getManifests());
 
             instrumentation.addTransformer((ClassFileTransformer) instance, true);
 
             retransform.invoke(instance);
 
         } catch (Throwable e) {
+            System.out.println("throwable: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -94,6 +94,22 @@ public class ProfilerAgentBoostrap {
 
         return urlList;
 
+    }
+
+    private static List<URL> getManifests() {
+
+        List<URL> packages = new ArrayList<>();
+
+        try {
+            Enumeration<URL> urls = ProfilerAgentBoostrap.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            while (urls.hasMoreElements()) {
+                packages.add(urls.nextElement());
+            }
+        } catch (IOException e) {
+            System.out.println("getManifests error. error: " + e.getMessage());
+        }
+
+        return packages;
     }
 
 }

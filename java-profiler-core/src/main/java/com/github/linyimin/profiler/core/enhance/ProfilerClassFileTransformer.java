@@ -13,12 +13,14 @@ import com.alibaba.deps.org.objectweb.asm.tree.MethodNode;
 import com.github.linyimin.Bridge;
 import com.github.linyimin.profiler.common.instruction.InstrumentationHolder;
 import com.github.linyimin.profiler.common.logger.LogFactory;
+import com.github.linyimin.profiler.common.utils.MainClassUtil;
 import com.github.linyimin.profiler.core.container.IocContainer;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
+import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +39,13 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
     private final Object DUMMY = new Object();
     private final Map<String, Object> enhancedObject = new ConcurrentHashMap<>();
 
-    public ProfilerClassFileTransformer(Instrumentation instrumentation, String args) {
+
+    public ProfilerClassFileTransformer(Instrumentation instrumentation, String args, List<URL> manifestPackages) {
 
         Bridge.setBridge(new EventDispatcher());
         InstrumentationHolder.setInstrumentation(instrumentation);
+
+        MainClassUtil.resolveMainClassPackage(manifestPackages);
 
         IocContainer.start();
 
