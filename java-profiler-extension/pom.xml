@@ -2,10 +2,12 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <parent>
-        <artifactId>java-profiler-boost</artifactId>
         <groupId>com.github.linyimin</groupId>
-        <version>${revision}</version>
+        <artifactId>java-profiler-starter</artifactId>
+        <version>1.0.10-SNAPSHOT</version>
+        <relativePath>../java-profiler-starter/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,18 +16,6 @@
     <name>java-profiler-extension</name>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.linyimin</groupId>
-            <artifactId>java-profiler-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.linyimin</groupId>
-            <artifactId>java-profiler-common</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>io.opentelemetry</groupId>
@@ -96,61 +86,28 @@
     </dependencies>
 
     <build>
-        <finalName>java-profiler-extension</finalName>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>jar-with-dependencies</id>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                    <phase>package</phase>
-                    <configuration>
-                        <finalName>${project.artifactId}</finalName>
-                        <appendAssemblyId>false</appendAssemblyId>
-                        <outputDirectory>${extension.output.directory}</outputDirectory>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                        <archive>
-                            <manifestEntries>
-                                <Specification-Title>${project.name}</Specification-Title>
-                                <Specification-Version>${project.version}</Specification-Version>
-                                <Implementation-Title>${project.name}</Implementation-Title>
-                                <Implementation-Version>${project.version}</Implementation-Version>
-                            </manifestEntries>
-                        </archive>
-
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.8</version>
-            <executions>
-                <execution>
-                    <phase>process-resources</phase>
-                    <configuration>
-                        <tasks>
-                            <copy todir="${extension.output.directory}/async-profiler">
-                                <fileset dir="async-profiler" includes="**/*"/>
-                            </copy>
-                        </tasks>
-                    </configuration>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-
-    </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${extension.output.directory}/async-profiler">
+                                    <fileset dir="async-profiler" includes="**/*"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
 
