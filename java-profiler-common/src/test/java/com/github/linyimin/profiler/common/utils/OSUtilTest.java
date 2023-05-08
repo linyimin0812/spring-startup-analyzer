@@ -36,22 +36,4 @@ public class OSUtilTest {
             assertFalse(OSUtil.isMac());
         }
     }
-
-    @Test
-    public void testIsArm32() {
-        if ("arm_32".equals(OSUtil.arch)) {
-            assertTrue(OSUtil.isArm32());
-        } else {
-            assertFalse(OSUtil.isArm32());
-        }
-    }
-
-    @Test
-    public void testIsArm64() {
-        if ("aarch_64".equals(OSUtil.arch)) {
-            assertTrue(OSUtil.isArm64());
-        } else {
-            assertFalse(OSUtil.isArm64());
-        }
-    }
 }

@@ -91,9 +91,6 @@ public class AsyncProfilerListener implements EventListener {
             profilerSoPath = "async-profiler/libasyncProfiler-mac.so";
         } else if (OSUtil.isLinux()) {
             profilerSoPath = "async-profiler/libasyncProfiler-linux-x64.so";
-            if (OSUtil.isArm32()) {
-                profilerSoPath = "async-profiler/libasyncProfiler-linux-arm64.so";
-            }
         } else {
             throw new IllegalStateException("Current OS do not support AsyncProfiler, Only support Linux/Mac.");
         }
