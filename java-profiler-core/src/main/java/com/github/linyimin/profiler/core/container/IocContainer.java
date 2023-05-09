@@ -1,6 +1,9 @@
 package com.github.linyimin.profiler.core.container;
 
+import ch.qos.logback.classic.Logger;
+import com.github.linyimin.profiler.common.logger.LogFactory;
 import com.github.linyimin.profiler.common.markdown.MarkdownWriter;
+import com.github.linyimin.profiler.common.settings.ProfilerSettings;
 import com.github.linyimin.profiler.core.http.SimpleHttpServer;
 import com.github.linyimin.profiler.core.monitor.StartupMonitor;
 import com.github.linyimin.profiler.api.EventListener;
@@ -19,6 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @description 生命周期实例容器，由容器统一控制
  **/
 public class IocContainer {
+
+
+    private static final Logger logger = LogFactory.getStartupLogger();
 
     private static final MutablePicoContainer container = new PicoBuilder().withSetterInjection().withCaching().withLifecycle().build();
 
@@ -59,6 +65,13 @@ public class IocContainer {
             container.dispose();
             MarkdownWriter.upload();
         }
+
+        String endpoint = ProfilerSettings.getProperty("java-profiler.jaeger.ui.endpoint");
+        String prompt = String.format("======= java-profiler-boost stop, click %s to view detailed info about the startup process ======", endpoint);
+
+        logger.info(prompt);
+        System.out.println(prompt);
+
     }
 
     public static <T> T getComponent(Class<T> componentType) {
