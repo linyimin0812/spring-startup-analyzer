@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>java-profiler-boost</artifactId>
-        <groupId>com.github.linyimin</groupId>
+        <groupId>io.github.linyimin0812</groupId>
         <version>1.0.10-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -24,7 +24,7 @@
                     <archive>
                         <manifestEntries>
                             <!-- 注册premain的class -->
-                            <Premain-Class>com.github.linyimin.agent.ProfilerAgentBoostrap</Premain-Class>
+                            <Premain-Class>io.github.linyimin0812.agent.ProfilerAgentBoostrap</Premain-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>

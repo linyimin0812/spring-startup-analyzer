@@ -130,7 +130,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 
 ```xml
 <parent>
-    <groupId>com.github.linyimin</groupId>
+    <groupId>io.github.linyimin0812</groupId>
     <artifactId>java-profiler-starter</artifactId>
     <version>1.0.10-SNAPSHOT</version>
 </parent>
@@ -139,7 +139,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 ### 2.5.1 扩展接口
 
 <details>
-<summary style='cursor: pointer'>com.github.linyimin.profiler.api.EventListener</summary>
+<summary style='cursor: pointer'>EventListener</summary>
 
 ```java
 public interface EventListener extends Startable {
@@ -247,7 +247,7 @@ public class FindResourceCounter implements EventListener {
 ```
 </details>
 
-需要注意**EventListener接口的实现需要使用@MetaInfServices标识**，因为扩展的接口是通过SPI进行加载的，使用`@MetaInfServices`标识后，在代码编译时会自动将实现类写入META-INF/services/com.github.linyimin.profiler.api.EventListener文件中。如果没有使用`@MetaInfServices`标识，需要手动将实现类的全限定名写入META-INF/services/com.github.linyimin.profiler.api.EventListener文件中，否则将加载不到此扩展实现。
+需要注意**EventListener接口的实现需要使用@MetaInfServices标识**，因为扩展的接口是通过SPI进行加载的，使用`@MetaInfServices`标识后，在代码编译时会自动将实现类写入META-INF/services/io.github.linyimin0812.profiler.api.EventListener文件中。如果没有使用`@MetaInfServices`标识，需要手动将实现类的全限定名写入META-INF/services/io.github.linyimin0812.profiler.api.EventListener文件中，否则将加载不到此扩展实现。
 
 ### 2.5.2 UI扩展接口
 
