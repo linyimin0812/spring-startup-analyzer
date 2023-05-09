@@ -16,12 +16,12 @@ public class MarkdownStatistics {
 
     private static final List<Statistics> STATISTICS = new ArrayList<>();
 
-    public static void write(int order, String label, String value) {
+    public synchronized static void write(int order, String label, String value) {
         Statistics statistics = new Statistics(order, label, value);
         STATISTICS.add(statistics);
     }
 
-    public static void write(String label, String value) {
+    public synchronized static void write(String label, String value) {
 
         Statistics statistics = new Statistics(label, value);
         STATISTICS.add(statistics);
