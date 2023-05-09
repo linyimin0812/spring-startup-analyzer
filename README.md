@@ -5,19 +5,19 @@
 <details open>
   <summary style='cursor: pointer'><strong>UI首页</strong></summary>
 
-  ![](./docs/home-ui.jpg)
+![](./docs/home-ui.jpg)
 </details>
 
 <details>
   <summary style='cursor: pointer'><strong>Spring bean加载耗时timeline可视化分析</strong></summary>
 
-  ![](./docs/spring-bean-timeline.jpg)
+![](./docs/spring-bean-timeline.jpg)
 </details>
 
 <details>
   <summary style='cursor: pointer'><strong>调用链路跟踪</strong></summary>
 
-  ![](./docs/invoke-tracer.jpg)
+![](./docs/invoke-tracer.jpg)
 </details>
 
 <details>
@@ -35,15 +35,15 @@
 <details>
   <summary style='cursor: pointer'><strong>方法调用次数、耗时统计(支持自定义方法)</strong></summary>
 
-  ![](./docs/details-of-invoke.jpg)
+![](./docs/details-of-invoke.jpg)
 </details>
 
 <details>
   <summary style='cursor: pointer'><strong>应用未加载的jar包(帮助fatjar瘦身)</strong></summary>
 
-  ![](./docs/unused-jar.jpg)
+![](./docs/unused-jar.jpg)
 
-  <strong>&emsp;需要注意的是: 有一些jar可能会在运行时加载，要删除启动时没有加载的jar包，需要做好测试，以免线上出现ClassNotFoundException</strong>
+<strong>&emsp;需要注意的是: 有一些jar可能会在运行时加载，要删除启动时没有加载的jar包，需要做好测试，以免线上出现ClassNotFoundException</strong>
 </details>
 
 <details open>
@@ -139,7 +139,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 ### 2.5.1 扩展接口
 
 <details>
-<summary style='cursor: pointer'>EventListener</summary>
+<summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
 
 ```java
 public interface EventListener extends Startable {
@@ -318,7 +318,7 @@ MarkdownStatistics.write(int order, String label, String value);
 mvn clean package
 ```
 
-只要按照步骤[安装jar包](#2-2-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#2-4-应用启动)即可加载扩展jar包。
+只要按照步骤[安装jar包](#22-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#24-应用启动)即可加载扩展jar包。
 
 # 3. 后续计划
 
@@ -332,6 +332,11 @@ mvn clean package
 
 # 4. 实现原理
 
+刚开始的时候，只想做Spring bean加载耗时timeline可视化分析，实现了一个简单的版本[spring-bean-timeline](https://github.com/linyimin0812/spring-bean-timeline)，但是随着需求的增多，直接和应用源码耦合的方式不再适用，容易产生依赖冲突。于是开始引入java agent技术。
+
+java agent是一种代理技术，通过jvm的Instrumentation api实现，这个api提供了在jvm加载类之前或之后修改字节码的能力。通常被用于java应用程序的监控、诊断、性能分析、代码注入等。java agent提供了两个入口点：`premain`和`main`方法。其中`premain`方法可以实现**在java应用程序的类被加载之前对它们进行转换**。
+
+要观测应用启动过程，需要在应用类被加载之前对其进行增强，然后加载增强后的类。所以选择了java agent的`premain`实现。由于通过asm进行字节码增强细节太多，又不好理解，所以选择了[ByteKit](https://github.com/alibaba/bytekit)进行字节码增强，ByteKit一个基于ASM提供更高层的字节码处理能力，主要面向诊断/APM领域的字节码库，提供了一套简洁的API，开发人员可以轻松的完成字节码增强。
 
 
 # 5. 为项目添砖加瓦
