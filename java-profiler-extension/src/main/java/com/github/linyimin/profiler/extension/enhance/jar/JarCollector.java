@@ -1,4 +1,4 @@
-package com.github.linyimin.profiler.extension.enhance.unused;
+package com.github.linyimin.profiler.extension.enhance.jar;
 
 import ch.qos.logback.classic.Logger;
 import com.github.linyimin.profiler.api.Lifecycle;
