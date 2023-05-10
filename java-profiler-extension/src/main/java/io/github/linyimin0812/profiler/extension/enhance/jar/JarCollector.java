@@ -93,12 +93,12 @@ public class JarCollector implements Lifecycle {
 
     @Override
     public void start() {
-        logger.info("=======================UnusedJarCollector start=======================");
+        logger.info("=======================JarCollector start=======================");
     }
 
     @Override
     public void stop() {
-        logger.info("=======================UnusedJarCollector stop=======================");
+        logger.info("=======================JarCollector stop=======================");
 
         collect();
 
