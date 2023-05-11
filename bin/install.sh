@@ -18,12 +18,11 @@ download_jar() {
     mkdir -p "${PROFILER_HOME}"
   fi
 
-  download_url="https://github.com/linyimin-bupt/${PRODUCT_NAME}/releases/download/${LAST_TAG}/${PRODUCT_NAME}.tar.gz"
+  download_url="https://github.com/linyimin0812/${PRODUCT_NAME}/releases/download/${LAST_TAG}/${PRODUCT_NAME}.tar.gz"
 
   echo "Download java-profiler-boost from: ${download_url}"
 
   curl -#Lkf \
-      --connect-timeout 60 \
       -o "${PROFILER_HOME}/${PRODUCT_NAME}.tar.gz" \
       "${download_url}" \
     || (echo "Download java-profiler-boost from: ${download_url} error, please install manually!!!" && exit 1)
@@ -48,6 +47,8 @@ main() {
   download_jar
 
   extract_jar
+
+  rm -rf "${PROFILER_HOME}/${PRODUCT_NAME}.tar.gz"
 
   echo "${PRODUCT_NAME} install success. install directory: ${PROFILER_HOME}"
 
