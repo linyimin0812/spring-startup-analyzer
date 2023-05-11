@@ -4,7 +4,11 @@ import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.upload.FileUploader;
+import io.github.linyimin0812.profiler.common.utils.OSUtil;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,9 +52,35 @@ public class MarkdownWriter {
             contentBuilder.append(content.getContent());
         }
 
+        writeToFile(contentBuilder.toString());
+
         FileUploader.upload(Jaeger.getServiceName() + ".md", contentBuilder.toString());
 
         contents.clear();
 
+    }
+
+    private static void writeToFile(String content) {
+
+        String path = getPath(Jaeger.getServiceName() + ".md");
+
+        try {
+            FileWriter writer = new FileWriter(path);
+            writer.write(Style.style);
+            writer.write(content);
+            writer.close();
+        } catch (IOException e) {
+            logger.error("write {} to {} error.", content, path, e);
+        }
+    }
+
+    private static String getPath(String fileName) {
+        String dir = OSUtil.home() + "output" + File.separator;
+        File file = new File(dir);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return dir + fileName;
     }
 }

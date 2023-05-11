@@ -13,7 +13,7 @@
   <groupId>io.github.linyimin0812</groupId>
   <artifactId>java-profiler-boost</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.12</version>
+  <version>1.0.13</version>
 
   <name>java-profiler-boost</name>
 
