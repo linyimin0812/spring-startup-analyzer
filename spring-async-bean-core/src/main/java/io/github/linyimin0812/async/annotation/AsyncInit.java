@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @date 2023/05/14 00:45
  **/
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE })
 public @interface AsyncInit {
 
 }

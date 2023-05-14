@@ -8,13 +8,15 @@ clean:
 	cd ./java-profiler-extension && ${MVN} clean
 
 .PYTHON: package
-package:
+package: clean
 	${MVN} package
 	cd ./java-profiler-extension && ${MVN} package
 	${MVN} package
 
-.PYTHON: clean-package
-clean-package: clean package
+.PYTHON: install
+install: clean
+	${MVN} install
+	cd ./java-profiler-extension && ${MVN} install
 
 .PYTHON: deploy
 deploy: clean

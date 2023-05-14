@@ -135,16 +135,15 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         }
 
         if (candidateMethods.size() == 1) {
-            AsyncInit asyncInitAnnotation = candidateMethods.get(0).getAnnotation(AsyncInit.class);
-            if (asyncInitAnnotation == null) {
-                asyncInitAnnotation = returnType.getAnnotation(AsyncInit.class);
-            }
+            AsyncInit asyncInitAnnotation = returnType.getAnnotation(AsyncInit.class);
 
             if (asyncInitAnnotation == null && !AsyncConfig.getInstance().isAsyncBean(beanName)) {
                 return;
             }
 
-            AsyncInitBeanHolder.registerAsyncInitBean(beanName, beanDefinition.getInitMethodName());
+            Bean bean = candidateMethods.get(0).getAnnotation(Bean.class);
+
+            AsyncInitBeanHolder.registerAsyncInitBean(beanName, bean.initMethod());
         } else if (candidateMethods.size() > 1) {
             // TODO: 支持多个?
             throw new RuntimeException("Multi @Bean-method with same name try to publish in " + returnType.getCanonicalName());
