@@ -1,12 +1,12 @@
 package io.github.linyimin0812.profiler.core.monitor.check;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;

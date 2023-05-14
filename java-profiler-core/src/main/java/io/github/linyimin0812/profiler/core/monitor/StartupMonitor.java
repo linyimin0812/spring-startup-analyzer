@@ -1,12 +1,12 @@
 package io.github.linyimin0812.profiler.core.monitor;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
 import io.github.linyimin0812.profiler.core.monitor.check.AppStatus;
 import io.github.linyimin0812.profiler.core.monitor.check.AppStatusCheckService;
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 /**
  * @author linyimin

@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.linyimin0812</groupId>
         <artifactId>java-profiler-starter</artifactId>
-        <version>1.0.13</version>
+        <version>1.1.2-SNAPSHOT</version>
         <relativePath>../java-profiler-starter/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -56,12 +56,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
             <scope>provided</scope>
         </dependency>
 

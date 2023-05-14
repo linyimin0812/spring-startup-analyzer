@@ -3,7 +3,7 @@
 set -euxf -o pipefail
 
 PRODUCT_NAME=java-profiler-boost
-LAST_TAG=${1:-v1.0.13}
+LAST_TAG=${1:-v1.1.2-SNAPSHOT}
 PROFILER_HOME=${HOME}/java-profiler-boost
 
 check_permission() {

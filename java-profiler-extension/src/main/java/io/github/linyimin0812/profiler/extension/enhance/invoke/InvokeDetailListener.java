@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.extension.enhance.invoke;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
@@ -12,6 +11,7 @@ import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

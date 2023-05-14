@@ -1,12 +1,12 @@
 package io.github.linyimin0812.profiler.extension.enhance.jar;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.markdown.MarkdownStatistics;
 import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.lang.instrument.Instrumentation;
 import java.net.URL;

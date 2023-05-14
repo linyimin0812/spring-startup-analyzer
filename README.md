@@ -132,7 +132,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>java-profiler-starter</artifactId>
-    <version>1.0.13</version>
+    <version>1.1.2-SNAPSHOT</version>
 </parent>
 ```
 

@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.common.jaeger;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -18,6 +17,7 @@ import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.internal.JcTools;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;

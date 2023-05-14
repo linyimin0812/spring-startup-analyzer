@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.Event;
@@ -12,6 +11,7 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.util.*;
 

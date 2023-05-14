@@ -1,7 +1,6 @@
 package io.github.linyimin0812.profiler.common.logger;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -10,6 +9,7 @@ import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +64,7 @@ public class LogFactory {
 
         appender.start();
 
-        Logger logger = SINGLETON.getLogger(name);
+        ch.qos.logback.classic.Logger logger = SINGLETON.getLogger(name);
         logger.detachAndStopAllAppenders();
         logger.addAppender(appender);
         logger.setLevel(Level.INFO);
@@ -73,7 +73,7 @@ public class LogFactory {
 
     }
 
-    private static void addConsoleAppender(Logger logger, String pattern) {
+    private static void addConsoleAppender(ch.qos.logback.classic.Logger logger, String pattern) {
 
         // 为了方便调试，通过环境变量配置日志输出到console
         String profile = System.getProperty("java.profiler.boost.profile");

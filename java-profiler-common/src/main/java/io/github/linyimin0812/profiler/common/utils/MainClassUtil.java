@@ -1,7 +1,7 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;

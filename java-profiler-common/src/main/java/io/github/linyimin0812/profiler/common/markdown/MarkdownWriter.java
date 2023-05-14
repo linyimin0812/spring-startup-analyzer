@@ -1,10 +1,10 @@
 package io.github.linyimin0812.profiler.common.markdown;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.upload.FileUploader;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileWriter;

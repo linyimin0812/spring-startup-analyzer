@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.extension.enhance.asyncprofiler;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
@@ -10,6 +9,7 @@ import io.github.linyimin0812.profiler.common.upload.FileUploader;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.extension.enhance.asyncprofiler.one.profiler.AsyncProfiler;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;

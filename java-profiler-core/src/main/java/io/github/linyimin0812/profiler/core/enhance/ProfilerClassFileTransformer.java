@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.core.enhance;
 
-import ch.qos.logback.classic.Logger;
 import com.alibaba.bytekit.asm.MethodProcessor;
 import com.alibaba.bytekit.asm.interceptor.InterceptorProcessor;
 import com.alibaba.bytekit.asm.interceptor.parser.DefaultInterceptorClassParser;
@@ -15,6 +14,7 @@ import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.utils.MainClassUtil;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
+import org.slf4j.Logger;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;

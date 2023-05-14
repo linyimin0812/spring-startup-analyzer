@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.core.container;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
@@ -11,6 +10,7 @@ import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.core.monitor.check.AppStatusCheckService;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.ServiceLoader;

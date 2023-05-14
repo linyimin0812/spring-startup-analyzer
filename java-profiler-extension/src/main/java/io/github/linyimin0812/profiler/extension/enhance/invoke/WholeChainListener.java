@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.extension.enhance.invoke;
 
-import ch.qos.logback.classic.Logger;
 import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
@@ -15,6 +14,7 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import org.kohsuke.MetaInfServices;
+import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -80,7 +80,10 @@ public class WholeChainListener implements EventListener {
 
         } else if (event instanceof AtExitEvent) {
             // 调用结束, 出栈
-            parentStackThreadLocal.get().pop().end();
+            Stack<Span> stack = parentStackThreadLocal.get();
+            if (!stack.isEmpty()) {
+                stack.pop().end();
+            }
         }
     }
 
