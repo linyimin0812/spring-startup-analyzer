@@ -46,6 +46,11 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, PriorityO
     }
 
     @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Override
     public int getOrder() {
         return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
