@@ -16,6 +16,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>2.1.7.RELEASE</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.linyimin0812</groupId>
