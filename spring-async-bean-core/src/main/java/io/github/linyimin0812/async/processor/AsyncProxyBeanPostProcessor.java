@@ -37,6 +37,10 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
+        if (!beanFactory.containsBeanDefinition(beanName)) {
+            return bean;
+        }
+
         String methodName = AsyncInitBeanFinder.getAsyncInitMethodName(beanName, beanFactory.getBeanDefinition(beanName));
 
         if (methodName == null) {
