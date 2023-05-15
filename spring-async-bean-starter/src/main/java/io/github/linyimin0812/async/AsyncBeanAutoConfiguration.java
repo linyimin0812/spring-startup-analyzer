@@ -2,7 +2,6 @@ package io.github.linyimin0812.async;
 
 import io.github.linyimin0812.async.listener.AsyncTaskExecutionListener;
 import io.github.linyimin0812.async.processor.AsyncBeanPriorityLoadPostProcessor;
-import io.github.linyimin0812.async.processor.AsyncInitBeanFactoryPostProcessor;
 import io.github.linyimin0812.async.processor.AsyncProxyBeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,12 +20,6 @@ public class AsyncBeanAutoConfiguration {
     @ConditionalOnMissingBean
     public static AsyncTaskExecutionListener asyncTaskExecutionListener() {
         return new AsyncTaskExecutionListener();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
-        return new AsyncInitBeanFactoryPostProcessor();
     }
 
     @Bean
