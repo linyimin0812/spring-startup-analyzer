@@ -23,6 +23,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, PriorityO
 
     private final Logger logger = LogFactory.getStartupLogger();
 
+    private final ThreadLocal<Object> originBeanThreadLocal = new ThreadLocal<>();
+
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -32,6 +34,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, PriorityO
         if (methodName == null) {
             return bean;
         }
+
+        originBeanThreadLocal.set(bean);
 
         ProxyFactory proxyFactory = new ProxyFactory();
         proxyFactory.setTargetClass(bean.getClass());
@@ -47,7 +51,11 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, PriorityO
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
+        try {
+            return originBeanThreadLocal.get() != null ? originBeanThreadLocal.get() : bean;
+        } finally {
+            originBeanThreadLocal.remove();
+        }
     }
 
     @Override
