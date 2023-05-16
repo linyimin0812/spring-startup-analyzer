@@ -27,7 +27,12 @@ public class BeanCreateListener extends BeanListener {
     private Tracer tracer;
     private Span ancestorSpan;
 
-    private static final PersistentThreadLocal<Stack<Span>> parentStackThreadLocal = new PersistentThreadLocal<>(Stack::new);
+    private final PersistentThreadLocal<Stack<Span>> parentStackThreadLocal = new PersistentThreadLocal<>(Stack::new);
+
+    private final PersistentThreadLocal<Stack<BeanCreateResult>> parentBeanStackThreadLocal = new PersistentThreadLocal<>(Stack::new);
+
+    public static final List<BeanCreateResult> BEAN_CREATE_RESULTS = new ArrayList<>();
+
 
     @Override
     public void onEvent(Event event) {
@@ -36,29 +41,50 @@ public class BeanCreateListener extends BeanListener {
             // 记录bean初始化开始
             String beanName = (String) atEnterEvent.args[0];
 
-            Span span;
-
-            if (!parentStackThreadLocal.get().isEmpty()) {
-
-                Span parentSpan = parentStackThreadLocal.get().peek();
-
-                span = tracer.spanBuilder(beanName)
-                        .setAttribute("thread", Thread.currentThread().getName())
-                        .setParent(Context.current().with(parentSpan))
-                        .startSpan();
-            } else {
-                span = tracer.spanBuilder(beanName)
-                        .setAttribute("thread", Thread.currentThread().getName())
-                        .setParent(Context.current().with(ancestorSpan))
-                        .startSpan();
-            }
-
-            parentStackThreadLocal.get().push(span);
+            addSpan(beanName);
+            addBeanCreateResult(beanName);
 
         } else if (event.type == Event.Type.AT_EXIT) {
             // bean初始化结束, 出栈
             parentStackThreadLocal.get().pop().end();
+            BEAN_CREATE_RESULTS.add(parentBeanStackThreadLocal.get().pop());
         }
+    }
+
+    private void addSpan(String beanName) {
+        Span span;
+
+        if (!parentStackThreadLocal.get().isEmpty()) {
+
+            Span parentSpan = parentStackThreadLocal.get().peek();
+
+            span = tracer.spanBuilder(beanName)
+                    .setAttribute("thread", Thread.currentThread().getName())
+                    .setParent(Context.current().with(parentSpan))
+                    .startSpan();
+        } else {
+            span = tracer.spanBuilder(beanName)
+                    .setAttribute("thread", Thread.currentThread().getName())
+                    .setParent(Context.current().with(ancestorSpan))
+                    .startSpan();
+        }
+
+        parentStackThreadLocal.get().push(span);
+    }
+
+    private void addBeanCreateResult(String beanName) {
+
+        BeanCreateResult beanCreateResult = new BeanCreateResult(beanName);
+
+        if (!parentBeanStackThreadLocal.get().isEmpty()) {
+
+            BeanCreateResult parentBeanResult = parentBeanStackThreadLocal.get().peek();
+            beanCreateResult.setHasParent(true);
+            parentBeanResult.addChild(beanCreateResult);
+
+        }
+
+        parentBeanStackThreadLocal.get().push(beanCreateResult);
     }
 
     @Override
@@ -86,5 +112,75 @@ public class BeanCreateListener extends BeanListener {
     public void stop() {
         logger.info("============BeanCreateListener stop=============");
         ancestorSpan.end();
+    }
+
+    public static class BeanCreateResult {
+        private String beanClassName;
+        private long beanStartTime;
+        private long beanEndTime;
+        private String loadThreadName;
+
+        private boolean hasParent;
+
+        private List<BeanCreateResult> children;
+
+        public BeanCreateResult(String beanClassName) {
+            this.beanClassName = beanClassName;
+            this.beanStartTime = System.currentTimeMillis();
+            this.loadThreadName = Thread.currentThread().getName();
+            this.children = new ArrayList<>();
+        }
+
+        public String getBeanClassName() {
+            return beanClassName;
+        }
+
+        public void setBeanClassName(String beanClassName) {
+            this.beanClassName = beanClassName;
+        }
+
+        public long getBeanStartTime() {
+            return beanStartTime;
+        }
+
+        public void setBeanStartTime(long beanStartTime) {
+            this.beanStartTime = beanStartTime;
+        }
+
+        public List<BeanCreateResult> getChildren() {
+            return children;
+        }
+
+        public void setChildren(List<BeanCreateResult> children) {
+            this.children = children;
+        }
+
+        public String getLoadThreadName() {
+            return loadThreadName;
+        }
+
+        public void setLoadThreadName(String loadThreadName) {
+            this.loadThreadName = loadThreadName;
+        }
+
+        public long getBeanEndTime() {
+            return beanEndTime;
+        }
+
+        public void setBeanEndTime(long beanEndTime) {
+            this.beanEndTime = beanEndTime;
+        }
+
+        public boolean isHasParent() {
+            return hasParent;
+        }
+
+        public void setHasParent(boolean hasParent) {
+            this.hasParent = hasParent;
+        }
+
+        public void addChild(BeanCreateResult child) {
+            this.children.add(child);
+        }
     }
 }
