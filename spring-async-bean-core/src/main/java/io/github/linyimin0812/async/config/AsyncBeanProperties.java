@@ -19,11 +19,11 @@ public class AsyncBeanProperties {
      */
     private boolean asyncBeanPriorityLoadEnable = false;
 
-    private static final String asyncBeanPriorityLoadEnableKey = String.format("%s.asyncBeanPriorityLoadEnable", PREFIX);
+    private static final String asyncBeanPriorityLoadEnableKey = String.format("%s.async.bean.priority.load.enable", PREFIX);
 
     private List<String> beanNames = new ArrayList<>();
 
-    private static final String beanNamesKey = String.format("%s.beanNames", PREFIX);
+    private static final String beanNamesKey = String.format("%s.bean.names", PREFIX);
 
     private final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
 
@@ -32,14 +32,14 @@ public class AsyncBeanProperties {
      */
     private int asyncInitBeanThreadPoolCoreSize = CPU_COUNT + 1;
 
-    private static final String asyncInitBeanThreadPoolCoreSizeKey = String.format("%s.asyncInitBeanThreadPoolCoreSize", PREFIX);
+    private static final String asyncInitBeanThreadPoolCoreSizeKey = String.format("%s.async.init.bean.thread.pool.core.size", PREFIX);
 
     /**
      * thread pool max size
      */
     private int asyncInitBeanThreadPoolMaxSize = CPU_COUNT + 1;
 
-    private static final String asyncInitBeanThreadPoolMaxSizeKey = String.format("%s.asyncInitBeanThreadPoolMaxSize", PREFIX);
+    private static final String asyncInitBeanThreadPoolMaxSizeKey = String.format("%s.async.init.bean.thread.pool.max.size", PREFIX);
 
 
     public boolean isAsyncBeanPriorityLoadEnable() {

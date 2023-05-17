@@ -29,6 +29,8 @@ public class BeanInitializeListener extends BeanListener {
 
     private final Map<String/* processId_invokeId */, BeanInitializeResult> RESULT_MAP = new ConcurrentHashMap<>();
 
+    private final long MIN_COST = Long.parseLong(ProfilerSettings.getProperty("java-profiler.spring.bean.init.min.millis", "100"));
+
     @Override
     public void onEvent(Event event) {
         InvokeEvent invokeEvent = (InvokeEvent) event;
@@ -77,8 +79,7 @@ public class BeanInitializeListener extends BeanListener {
         // Detail of Beans Take Longer Time
         reportDetailOfBeanTakeLongerTime();
 
-        // TODO: Root Beans BeanCreateListener.BEAN_CREATE_RESULTS
-
+        BeanCreateListener.BEAN_CREATE_RESULTS.clear();
         RESULT_MAP.clear();
     }
 
@@ -88,23 +89,19 @@ public class BeanInitializeListener extends BeanListener {
 
     private void reportNumOfBeanTakeLongerTime() {
 
-        long minCost = Long.parseLong(ProfilerSettings.getProperty("java-profiler.spring.bean.init.min.millis"));
-
         long count = RESULT_MAP.values().stream()
                 .filter(result -> result.endMillis > 0)
-                .filter(result -> (result.endMillis - result.startMillis) >= minCost)
+                .filter(result -> (result.endMillis - result.startMillis) >= MIN_COST)
                 .count();
 
-        MarkdownStatistics.write(String.format("Num of Beans(>= %s ms)", minCost), String.valueOf(count));
+        MarkdownStatistics.write(String.format("Num of Beans(>= %s ms)", MIN_COST), String.valueOf(count));
     }
 
     private void reportDetailOfBeanTakeLongerTime() {
 
-        long minCost = Long.parseLong(ProfilerSettings.getProperty("java-profiler.spring.bean.init.min.millis"));
-
         List<BeanInitializeResult> list = RESULT_MAP.values().stream()
                 .filter(result -> result.endMillis > 0)
-                .filter(result -> (result.endMillis - result.startMillis) >= minCost)
+                .filter(result -> (result.endMillis - result.startMillis) >= MIN_COST)
                 .sorted(BeanInitializeResult::compareTo)
                 .collect(Collectors.toList());
 
@@ -112,12 +109,18 @@ public class BeanInitializeListener extends BeanListener {
             return;
         }
 
+        List<String> rootBeanNames = BeanCreateListener.BEAN_CREATE_RESULTS.stream()
+                .filter(beanCreateResult -> !beanCreateResult.isHasParent())
+                .map(BeanCreateListener.BeanCreateResult::getBeanName)
+                .collect(Collectors.toList());
+
         StringBuilder topBeanBuilder = new StringBuilder("<details open>\n")
-                .append(String.format("<summary><h1 style='display: inline'>Details of Bean(>= %s ms)</h1></summary>\n", minCost))
+                .append(String.format("<summary><h1 style='display: inline'>Details of Bean(>= %s ms)</h1></summary>\n", MIN_COST))
                 .append("<hr/>\n")
                 .append("<table>\n")
                 .append("<tr>\n")
                 .append(String.format("<th>%s</th>\n", "Bean Name"))
+                .append(String.format("<th>%s</th>\n", "Root Bean"))
                 .append(String.format("<th>%s</th>\n", "Cost(ms)"))
                 .append(String.format("<th>%s</th>\n", "Class Name"))
                 .append("</tr>\n")
@@ -125,6 +128,7 @@ public class BeanInitializeListener extends BeanListener {
         for (BeanInitializeResult result : list) {
             topBeanBuilder.append("<tr>\n")
                     .append(String.format("<td>%s</td>\n", result.beanName))
+                    .append(String.format("<td style='text-align: center;'>%s</td>\n", rootBeanNames.contains(result.beanName) ? "Y" : "N"))
                     .append(String.format("<td style='text-align: center;'>%s</td>\n", result.endMillis - result.startMillis))
                     .append(String.format("<td>%s</td>\n", result.className))
                     .append("</tr>\n");

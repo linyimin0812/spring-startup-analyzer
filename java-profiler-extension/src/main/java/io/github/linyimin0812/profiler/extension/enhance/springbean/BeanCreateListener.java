@@ -115,7 +115,7 @@ public class BeanCreateListener extends BeanListener {
     }
 
     public static class BeanCreateResult {
-        private String beanClassName;
+        private String beanName;
         private long beanStartTime;
         private long beanEndTime;
         private String loadThreadName;
@@ -124,19 +124,19 @@ public class BeanCreateListener extends BeanListener {
 
         private List<BeanCreateResult> children;
 
-        public BeanCreateResult(String beanClassName) {
-            this.beanClassName = beanClassName;
+        public BeanCreateResult(String beanName) {
+            this.beanName = beanName;
             this.beanStartTime = System.currentTimeMillis();
             this.loadThreadName = Thread.currentThread().getName();
             this.children = new ArrayList<>();
         }
 
-        public String getBeanClassName() {
-            return beanClassName;
+        public String getBeanName() {
+            return beanName;
         }
 
-        public void setBeanClassName(String beanClassName) {
-            this.beanClassName = beanClassName;
+        public void setBeanName(String beanName) {
+            this.beanName = beanName;
         }
 
         public long getBeanStartTime() {
