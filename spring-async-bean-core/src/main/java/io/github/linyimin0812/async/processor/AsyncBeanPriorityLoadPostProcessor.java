@@ -23,7 +23,7 @@ public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPo
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 
-        if (!AsyncConfig.getInstance().getAsyncBeanProperties().isAsyncBeanPriorityLoadEnable()) {
+        if (!AsyncConfig.getInstance().getAsyncBeanProperties().isBeanPriorityLoadEnable()) {
             return;
         }
 

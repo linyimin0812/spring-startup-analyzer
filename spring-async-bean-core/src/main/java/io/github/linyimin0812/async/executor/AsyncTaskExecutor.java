@@ -3,7 +3,6 @@ package io.github.linyimin0812.async.executor;
 import io.github.linyimin0812.async.config.AsyncConfig;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import org.slf4j.Logger;
-import org.springframework.core.env.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +58,9 @@ public class AsyncTaskExecutor {
     }
 
     private static ThreadPoolExecutor createThreadPoolExecutor() {
-        int threadPoolCoreSize = AsyncConfig.getInstance().getAsyncBeanProperties().getAsyncInitBeanThreadPoolCoreSize();
+        int threadPoolCoreSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolCoreSize();
 
-        int threadPollMaxSize = AsyncConfig.getInstance().getAsyncBeanProperties().getAsyncInitBeanThreadPoolMaxSize();
+        int threadPollMaxSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolMaxSize();
 
         logger.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.", threadPoolCoreSize, threadPoolCoreSize);
 
