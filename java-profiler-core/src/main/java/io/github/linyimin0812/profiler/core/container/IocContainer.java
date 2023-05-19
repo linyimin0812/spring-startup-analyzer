@@ -1,5 +1,6 @@
 package io.github.linyimin0812.profiler.core.container;
 
+import io.github.linyimin0812.profiler.common.file.FileProcessor;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
@@ -64,6 +65,7 @@ public class IocContainer {
         if (stopped.compareAndSet(false, true)) {
             container.dispose();
             MarkdownWriter.upload();
+            FileProcessor.merge();
         }
 
         String endpoint = ProfilerSettings.getProperty("java-profiler.jaeger.ui.endpoint");

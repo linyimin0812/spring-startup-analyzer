@@ -67,6 +67,14 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.60.0</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <properties>

@@ -1,13 +1,20 @@
-package io.github.linyimin0812.profiler.common.upload;
+package io.github.linyimin0812.profiler.common.file;
 
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
+import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import okhttp3.*;
 import org.slf4j.Logger;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -16,7 +23,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
  * @date 2023/04/30 15:02
  * @description upload async profiler file
  **/
-public class FileUploader {
+public class FileProcessor {
 
     private static final Logger logger = LogFactory.getStartupLogger();
 
@@ -66,5 +73,44 @@ public class FileUploader {
         } catch (Exception e) {
             logger.error("upload {} error.", fileName, e);
         }
+    }
+
+    public static void merge() {
+
+        String dir = OSUtil.home() + "output" + File.separator;
+        String mdName = Jaeger.getServiceName() + ".md";
+        String htmlName = Jaeger.getServiceName() + ".html";
+
+        try {
+
+            Path mdPath = Paths.get(dir, mdName);
+            Path htmlPath = Paths.get(dir, htmlName);
+
+            String mdContent = new String(Files.readAllBytes(mdPath), StandardCharsets.UTF_8);
+            String renderStr = markdownToHtml(mdContent);
+
+            String htmlContent = new String(Files.readAllBytes(htmlPath), StandardCharsets.UTF_8);
+
+            renderStr = renderStr + "<details open>\n" +
+                    "<summary><h1 style='display: inline'>Wall Clock Profile</h1></summary>\n" +
+                    "<hr>\n" +
+                    "<div style='width: 100%;border: 1px solid grey;padding: 2px;'>\n" +
+                    htmlContent +
+                    "</div>\n" +
+                    "</details>";
+
+            FileWriter writer = new FileWriter(dir + Jaeger.getServiceName() + "-all.html");
+            writer.write(renderStr);
+            writer.close();
+
+        } catch (Exception e) {
+            logger.error("merge file {} and {} error.", mdName, htmlName, e);
+        }
+    }
+
+    private static String markdownToHtml(String markdown) {
+        Parser parser = Parser.builder().build();
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        return renderer.render(parser.parse(markdown));
     }
 }

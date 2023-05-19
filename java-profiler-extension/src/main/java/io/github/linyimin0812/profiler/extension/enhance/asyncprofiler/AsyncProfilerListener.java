@@ -5,7 +5,7 @@ import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-import io.github.linyimin0812.profiler.common.upload.FileUploader;
+import io.github.linyimin0812.profiler.common.file.FileProcessor;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.extension.enhance.asyncprofiler.one.profiler.AsyncProfiler;
 import org.kohsuke.MetaInfServices;
@@ -78,7 +78,7 @@ public class AsyncProfilerListener implements EventListener {
             String result = AsyncProfiler.getInstance().execute(command);
             logger.info("AsyncProfiler execute stop command: {}, result is {}", command, result);
 
-            FileUploader.upload(getFile());
+            FileProcessor.upload(getFile());
 
         } catch (IOException e) {
             logger.info("AsyncProfiler execute stop command error. command: {}, error: {}", command, e);

@@ -77,6 +77,12 @@
             <artifactId>okhttp</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.60.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
