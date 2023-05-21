@@ -84,7 +84,7 @@ docker run -d \
 -p 14268:14268 \
 -p 14269:14269  \
 -p 9411:9411 \
-linyimin520812/all-in-one:v1.30.3
+linyimin520812/all-in-one:v2.0.0
 ```
 
 访问[http://127.0.0.1:16686](http://127.0.0.1:16686)成功即说明jaeger已启动完成。
@@ -144,7 +144,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>java-profiler-starter</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.0</version>
 </parent>
 ```
 
@@ -378,7 +378,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
