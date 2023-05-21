@@ -147,7 +147,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>java-profiler-starter</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </parent>
 ```
 
@@ -381,7 +381,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
