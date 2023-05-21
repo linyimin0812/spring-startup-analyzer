@@ -27,4 +27,4 @@ tar:
 	cd ${INSTALL_DIR} && tar -zcvf ${PROJECT_NAME}.tar.gz ./lib/ ./config/
 
 .PYTHON: all
-all: clean package tar
+all: clean install package tar
