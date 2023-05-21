@@ -1,4 +1,5 @@
 [![license](https://img.shields.io/github/license/linyimin0812/java-profiler-boost)](https://github.com/linyimin0812/java-profiler-boost)
+[![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/java-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
 
 # 1. 简介
 
