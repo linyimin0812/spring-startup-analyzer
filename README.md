@@ -1,3 +1,5 @@
+[![license](https://img.shields.io/github/license/linyimin0812/java-profiler-boost)](https://github.com/linyimin0812/java-profiler-boost)
+
 # 1. 简介
 
 随着业务的发展，应用中引入的jar包越来越多，一些应用运行的fatjar有200多M，启动时间维持在6-7分钟左右，严重影响对线上问题的响应速度，同时也严重影响着研发效率。急需进行应用启动时长的优化。这篇文章《[一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)》提供了一个非常好的思路，优化效果很明显。结合这篇文章提供的思路，实现了这个项目。**无观测不优化**，本项目实现对应用启动整体过程的观测，主要包含以下能力：
