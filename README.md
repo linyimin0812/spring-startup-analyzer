@@ -2,6 +2,8 @@
 
 随着业务的发展，应用中引入的jar包越来越多，一些应用运行的fatjar有200多M，启动时间维持在6-7分钟左右，严重影响对线上问题的响应速度，同时也严重影响着研发效率。急需进行应用启动时长的优化。这篇文章《[一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)》提供了一个非常好的思路，优化效果很明显。结合这篇文章提供的思路，实现了这个项目。**无观测不优化**，本项目实现对应用启动整体过程的观测，主要包含以下能力：
 
+## 1.1 应用启动数据采集
+
 <details open>
   <summary style='cursor: pointer'><strong>UI首页</strong></summary>
 
@@ -51,11 +53,21 @@
     &emsp;&emsp;系统预留了扩展接口，可以通过实现接口完成自定义功能扩展，<a href="#25-自定义扩展">详情查看</a>
 </details>
 
-# 2. 使用
+## 1.2 应用启动时长优化
+
+<details open>
+  <summary style='cursor: pointer'><strong>Spring Bean异步加载</strong></summary>
+    &emsp;&emsp;针对初始化耗时比较长的bean，异步执行init和@PostConstruct方法，<a href="#3-应用启动时长优化">详情查看</a>
+</details>
+
+
+# 2. 应用启动数据采集
 
 因为项目需要对Spring Bean初始化时序及调用关系的可视化，选择了将数据上报到[jaeger](https://www.jaegertracing.io/)，由jaeger ui进行展示，所以需要本地启动jaeger。
 
-## 2.1. 启动jaeger
+采集的数据会统一写到`$HOME/java-profiler-boost/output/${appName}/${time}-${ip}-all.html`文件中，如果不能支持jaeger环境(如本地机器与预发环境隔离，本地机器无法访问到预发环境)，可以将此文件下载到本地机器，使用Chrome浏览器打开查看采集的数据。但是此文件不包含trace数据。
+
+## 2.1 启动jaeger
 
 ```shell
 docker run -d \
@@ -77,9 +89,9 @@ linyimin520812/all-in-one:v1.30.3
 
 访问[http://127.0.0.1:16686](http://127.0.0.1:16686)成功即说明jaeger已启动完成。
 
-## 2.2. 安装jar包
+## 2.2 安装jar包
 
-### 2.2.1 手动安装
+**1. 手动安装**
 
 1. 点击[realease](https://github.com/linyimin-bupt/java-profiler-boost/releases/download/v1.0.0/java-profiler-boost.tar.gz)下载最新版tar.gz包
 2. 新建文件夹，并解压
@@ -90,7 +102,7 @@ cd 下载路径
 tar -zxvf java-profiler-boost.tar.gz ${HOME}/java-profiler-boost
 ```
 
-### 2.2.2 脚本安装
+**2. 脚本安装**
 
 ```shell
 curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/main/bin/setup.sh | sh
@@ -320,48 +332,89 @@ mvn clean package
 
 只要按照步骤[安装jar包](#22-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#24-应用启动)即可加载扩展jar包。
 
-# 3. 后续计划
+# 3. 应用启动时长优化
+
+从[应用启动数据采集](#2-应用启动数据采集)中，可以获取初始化耗时长的Bean，因为Spring启动过程是单线程完成的，为了优化应用的启动时长，可以考虑将这些耗时长的Bean的初始化方法异步化，查看[实现原理](./HOW_IT_WORKS.md#spring-bean异步加载原理)。
+
+需要注意：
+
+- **应该优先从代码层面优化初始化时间长的Bean，从根本上解决Bean初始化耗时长问题**
+- **对于二方包/三方包中初始化耗时长的Bean(无法进行代码优化)再考虑Bean的异步化**
+- **对于不被依赖的Bean可以放心进行异步化**，可以通过[各个Bean加载耗时](#11-应用启动数据采集)中的`Root Bean`判断Bean是否被其他Bean依赖
+- **对于被依赖的Bean需要小心分析，在应用启动过程中不能其他Bean被调用，否则可能会存在问题**
+
+## 3.1 支持异步化的Bean类型
+
+支持@Bean, @PostConstruct及@ImportResource 方式初始化bean，使用demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
+
+1. `@Bean(initMethod = "init")`标识的Bean
+
+```java
+@Bean(initMethod = "init")
+public TestBean testBean() {
+    return new TestBean();
+}
+```
+
+2. `@PostConstruct`标识的Bean
+
+
+```java
+@Component
+public class TestComponent {
+    @PostConstruct
+    public void init() throws InterruptedException {
+        Thread.sleep(20 * 1000);
+    }
+}
+```
+
+
+## 3.2 接入异步Bean优化
+
+1. 添加pom依赖
+
+```xml
+<dependency>
+    <groupId>io.github.linyimin0812</groupId>
+    <artifactId>spring-async-bean-starter</artifactId>
+    <version>1.1.3-SNAPSHOT</version>
+</dependency>
+```
+
+2. 配置一步加载信息
+
+```properties
+# 异步化的Bean可能在Spring Bean初始化顺序的末尾，导致异步优化效果不佳，打开配置优先加载异步化的Bean
+java.profiler.boost.spring.async.bean-priority-load-enable=true
+# 指定异步的Bean名称
+java.profiler.boost.spring.async.bean-names=testBean,testComponent
+# 执行异步化Bean初始化方法线程池的核心线程数
+java.profiler.boost.spring.async.init-bean-thread-pool-core-size=8
+# 执行异步化Bean初始化方法线程池的最大线程数
+java.profiler.boost.spring.async.init-bean-thread-pool-max-size=8
+```
+
+3. 检查Bean是否异步初始化
+
+查看日志`$HOME/java-profiler-boost/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
+
+```
+async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
+```
+
+# 4. 后续计划
 
 目前已完成应用启动过程的观测，可以知道应用启动过程中的卡点。所以接下来需要针对一些常见的卡点提供一套解决方案，比如：
 
 - [ ] Jar Index
 
-- [ ] Spring bean异步加载
-
 - [ ] 通用的优化方案
-
-# 4. 实现原理
-
-刚开始的时候，只想做Spring bean加载耗时timeline可视化分析，实现了一个简单的版本[spring-bean-timeline](https://github.com/linyimin0812/spring-bean-timeline)，但是随着需求的增多，直接和应用源码耦合的方式不再适用，容易产生依赖冲突。于是开始引入java agent技术。
-
-java agent是一种代理技术，通过jvm的Instrumentation api实现，这个api提供了在jvm加载类之前或之后修改字节码的能力。通常被用于java应用程序的监控、诊断、性能分析、代码注入等。java agent提供了两个入口点：`premain`和`main`方法。其中`premain`方法可以实现**在java应用程序的类被加载之前对它们进行转换**。
-
-要观测应用启动过程，需要在应用类被加载之前对其进行增强，然后加载增强后的类。所以选择了java agent的`premain`实现。由于通过asm进行字节码增强细节太多，又不好理解，所以选择了[ByteKit](https://github.com/alibaba/bytekit)进行字节码增强，ByteKit一个基于ASM提供更高层的字节码处理能力，主要面向诊断/APM领域的字节码库，提供了一套简洁的API，开发人员可以轻松的完成字节码增强。
-
-其他实现主要参考了[jvm-sandbox](https://github.com/alibaba/jvm-sandbox)和[arthas](https://github.com/alibaba/arthas)的实现。
-
-
-## 4.1 类/方法增强策略
-
-增强类`ProfilerClassFileTransformer`是接口`ClassFileTransformer`的实现类，其`transform`方法会在类被加载到jvm之前执行，所以在这个方法中实现对指定类的增强。
-
-参考jvm-sandbox的思想：任何一个Java方法的调用都可以分解为BEFORE、RETURN和THROWS三个环节，由此在三个环节上引申出对应环节的事件探测和流程控制机制。结合ByteKit提供的API
-
-<details>
-    <summary></summary>
-</details>
-
-## 4.2 类隔离策略
-
-
-## 4.3 扩展策略
-
-
 
 
 # 5. 为项目添砖加瓦
 
-欢迎提出 [issues](https://github.com/linyimin-bupt/java-profiler-boost/issues) 与 [pull requests](https://github.com/linyimin-bupt/java-profiler-boost/pulls)!。
+查看[CONTRIBUTING](./CONTRIBUTING.md)，同时欢迎提出 [issues](https://github.com/linyimin-bupt/java-profiler-boost/issues) 与 [pull requests](https://github.com/linyimin-bupt/java-profiler-boost/pulls)!。
 
 # 6. 🙏感谢支持
 

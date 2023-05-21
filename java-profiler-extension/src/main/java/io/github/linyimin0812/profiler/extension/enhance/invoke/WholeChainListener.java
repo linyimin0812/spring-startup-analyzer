@@ -4,6 +4,7 @@ import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
+import io.github.linyimin0812.profiler.common.utils.IpUtil;
 import io.github.linyimin0812.profiler.common.utils.MainClassUtil;
 import io.github.linyimin0812.profiler.extension.container.IocContainerHolder;
 import io.github.linyimin0812.profiler.api.EventListener;
@@ -27,9 +28,7 @@ public class WholeChainListener implements EventListener {
 
     private final Logger logger = LogFactory.getStartupLogger();
 
-    private List<String> listenPackages = Arrays.asList(
-            ProfilerSettings.getProperty("java-profiler.invoke.chain.packages", "").split(",")
-    );
+    private List<String> listenPackages = new ArrayList<>();
 
     private Tracer tracer;
     private Span ancestorSpan;
@@ -105,6 +104,11 @@ public class WholeChainListener implements EventListener {
     public void start() {
         logger.info("===============WholeChainListener start==================");
 
+        if (!IpUtil.isJaegerReachable()) {
+            logger.warn("Skip WholeChainListener for jaeger is not reachable.");
+            return;
+        }
+
         if (ProfilerSettings.contains("java-profiler.invoke.chain.packages")) {
 
             String packages = ProfilerSettings.getProperty("java-profiler.invoke.chain.packages", "");
@@ -128,6 +132,11 @@ public class WholeChainListener implements EventListener {
     @Override
     public void stop() {
         logger.info("===============WholeChainListener stop==================");
+
+        if (!IpUtil.isJaegerReachable() || ancestorSpan == null) {
+            return;
+        }
+
         Collection<Stack<Span>> collection = parentStackThreadLocal.getAll();
 
         for (Stack<Span> stack : collection) {

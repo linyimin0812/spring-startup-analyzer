@@ -3,6 +3,7 @@ package io.github.linyimin0812.profiler.common.markdown;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.file.FileProcessor;
+import io.github.linyimin0812.profiler.common.utils.IpUtil;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import org.slf4j.Logger;
 
@@ -33,7 +34,7 @@ public class MarkdownWriter {
         contents.add(markdownContent);
     }
 
-    public static void upload() {
+    public static void flush() {
 
         String statistics = MarkdownStatistics.statistics();
         if (statistics.length() > 0) {
@@ -54,7 +55,9 @@ public class MarkdownWriter {
 
         writeToFile(contentBuilder.toString());
 
-        FileProcessor.upload(Jaeger.getServiceName() + ".md", contentBuilder.toString());
+        if (IpUtil.isJaegerReachable()) {
+            FileProcessor.upload(Jaeger.getServiceName() + ".md", contentBuilder.toString());
+        }
 
         contents.clear();
 

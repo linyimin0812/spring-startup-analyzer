@@ -4,6 +4,7 @@ import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.utils.IpUtil;
 import io.github.linyimin0812.profiler.extension.container.IocContainerHolder;
 import io.github.linyimin0812.profiler.extension.enhance.invoke.PersistentThreadLocal;
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
@@ -33,9 +34,17 @@ public class BeanCreateListener extends BeanListener {
 
     public static final List<BeanCreateResult> BEAN_CREATE_RESULTS = new ArrayList<>();
 
+    @Override
+    public boolean filter(String className) {
+        if (!IpUtil.isJaegerReachable()) {
+            return false;
+        }
+        return super.filter(className);
+    }
 
     @Override
     public void onEvent(Event event) {
+
         if (event.type == Event.Type.AT_ENTER) {
             AtEnterEvent atEnterEvent = (AtEnterEvent) event;
             // 记录bean初始化开始
@@ -104,6 +113,12 @@ public class BeanCreateListener extends BeanListener {
     @Override
     public void start() {
         logger.info("============BeanCreateListener start=============");
+
+        if (!IpUtil.isJaegerReachable()) {
+            logger.warn("Skip BeanCreateListener for jaeger is not reachable");
+            return;
+        }
+
         tracer = IocContainerHolder.getContainer().getComponent(Jaeger.class).createTracer("spring-bean-load-tracer");
         ancestorSpan = tracer.spanBuilder("bean-create-span").startSpan();
     }
@@ -111,6 +126,9 @@ public class BeanCreateListener extends BeanListener {
     @Override
     public void stop() {
         logger.info("============BeanCreateListener stop=============");
+        if (!IpUtil.isJaegerReachable() || ancestorSpan == null) {
+            return;
+        }
         ancestorSpan.end();
     }
 

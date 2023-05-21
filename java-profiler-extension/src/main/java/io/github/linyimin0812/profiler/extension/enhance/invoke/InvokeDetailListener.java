@@ -31,8 +31,6 @@ public class InvokeDetailListener implements EventListener {
 
     private List<String> methodQualifiers = new ArrayList<>();
 
-    private long start;
-
     @Override
     public boolean filter(String className) {
         return methodQualifiers.stream().anyMatch(qualifier -> qualifier.startsWith(className + "."));
@@ -85,9 +83,6 @@ public class InvokeDetailListener implements EventListener {
         methodQualifiers = Arrays.stream(
                 ProfilerSettings.getProperty("java-profiler.invoke.count.methods", "").split("\\|")
         ).map(StringUtils::trim).collect(Collectors.toList());
-
-        start = System.currentTimeMillis();
-
     }
 
     @Override
@@ -139,8 +134,6 @@ public class InvokeDetailListener implements EventListener {
         invokeDetailTable.append("</table>\n").append("</details>\n\n").append("<hr/>\n");
 
         MarkdownWriter.write(invokeDetailTable.toString());
-
-        MarkdownStatistics.write(0, "Startup Time(s)", String.format("%.2f", (System.currentTimeMillis() - start) / 1000D));
     }
 
     private String buildTopCostInvokeInfo(List<InvokeDetail> details) {

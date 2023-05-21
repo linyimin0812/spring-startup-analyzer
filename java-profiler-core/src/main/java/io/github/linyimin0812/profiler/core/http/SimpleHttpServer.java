@@ -19,6 +19,8 @@ import static java.net.HttpURLConnection.HTTP_OK;
  **/
 public class SimpleHttpServer {
 
+    private static HttpServer server;
+
     public static void main(String[] args) {
         start();
     }
@@ -26,7 +28,7 @@ public class SimpleHttpServer {
     public static void start() {
         int serverPort = Integer.parseInt(ProfilerSettings.getProperty("java-profiler.admin.http.server.port", "8065"));
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+            server = HttpServer.create(new InetSocketAddress(serverPort), 0);
             server.createContext("/", new RootHandler());
             server.setExecutor(null);
             server.start();
@@ -59,5 +61,13 @@ public class SimpleHttpServer {
             os.close();
 
         }
+    }
+
+    public static void stop() {
+        if (server == null) {
+            return;
+        }
+
+        server.stop(30);
     }
 }

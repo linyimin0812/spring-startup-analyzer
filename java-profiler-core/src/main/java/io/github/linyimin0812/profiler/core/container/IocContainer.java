@@ -2,6 +2,7 @@ package io.github.linyimin0812.profiler.core.container;
 
 import io.github.linyimin0812.profiler.common.file.FileProcessor;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.markdown.MarkdownStatistics;
 import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.core.http.SimpleHttpServer;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class IocContainer {
 
 
-    private static final Logger logger = LogFactory.getStartupLogger();
+    private static final Logger startupLogger = LogFactory.getStartupLogger();
 
     private static final MutablePicoContainer container = new PicoBuilder().withSetterInjection().withCaching().withLifecycle().build();
 
@@ -33,45 +34,62 @@ public class IocContainer {
 
     private static final AtomicBoolean stopped = new AtomicBoolean();
 
+    private static long startTimeMillis = 0;
+
     /**
      * 启动服务容器
      */
     public static void start() {
-        if (started.compareAndSet(false, true)) {
-
-            container.start();
-
-            for (Lifecycle lifecycle : ServiceLoader.load(Lifecycle.class, IocContainer.class.getClassLoader())) {
-                container.addComponent(lifecycle);
-            }
-
-            for (EventListener listener : ServiceLoader.load(EventListener.class, IocContainer.class.getClassLoader())) {
-                container.addComponent(listener);
-            }
-
-            for (AppStatusCheckService service : ServiceLoader.load(AppStatusCheckService.class, StartupMonitor.class.getClassLoader())) {
-                service.init();
-                container.addComponent(service);
-            }
-
-            SimpleHttpServer.start();
+        if (!started.compareAndSet(false, true)) {
+            return;
         }
+
+        container.start();
+
+        for (Lifecycle lifecycle : ServiceLoader.load(Lifecycle.class, IocContainer.class.getClassLoader())) {
+            container.addComponent(lifecycle);
+        }
+
+        for (EventListener listener : ServiceLoader.load(EventListener.class, IocContainer.class.getClassLoader())) {
+            container.addComponent(listener);
+        }
+
+        for (AppStatusCheckService service : ServiceLoader.load(AppStatusCheckService.class, StartupMonitor.class.getClassLoader())) {
+            service.init();
+            container.addComponent(service);
+        }
+
+        SimpleHttpServer.start();
+
+        startTimeMillis = System.currentTimeMillis();
+
     }
 
     /**
      * 停止容器
      */
     public static void stop() {
-        if (stopped.compareAndSet(false, true)) {
-            container.dispose();
-            MarkdownWriter.upload();
-            FileProcessor.merge();
+
+        if (!stopped.compareAndSet(false, true)) {
+            startupLogger.warn("IocContainer has stopped.");
+            return;
         }
+
+        double startupDuration = (System.currentTimeMillis() - startTimeMillis) / 1000D;
+
+        container.dispose();
+
+        MarkdownStatistics.write(0, "Startup Time(s)", String.format("%.2f", startupDuration));
+
+        MarkdownWriter.flush();
+        FileProcessor.merge();
+
+        SimpleHttpServer.stop();
 
         String endpoint = ProfilerSettings.getProperty("java-profiler.jaeger.ui.endpoint");
         String prompt = String.format("======= java-profiler-boost stop, click %s to view detailed info about the startup process ======", endpoint);
 
-        logger.info(prompt);
+        startupLogger.info(prompt);
         System.out.println(prompt);
 
     }

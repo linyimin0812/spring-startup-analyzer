@@ -11,7 +11,7 @@ public enum LoggerName {
     startup,
 
     /**
-     * enhanced method infoemation
+     * enhanced method information
      */
     transform
 }

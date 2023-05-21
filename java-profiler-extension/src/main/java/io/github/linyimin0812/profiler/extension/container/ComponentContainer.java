@@ -2,8 +2,10 @@ package io.github.linyimin0812.profiler.extension.container;
 
 
 import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
+import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.slf4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,6 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @description 实例容器
  **/
 public class ComponentContainer {
+
+    private final Logger startupLogger = LogFactory.getStartupLogger();
 
     private final MutablePicoContainer container = new PicoBuilder().withSetterInjection().withCaching().withLifecycle().build();
 
@@ -34,18 +38,22 @@ public class ComponentContainer {
      * 启动服务容器
      */
     public final void start() {
-        if (started.compareAndSet(false, true)) {
-            container.start();
+        if (!started.compareAndSet(false, true)) {
+            startupLogger.warn("ComponentContainer has started.");
+            return;
         }
+        container.start();
     }
 
     /**
      * 停止容器
      */
     public final void stop() {
-        if (stopped.compareAndSet(false, true)) {
-            container.dispose();
+        if (!stopped.compareAndSet(false, true)) {
+            startupLogger.warn("ComponentContainer has stopped.");
+            return;
         }
+        container.dispose();
     }
 
     /**
