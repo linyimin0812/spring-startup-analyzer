@@ -34,7 +34,7 @@
 <details>
   <summary style='cursor: pointer'><strong>各个Bean加载耗时</strong></summary>
 
-![](./docs/details-of-bean.jpg)
+![](./docs/details-of-bean.png)
 </details>
 
 <details>
