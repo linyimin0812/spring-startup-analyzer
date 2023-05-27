@@ -15,6 +15,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
 import java.lang.reflect.InvocationTargetException;
@@ -72,7 +73,7 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
 
     @Override
     public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
     @Override

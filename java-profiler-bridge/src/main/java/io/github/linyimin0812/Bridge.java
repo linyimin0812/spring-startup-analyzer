@@ -13,7 +13,7 @@ public class Bridge {
 
     public static final AbstractBridge NOP_BRIDGE = new NopBridge();
 
-    private static volatile AbstractBridge bridgeInstance = NOP_BRIDGE;
+    private static AbstractBridge bridgeInstance = NOP_BRIDGE;
 
     public static AbstractBridge getBridge() {
         return bridgeInstance;

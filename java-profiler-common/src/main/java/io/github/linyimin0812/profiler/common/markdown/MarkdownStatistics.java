@@ -39,8 +39,8 @@ public class MarkdownStatistics {
 
         for (Statistics statistics : STATISTICS) {
             contentBuilder.append("<div class=\"markdown-statistic\">\n")
-                    .append(String.format("<div class=\"markdown-statistic-label\">%s</div>\n", statistics.label))
-                    .append(String.format("<div class=\"markdown-statistic-value\">%s</div>\n", statistics.value))
+                    .append(String.format("<div class=\"markdown-statistic-label\">%s</div>%n", statistics.label))
+                    .append(String.format("<div class=\"markdown-statistic-value\">%s</div>%n", statistics.value))
                     .append("</div>\n");
         }
 

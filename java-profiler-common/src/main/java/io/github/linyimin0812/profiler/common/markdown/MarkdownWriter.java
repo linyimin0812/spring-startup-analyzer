@@ -67,11 +67,9 @@ public class MarkdownWriter {
 
         String path = getPath(Jaeger.getServiceName() + ".md");
 
-        try {
-            FileWriter writer = new FileWriter(path);
+        try (FileWriter writer = new FileWriter(path)) {
             writer.write(Style.style);
             writer.write(content);
-            writer.close();
         } catch (IOException e) {
             logger.error("write {} to {} error.", content, path, e);
         }

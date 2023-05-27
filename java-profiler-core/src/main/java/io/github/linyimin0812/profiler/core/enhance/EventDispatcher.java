@@ -9,7 +9,8 @@ import io.github.linyimin0812.profiler.api.event.AtExitEvent;
 import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.Bridge;
 
-import java.util.Stack;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -117,7 +118,7 @@ public class EventDispatcher extends Bridge.AbstractBridge {
         /**
          * 调用栈
          */
-        private final Stack<Long> stack = new Stack<>();
+        private final Deque<Long> stack = new LinkedList<>();
 
         /**
          * 压入调用id
@@ -145,7 +146,7 @@ public class EventDispatcher extends Bridge.AbstractBridge {
          * @return 调用过程id
          */
         long getProcessId() {
-            return stack.firstElement();
+            return stack.getFirst();
         }
 
         boolean isEmpty() {

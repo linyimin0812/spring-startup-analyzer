@@ -244,9 +244,9 @@ public class BatchSpanBasedDurationProcessor implements SpanProcessor {
                     } else {
                         BatchSpanBasedDurationProcessor.logger.error("Exporter failed");
                     }
-                } catch (Throwable t) {
-                    ThrowableUtil.propagateIfFatal(t);
-                    BatchSpanBasedDurationProcessor.logger.warn("Exporter threw an Exception", t);
+                } catch (Exception e) {
+                    ThrowableUtil.propagateIfFatal(e);
+                    BatchSpanBasedDurationProcessor.logger.warn("Exporter threw an Exception", e);
                 } finally {
                     this.batch.clear();
                 }

@@ -40,7 +40,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
     private final Map<String, Object> enhancedObject = new ConcurrentHashMap<>();
 
 
-    public ProfilerClassFileTransformer(Instrumentation instrumentation, String args, List<URL> manifestPackages) {
+    public ProfilerClassFileTransformer(Instrumentation instrumentation, List<URL> manifestPackages) {
 
         Bridge.setBridge(new EventDispatcher());
         InstrumentationHolder.setInstrumentation(instrumentation);
@@ -98,7 +98,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
                 try {
                     interceptor.process(methodProcessor);
                     logger.info("transform: {}", getCacheKey(loader, classNode, methodNode));
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     logger.error("enhancer error, class: {}, method: {}, interceptor: {}, error: {}",
                             classNode.name, methodNode.name, interceptor.getClass().getName(), e);
                 }

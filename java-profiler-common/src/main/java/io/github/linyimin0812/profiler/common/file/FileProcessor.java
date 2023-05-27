@@ -99,9 +99,9 @@ public class FileProcessor {
                     "</div>\n" +
                     "</details>";
 
-            FileWriter writer = new FileWriter(dir + Jaeger.getServiceName() + "-all.html");
-            writer.write(renderStr);
-            writer.close();
+            try (FileWriter writer = new FileWriter(dir + Jaeger.getServiceName() + "-all.html")) {
+                writer.write(renderStr);
+            }
 
         } catch (Exception e) {
             logger.error("merge file {} and {} error.", mdName, htmlName, e);

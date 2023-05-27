@@ -6,6 +6,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -44,9 +45,9 @@ public class ProfilerAgentBoostrap {
         try {
             agentLoader = createAgentClassLoader();
             Class<?> transFormer = agentLoader.loadClass("io.github.linyimin0812.profiler.core.enhance.ProfilerClassFileTransformer");
-            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, String.class, List.class);
+            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, List.class);
             Method retransform = transFormer.getDeclaredMethod("retransformLoadedClass");
-            Object instance = constructor.newInstance(instrumentation, args, getManifests());
+            Object instance = constructor.newInstance(instrumentation, getManifests());
 
             instrumentation.addTransformer((ClassFileTransformer) instance, true);
 
@@ -71,7 +72,7 @@ public class ProfilerAgentBoostrap {
         return new ProfilerAgentClassLoader(urlList.toArray(new URL[0]));
     }
 
-    private static List<URL> getJars(String path) throws Throwable {
+    private static List<URL> getJars(String path) throws MalformedURLException {
 
         List<URL> urlList = new ArrayList<>();
 
