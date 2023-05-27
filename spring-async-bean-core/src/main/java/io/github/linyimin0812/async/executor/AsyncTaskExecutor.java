@@ -41,6 +41,7 @@ public class AsyncTaskExecutor {
             try {
                 future.get();
             } catch (ExecutionException | InterruptedException e) {
+                logger.error("future get error.", e);
                 throw new RuntimeException(e);
             }
         }
