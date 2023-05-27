@@ -141,10 +141,8 @@ public class BatchSpanBasedDurationProcessor implements SpanProcessor {
         private void addSpan(ReadableSpan span) {
             if (!this.queue.offer(span)) {
                 this.processedSpansCounter.add(1L, this.droppedAttrs);
-            } else if (this.queue.size() >= this.spansNeeded.get()) {
-                if (!this.signal.offer(true)) {
-                    logger.warn("signal offer failed.");
-                }
+            } else if (this.queue.size() >= this.spansNeeded.get() && !this.signal.offer(true)) {
+                logger.warn("signal offer failed.");
             }
 
         }
@@ -228,10 +226,8 @@ public class BatchSpanBasedDurationProcessor implements SpanProcessor {
 
         private CompletableResultCode forceFlush() {
             CompletableResultCode flushResult = new CompletableResultCode();
-            if (this.flushRequested.compareAndSet(null, flushResult)) {
-                if (!this.signal.offer(true)) {
-                    logger.warn("signal offer failed.");
-                }
+            if (this.flushRequested.compareAndSet(null, flushResult) && !this.signal.offer(true)) {
+                logger.warn("signal offer failed.");
             }
 
             CompletableResultCode possibleResult = this.flushRequested.get();

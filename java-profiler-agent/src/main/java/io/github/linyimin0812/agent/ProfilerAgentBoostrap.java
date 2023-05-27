@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author linyimin
@@ -21,18 +23,20 @@ public class ProfilerAgentBoostrap {
 
     private static final String BRIDGE_JAR = "java-profiler-bridge.jar";
 
+    private static final Logger logger = Logger.getLogger(ProfilerAgentBoostrap.class.getSimpleName());
+
     private static final String AGENT_HOME = System.getProperty("user.home") + File.separator + "java-profiler-boost" + File.separator;
     private static final String LIB_HOME = AGENT_HOME + "lib" + File.separator;
     private static final String EXTENSION_HOME = LIB_HOME + "extension" + File.separator;
 
     public static void premain(String args, Instrumentation instrumentation) {
 
-        System.out.println("command args: " + args);
+        logger.info("command args: " + args);
 
         // bridge.jar
         File spyJarFile = new File(LIB_HOME + BRIDGE_JAR);
         if (!spyJarFile.exists()) {
-            System.out.println("Spy jar file does not exist: " + spyJarFile);
+            logger.info("Spy jar file does not exist: " + spyJarFile);
             return;
         }
         // load agent-spy.jar
@@ -56,7 +60,7 @@ public class ProfilerAgentBoostrap {
             retransform.invoke(instance);
 
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
+            logger.log(Level.SEVERE, "Exception: " + args);
             throw new RuntimeException(e);
         }
     }
@@ -69,7 +73,7 @@ public class ProfilerAgentBoostrap {
         urlList.addAll(getJars(LIB_HOME));
         urlList.addAll(getJars(EXTENSION_HOME));
 
-        System.out.println(urlList);
+        logger.info(urlList.toString());
 
         return new ProfilerAgentClassLoader(urlList.toArray(new URL[0]));
     }
@@ -109,7 +113,7 @@ public class ProfilerAgentBoostrap {
                 packages.add(urls.nextElement());
             }
         } catch (IOException e) {
-            System.out.println("getManifests error. error: " + e.getMessage());
+            logger.log(Level.SEVERE, "getManifests error. error: " + e.getMessage());
         }
 
         return packages;

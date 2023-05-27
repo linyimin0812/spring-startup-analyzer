@@ -40,8 +40,7 @@ public class AsyncTaskExecutor {
         for (Future<?> future : futureList) {
             try {
                 future.get();
-            } catch (ExecutionException | InterruptedException e) {
-                logger.error("future get error.", e);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
