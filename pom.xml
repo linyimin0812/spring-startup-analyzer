@@ -67,6 +67,9 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <output.directory>${user.home}/java-profiler-boost/lib</output.directory>
     <config.directory>${user.home}/java-profiler-boost/config</config.directory>
+    <sonar.organization>linyimin-bupt</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
   </properties>
 
   <dependencyManagement>
