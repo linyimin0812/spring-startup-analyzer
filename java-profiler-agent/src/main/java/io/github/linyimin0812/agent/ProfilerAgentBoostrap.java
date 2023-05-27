@@ -27,6 +27,8 @@ public class ProfilerAgentBoostrap {
 
     public static void premain(String args, Instrumentation instrumentation) {
 
+        System.out.println("command args: " + args);
+
         // bridge.jar
         File spyJarFile = new File(LIB_HOME + BRIDGE_JAR);
         if (!spyJarFile.exists()) {
@@ -53,13 +55,13 @@ public class ProfilerAgentBoostrap {
 
             retransform.invoke(instance);
 
-        } catch (Throwable e) {
-            System.out.println("throwable: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    private static ClassLoader createAgentClassLoader() throws Throwable {
+    private static ClassLoader createAgentClassLoader() throws MalformedURLException {
 
         List<URL> urlList = new ArrayList<>();
 
