@@ -4,6 +4,8 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
 
 
 # 1. 简介
