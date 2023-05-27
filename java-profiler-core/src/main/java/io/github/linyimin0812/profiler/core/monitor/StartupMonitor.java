@@ -36,6 +36,7 @@ public class StartupMonitor implements Lifecycle {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 logger.error("sleep interrupt", e);
+                Thread.currentThread().interrupt();
                 break;
             }
         }
