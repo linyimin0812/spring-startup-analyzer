@@ -155,4 +155,97 @@ Bridge类中定义了不同时机的静态增强处理函数，具体的处理�
 
 ## Spring Bean异步加载原理
 
-待完成
+Spring在启动过程中对于Bean的加载是顺序进行的，如果存在部分Bean加载耗时比较严重时，应用的启动时长会被严重拉长。Bean的加载耗时主要在`init-method`方法或`@PostConstruct`标识的方法，容器中的Bean多数不存在依赖关系，如果可以将Bean的初始化方法异步化，可以大大降低启动耗时。
+
+主要依赖Spring提供一个`BeanPostProcessor`扩展点实现。`BeanPostProcessor`允许我们自定义bean的实例化和初始化过程。它是一个接口，定义了两个方法：
+
+> `postProcessBeforeInitialization(Object bean, String beanName)`：在bean初始化之前调用该方法,可以在初始化之前对bean对象进行任何自定义的修改或增强。
+`postProcessAfterInitialization(Object bean, String beanName)`：在bean初始化之后调用该方法。可以在bean初始化后对其进行任何自定义的修改或增强。
+
+
+方法：
+
+1. 实现`BeanPostProcessor`扩展点
+
+- 在`postProcessBeforeInitialization`中判断beanName是否是配置异步初始化Bean
+- 如果需要异步化，查找`init-method`或者`@PostConstruct`修饰的方法
+- 动态代理初始化方法，将初始化方法扔到线程池中执行，并返回Future
+
+```java
+public class AsyncProxyBeanPostProcessor implements BeanPostProcessor {
+
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+
+        if (!beanFactory.containsBeanDefinition(beanName)) {
+            return bean;
+        }
+
+        String methodName = AsyncInitBeanFinder.getAsyncInitMethodName(beanName, beanFactory.getBeanDefinition(beanName));
+
+        ProxyFactory proxyFactory = new ProxyFactory();
+        proxyFactory.setTargetClass(bean.getClass());
+        proxyFactory.setProxyTargetClass(true);
+
+        AsyncInitializeBeanMethodInvoker invoker = new AsyncInitializeBeanMethodInvoker(bean, beanName, methodName);
+
+        proxyFactory.addAdvice(invoker);
+
+        return proxyFactory.getProxy();
+
+    }
+
+    class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
+
+        @Override
+        public Object invoke(MethodInvocation invocation) throws Throwable {
+            if (AsyncTaskExecutor.isFinished()) {
+                return invocation.getMethod().invoke(targetObject, invocation.getArguments());
+            }
+
+            Method method = invocation.getMethod();
+            String methodName = method.getName();
+
+            if (this.asyncMethodName.equals(methodName)) {
+                logger.info("async-init-bean, beanName: {}, async init method: {}", beanName, asyncMethodName);
+                AsyncTaskExecutor.submitTask(() -> {
+                    invocation.getMethod().invoke(targetObject, invocation.getArguments());
+                });
+
+                return null;
+            }
+
+            return invocation.getMethod().invoke(targetObject, invocation.getArguments());
+        }
+    }
+}
+```
+
+2. 实现ApplicationListener
+
+- 监听ContextRefreshedEvent事件，等待所有异步执行的init-method完成；
+
+3. 异步化的Bean可能在Spring Bean初始化顺序的末尾，导致异步优化效果不佳，支持优先加载配置异步化的Bean
+
+- InstantiationAwareBeanPostProcessorAdapter可以做到在Bean实例化之前，预先回调。
+
+
+```java
+public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryAware {
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+
+        List<String> asyncBeans = AsyncConfig.getInstance().getAsyncBeanProperties().getBeanNames();
+        for (String beanName : asyncBeans) {
+
+            if (beanFactory instanceof DefaultListableBeanFactory && !((DefaultListableBeanFactory) beanFactory).containsBeanDefinition(beanName)) {
+                continue;
+            }
+            beanFactory.getBean(beanName);
+        }
+    }
+}
+
+```
