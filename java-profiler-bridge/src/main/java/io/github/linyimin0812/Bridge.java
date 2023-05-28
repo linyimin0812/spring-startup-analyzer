@@ -47,16 +47,17 @@ public class Bridge {
 
         @Override
         public void atEnter(Class<?> clazz, Object target, String methodName, String methodDesc, Object[] args) {
+            // NopBridge do not need to do anything
         }
 
         @Override
         public void atExit(Class<?> clazz, Object target, String methodName, String methodDesc, Object[] args, Object returnObject) {
-
+            // NopBridge do not need to do anything
         }
 
         @Override
         public void atExceptionExit(Class<?> clazz, Object target, String methodName, String methodDesc, Object[] args, Throwable throwable) {
-
+            // NopBridge do not need to do anything
         }
     }
 }
