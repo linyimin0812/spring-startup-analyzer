@@ -7,77 +7,82 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
 
+[中文](README_ZH.md) |
+[ENGLISH](README.md)
 
-# 1. 简介
+# 1. Introduction
 
-随着业务的发展，应用中引入的jar包越来越多，一些应用运行的fatjar有200多M，启动时间维持在6-7分钟左右，严重影响对线上问题的响应速度，同时也严重影响着研发效率。急需进行应用启动时长的优化。这篇文章《[一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)》提供了一个非常好的思路，优化效果很明显。结合这篇文章提供的思路，实现了这个项目。**无观测不优化**，本项目实现对应用启动整体过程的观测，[具体原理](./HOW_IT_WORKS.md)。主要包含以下能力：
+With the development of business, more and more JAR files are introduced into the application. Some fat JAR files have a size of more than 200MB, and the startup time is around 6-7 minutes, which seriously affects the response speed to online problems and also affects the development efficiency. It is necessary to optimize the startup time of the application. **No observation, no optimization**. This project implements the observation of the overall startup process of an application and provides some methods for optimizing startup time. It mainly includes the following capabilities.
 
-## 1.1 应用启动数据采集
+
+## 1.1 Application startup data collection
 
 <details open>
-  <summary style='cursor: pointer'><strong>UI首页</strong></summary>
+  <summary style='cursor: pointer'><strong>UI homepage</strong></summary>
 
 ![](./docs/home-ui.jpg)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>Spring bean加载耗时timeline可视化分析</strong></summary>
+  <summary style='cursor: pointer'><strong>timeline of Spring bean loading</strong></summary>
 
 ![](./docs/spring-bean-timeline.jpg)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>调用链路跟踪</strong></summary>
+  <summary style='cursor: pointer'><strong>Call chain tracking</strong></summary>
 
 ![](./docs/invoke-tracer.jpg)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>应用启动过程线程wall clock火焰图(支持指定线程名称，不指定则采集全部线程)</strong></summary>
+  <summary style='cursor: pointer'><strong>Wall clock flame graph of application startup(supports specifying thread names)</strong></summary>
 
 ![](./docs/flame-graph.jpg)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>各个Bean加载耗时</strong></summary>
+  <summary style='cursor: pointer'><strong>Loading time of Beans</strong></summary>
 
 ![](./docs/details-of-bean.png)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>方法调用次数、耗时统计(支持自定义方法)</strong></summary>
+  <summary style='cursor: pointer'><strong>Method invocation count and time statistics (support for custom methods)</strong></summary>
 
 ![](./docs/details-of-invoke.jpg)
 </details>
 
 <details>
-  <summary style='cursor: pointer'><strong>应用未加载的jar包(帮助fatjar瘦身)</strong></summary>
+  <summary style='cursor: pointer'><strong>Unloaded JAR files in the application (help with slimming down fat JAR)</strong></summary>
 
 ![](./docs/unused-jar.jpg)
 
-<strong>&emsp;需要注意的是: 有一些jar可能会在运行时加载，要删除启动时没有加载的jar包，需要做好测试，以免线上出现ClassNotFoundException</strong>
+<strong>&emsp;It should be noted that some JAR files may be loaded at runtime. To remove JAR files that are not loaded at startup, it is important to perform thorough testing to avoid encountering ClassNotFoundException errors in production</strong>
 </details>
 
 <details open>
-  <summary style='cursor: pointer'><strong>支持针对方法/类/包维度的自定义扩展</strong></summary>
-    &emsp;&emsp;系统预留了扩展接口，可以通过实现接口完成自定义功能扩展，<a href="#25-自定义扩展">详情查看</a>
+  <summary style='cursor: pointer'><strong>Support for custom extensions at the method/class/package</strong></summary>
+    &emsp;&emsp;The system has reserved extension interfaces that can be implemented to achieve custom functionality extensions,<a href="#25-custom-extension">details</a>
 </details>
 
-## 1.2 应用启动时长优化
+
+## 1.2 Optimization of application startup time
 
 <details open>
-  <summary style='cursor: pointer'><strong>Spring Bean异步加载</strong></summary>
-    &emsp;&emsp;针对初始化耗时比较长的bean，异步执行init和@PostConstruct方法，<a href="#3-应用启动时长优化">详情查看</a>
+  <summary style='cursor: pointer'><strong>Asynchronous init method of Spring Bean</strong></summary>
+    &emsp;&emsp;For beans with longer initialization time, execute the init and @PostConstruct methods asynchronously,<a href="#3-optimization-of-application-startup-time">details</a>
 </details>
 
 
-# 2. 应用启动数据采集
 
-因为项目需要对Spring Bean初始化时序及调用关系的可视化，选择了将数据上报到[jaeger](https://www.jaegertracing.io/)，由jaeger ui进行展示，所以需要本地启动jaeger。
+# 2. Application startup data collection
 
-采集的数据会统一写到`$HOME/java-profiler-boost/output/${appName}/${time}-${ip}-all.html`文件中，如果不能支持jaeger环境(如本地机器与预发环境隔离，本地机器无法访问到预发环境)，可以将此文件下载到本地机器，使用Chrome浏览器打开查看采集的数据。但是此文件不包含trace数据。
+Because the project requires visualization of the Spring Bean initialization timeline and invocation relationships, we have chosen to report the data to [jaeger](https://www.jaegertracing.io/), for display in the Jaeger UI. Therefore, it is necessary to locally start Jaeger.
 
-## 2.1 启动jaeger
+The collected data will be written to the `$HOME/java-profiler-boost/output/${appName}/${time}-${ip}-all.html` file. If Jaeger environment is not available (such as when the local machine is isolated from the staging environment and cannot access it), you can download this file to your local machine and open it using the Chrome browser to view the collected data. However, please note that this file does not include trace data.
+
+## 2.1 start jaeger
 
 ```shell
 docker run -d \
@@ -97,61 +102,63 @@ docker run -d \
 linyimin520812/all-in-one:v2.0.0
 ```
 
-访问[http://127.0.0.1:16686](http://127.0.0.1:16686)成功即说明jaeger已启动完成。
+Accessing http://127.0.0.1:16686 successfully indicates that Jaeger has been started and is ready.
 
-## 2.2 安装jar包
+## 2.2 Installation
 
-**1. 手动安装**
+**1. Manual Installation**
 
-1. 点击[realease](https://github.com/linyimin-bupt/java-profiler-boost/releases/download/v1.0.0/java-profiler-boost.tar.gz)下载最新版tar.gz包
-2. 新建文件夹，并解压
+1. Click [realease](https://github.com/linyimin-bupt/java-profiler-boost/releases/download/v1.0.0/java-profiler-boost.tar.gz) to download the latest version tar.gz package 
+
+
+2. Create a new folder and extract the files
 
 ```shell
 mkdir -p ${HOME}/java-profiler-boost
-cd 下载路径
+cd download_path
 tar -zxvf java-profiler-boost.tar.gz ${HOME}/java-profiler-boost
 ```
 
-**2. 脚本安装**
+**2. Shell script installation**
 
 ```shell
 curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/main/bin/setup.sh | sh
 ```
 
-## 2.3 配置项
+## 2.3 Configuration
 
-在启动参数中进行配置，如配置超时时间为30分钟：`-Djava-profiler.app.status.check.timeout=30`
+Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Djava-profiler.app.status.check.timeout=30`
 
-请务必配置`java-profiler.app.status.check.endpoints`选项，不然会一直采集直到应用启动检查超时(默认20分钟)才会停止，每隔1秒请求一次endpoint，请求响应头状态码为200则认为应用启动完成。
+Please make sure to configure the `java-profiler.app.status.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
 
 
-| 配置项                                               | 说明                                                      | 默认值                       |
-| ---------------------------------------------------- | --------------------------------------------------------- | ---------------------------- |
-| java-profiler.app.status.check.timeout               | 应用启动检查超时时间，单位为分钟                          | 20                           |
-| **java-profiler.app.status.check.endpoints**         | 应用启动成功检查url，可配置多个，以","分隔                | http://127.0.0.1:8080/actuator/health |
-| java-profiler.jaeger.grpc.export.endpoint            | jaeger的export endpoint                                   | http://localhost:14250       |
-| java-profiler.jaeger.ui.endpoint                     | jaeger的UI endpoint                                       | http://localhost:16686       |
-| java-profiler.invoke.chain.packages                  | 进行调用trace的包名，支持配置多个，以","进行分隔          | main方法类所处的包名         |
-| java-profiler.jaeger.span.min.sample.duration.millis | Jaeger span的最小导出时间(ms)                             | 10                           |
-| java-profiler.admin.http.server.port                 | 管理端口                                                  | 8065                         |
-| java-profiler.async.profiler.sample.thread.names     | async profiler采集的线程名称，支持配置多个，以","进行分隔 | main                         |
-| **java-profiler.async.profiler.interval.millis**     | async profiler采集间隔时间(ms)                            | 5                            |
-| java-profiler.spring.bean.init.min.millis            | statistics中展示Bean的最小时间(ms)                        | 100                          |
+| configuration option | description                           | default value                       |
+| ---- | ----------- | ---------------------------- |
+| java-profiler.app.status.check.timeout   | application startup check timeout time in minutes  | 20   |
+| **java-profiler.app.status.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:8080/actuator/health |
+| java-profiler.jaeger.grpc.export.endpoint            | export endpoint of jaeger  | http://localhost:14250       |
+| java-profiler.jaeger.ui.endpoint                     | UI endpoint of jaeger  | http://localhost:16686       |
+| java-profiler.invoke.chain.packages                  | package name(s) for tracing method calls, multiple package names can be configured, separated by commas         | package of main class        |
+| java-profiler.jaeger.span.min.sample.duration.millis | Minimum export time (in millis) for Jaeger spans | 10                           |
+| java-profiler.admin.http.server.port                 | management port      | 8065                         |
+| java-profiler.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                         |
+| **java-profiler.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                            |
+| java-profiler.spring.bean.init.min.millis            | Minimum time (in millis) for displaying a Bean in the statistics   | 100     |
 
-## 2.4 应用启动
+## 2.4 Application Startup
 
-此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:$HOME/java-profiler-boost/lib/java-profiler-agent.jar`即可。如果是以java命令行的方式启动应用，则在命令行中添加，如果是在IDEA中启动，则需要在VM options选项中添加。
+This project is started as an agent, so you can add the parameter -javaagent:$HOME/java-profiler-boost/lib/java-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
 
-日志文件路径：`$HOME/java-profiler-boost/logs`
+Path of logs：`$HOME/java-profiler-boost/logs`
 
-- startup.log: 启动过程中的日志
-- transform.log: 被re-transform的类/方法信息
+- startup.log: log of startup
+- transform.log: log of re-transform class
 
-应用启动完成后会在console和startup.log文件中输出`======= java-profiler-boost stop, click %s to view detailed info about the startup process ======`，可以通过此输出来判断采集是否完成。
+After the application has finished starting, the message ======= java-profiler-boost stop, click %s to view detailed info about the startup process ====== will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 
-## 2.5 自定义扩展
+## 2.5 Custom extension
 
-如果需要自定义观测能力，需要引入`java-profiler-starter`的pom作为扩展项目的父pom，然后就可以使用项目对外暴露的接口进行扩展。更多的细节可以参考[java-profiler-extension](https://github.com/linyimin-bupt/java-profiler-boost/tree/main/java-profiler-extension)的实现
+Translation: If you want to customize the profiling capabilities, you need to include the `java-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[java-profiler-extension](https://github.com/linyimin-bupt/java-profiler-boost/tree/main/java-profiler-extension)
 
 ```xml
 <parent>
@@ -161,7 +168,7 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 </parent>
 ```
 
-### 2.5.1 扩展接口
+### 2.5.1 Extension Interfaces
 
 <details>
 <summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
@@ -170,42 +177,42 @@ curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/mai
 public interface EventListener extends Startable {
 
     /**
-     * 应用启动时调用
+     * Invocation during application startup
      */
     void start();
 
     /**
-     * 应用启动完成后调用
+     * Invocation after application startup completion
      */
     void stop();
     
     /**
-     * 需要增强的类
-     * @param className 类全限定名, 如果为空, 默认返回为true
+     * class need to be enhance
+     * @param className
 
-     * @return true: 进行增强, false: 不进行增强
+     * @return true: enhance, false: not enhance
      */
     boolean filter(String className);
 
     /**
-     * 需要增强的方法(此方法会依赖filter(className), 只有filter(className)返回true时，才会执行到此方法)
-     * @param methodName 方法名
-     * @param methodTypes 方法参数列表
-     * @return true: 进行增强, false: 不进行增强
+     * Methods to be enhanced (This method relies on the filter(className) condition. It will only be executed if filter(className) returns true.)
+     * @param methodName
+     * @param methodTypes
+     * @return true: enhance, false: not enhance
      */
     default boolean filter(String methodName, String[] methodTypes) {
         return true;
     }
 
     /**
-     * 事件响应处理逻辑
-     * @param event 触发的事件
+     * Event response processing logic
+     * @param event fire  event
      */
     void onEvent(Event event);
 
     /**
-     * 监听的事件
-     * @return 需要监听的事件列表
+     * events to listen
+     * @return events need to be listened
      */
     List<Event.Type> listen();
 
@@ -213,9 +220,10 @@ public interface EventListener extends Startable {
 ```
 </details>
 
-其中`start()和stop()`方法代表系统的生命周期，分别在应用开始启动和应用启动完成时调用。`filter()`方法指定需要增强的类/方法。`listen()`方法指定监听的事件，包括`进入方法`和`方法返回`两种事件。`onEvent()`方法在监听的事件发生时会被调用
+The `start()` and `stop()` methods represent the lifecycle of the system, called respectively at the beginning and completion of application startup. The `filter()` method specifies the classes/methods that need to be enhanced. The `listen()` method specifies the events to listen for, including `method enter` and `method return` events. The `onEvent()` method is called when the listened events occur.
 
-例如下面是一个统计应用启动过程中java.net.URLClassLoader.findResource(String)方法调用次数的扩展
+For example, the following is an extension that counts the number of invocations of the java.net.URLClassLoader.findResource(String) method during the application startup process:
+
 
 <details>
     <summary style='cursor: pointer'>FindResourceCounter demo</summary>
@@ -243,12 +251,12 @@ public class FindResourceCounter implements EventListener {
     @Override
     public void onEvent(Event event) {
         if (event instanceof AtEnterEvent) {
-            // 开始进入findResource方法
+            // enter findResource method
         } else if (event instanceof AtExitEvent) {
-            // findResource方法返回
+            // findResource return
         }
 
-        // 统计调用次数
+        //  counts the number of invocations
         COUNT.incrementAndGet();
 
     }
@@ -272,16 +280,16 @@ public class FindResourceCounter implements EventListener {
 ```
 </details>
 
-需要注意**EventListener接口的实现需要使用@MetaInfServices标识**，因为扩展的接口是通过SPI进行加载的，使用`@MetaInfServices`标识后，在代码编译时会自动将实现类写入META-INF/services/io.github.linyimin0812.profiler.api.EventListener文件中。如果没有使用`@MetaInfServices`标识，需要手动将实现类的全限定名写入META-INF/services/io.github.linyimin0812.profiler.api.EventListener文件中，否则将加载不到此扩展实现。
+It is important to note that **the implementation of the EventListener interface should be annotated with @MetaInfServices**. This is because the extension interface is loaded through the Service Provider Interface (SPI). When you use the `@MetaInfServices` annotation, the implementation class will be automatically written to the `META-INF/services/io.github.linyimin0812.profiler.api.EventListener` file during the code compilation process. If you don't use the `@MetaInfServices` annotation, you need to manually write the fully qualified name of the implementation class into the META-INF/services/io.github.linyimin0812.profiler.api.EventListener file`. Otherwise, the extension implementation will not be loaded.
 
-### 2.5.2 UI扩展接口
+### 2.5.2 UI Extension Interfaces
 
-在实现对某个类/方法的扩展后，如果需要将统计数据同步到jaeger-ui展示，可以使用相关的UI接口。本项目提供了2种接口：
+After implementing an extension for a specific class/method, if you want to synchronize the statistical data to be displayed in the Jaeger UI, you can use the related UI interfaces. This project provides two types of interfaces:
 
-**1. 如果需要展示调用关系，可以使用jaeger tracer接口**
+**1. If you need to display the invocation relationships, you can use the Jaeger Tracer interface**
 
 <details>
-    <summary style='cursor: pointer'>UI样式</summary>
+    <summary style='cursor: pointer'>UI format</summary>
 
 ![](./docs/home-ui.jpg)
 </details>
@@ -303,64 +311,67 @@ span.end();
 jaeger.stop();
 ```
 
-**2. markdown content接口**
+**2. markdown content interface**
 
 <details>
-    <summary style='cursor: pointer'>UI样式</summary>
+    <summary style='cursor: pointer'>UI format</summary>
 
 ![](./docs/markdown-content.jpg)
 
 </details>
 
 ```java
-// 写入markdown内容，默认order为100，order越小，显示越靠前
+// markdown content, default order value is 100, the smaller the order, the higher the priority for display
 MarkdownWriter.write(String content);
-// 指定显示order
+// specify order
 MarkdownWriter.write(int order, String content);
 ```
 
-**3. markdown statistics接口**
+**3. markdown statistics interfaces**
 
 <details>
-    <summary style='cursor: pointer'>UI样式</summary>
+    <summary style='cursor: pointer'>UI format</summary>
 
 ![](./docs/markdown-statistics.jpg)
 </details>
 
 ```java
-// 写入markdown统计数值，默认order为100，order越小，显示越靠前
+// markdown statistics, default order value is 100, the smaller the order, the higher the priority for display
 MarkdownStatistics.write(String label, String value);
-// 指定显示order
+// specify order
 MarkdownStatistics.write(int order, String label, String value);
 ```
 
 
-### 2.5.3 打包运行
+### 2.5.3 Package & Run
 
-在`java-profiler-starter`的pom中已经定义了打包plugin，默认会将生成的jar包拷贝到`$HOME/java-profiler-boost/extension`文件下。
+The `java-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/java-profiler-boost/extension` directory.
 
 ```shell
 mvn clean package
 ```
 
-只要按照步骤[安装jar包](#22-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#24-应用启动)即可加载扩展jar包。
+Once you have installed this project by following the steps in the [Installation](#22-Installation) section, you can execute the packaging command mentioned above. After the packaging is complete, you can start the application as described in the [Application Startup](#24-application-startup) section to load the extension JAR file.
 
-# 3. 应用启动时长优化
+# 3. Optimization of application startup time
 
-从[应用启动数据采集](#2-应用启动数据采集)中，可以获取初始化耗时长的Bean，因为Spring启动过程是单线程完成的，为了优化应用的启动时长，可以考虑将这些耗时长的Bean的初始化方法异步化，查看[实现原理](./HOW_IT_WORKS.md#spring-bean异步加载原理)。
+<!--  -->
 
-需要注意：
+ From the [Application startup data collection](#2-application-startup-data-collection)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous. You can refer to the [Implementation Principle](./HOW_IT_WORKS_EN.md) section for details on how it works.
 
-- **应该优先从代码层面优化初始化时间长的Bean，从根本上解决Bean初始化耗时长问题**
-- **对于二方包/三方包中初始化耗时长的Bean(无法进行代码优化)再考虑Bean的异步化**
-- **对于不被依赖的Bean可以放心进行异步化**，可以通过[各个Bean加载耗时](#11-应用启动数据采集)中的`Root Bean`判断Bean是否被其他Bean依赖
-- **对于被依赖的Bean需要小心分析，在应用启动过程中不能其他Bean被调用，否则可能会存在问题**
 
-## 3.1 支持异步化的Bean类型
+NOTE:
 
-支持@Bean, @PostConstruct及@ImportResource 方式初始化bean，使用demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
+- **It is advisable to prioritize optimizing the code of Beans to fundamentally address the issue of long initialization time**
+- **For Beans with long initialization time in second-party or third-party packages (where code optimization is not possible), consider asynchronous initialization of those Beans.**
+- **For Beans that are not dependent on other Beans, you can confidently proceed with asynchronous initialization**，You can determine if a Bean is dependent on other Beans by examining the `Root Bean` in  [Loading time of Beans](#11-application-startup-data-collection) session
+- **Careful analysis is required for Beans that are dependent on other Beans. They should not be called by other Beans during the application startup process, as it may lead to issues**
 
-1. `@Bean(initMethod = "init")`标识的Bean
+## 3.1 Types of Bean for Async
+
+Supports initialization of beans through @Bean, @PostConstruct, and @ImportResource. demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
+
+1. Bean annotated with `@Bean(initMethod = "init")`
 
 ```java
 @Bean(initMethod = "init")
@@ -369,7 +380,7 @@ public TestBean testBean() {
 }
 ```
 
-2. `@PostConstruct`标识的Bean
+2. Bean annotated with `@PostConstruct`
 
 
 ```java
@@ -383,9 +394,9 @@ public class TestComponent {
 ```
 
 
-## 3.2 接入异步Bean优化
+## 3.2 Usage
 
-1. 添加pom依赖
+1. Import Dependency
 
 ```xml
 <dependency>
@@ -395,41 +406,39 @@ public class TestComponent {
 </dependency>
 ```
 
-2. 配置一步加载信息
+2. Configuration
 
 ```properties
-# 异步化的Bean可能在Spring Bean初始化顺序的末尾，导致异步优化效果不佳，打开配置优先加载异步化的Bean
+# Asynchronous beans may be at the end of the Spring bean initialization order, which may result in suboptimal effects of asynchronous optimization. Open the configuration to prioritize loading asynchronous beans.
 java.profiler.boost.spring.async.bean-priority-load-enable=true
-# 指定异步的Bean名称
+# name of bean to async init
 java.profiler.boost.spring.async.bean-names=testBean,testComponent
-# 执行异步化Bean初始化方法线程池的核心线程数
+# init bean thread pool core size
 java.profiler.boost.spring.async.init-bean-thread-pool-core-size=8
-# 执行异步化Bean初始化方法线程池的最大线程数
+# init bean thread pool max size
 java.profiler.boost.spring.async.init-bean-thread-pool-max-size=8
 ```
 
-3. 检查Bean是否异步初始化
+3. Check if the bean is initialized asynchronously
 
-查看日志`$HOME/java-profiler-boost/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
+View the log in the $HOME/java-profiler-boost/logs/startup.log file. For asynchronously initialized methods, a log entry will be written in the following format:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
 
-# 4. 后续计划
+# 4. Future Plans
 
-目前已完成应用启动过程的观测，可以知道应用启动过程中的卡点。所以接下来需要针对一些常见的卡点提供一套解决方案，比如：
+Currently, the observation of the application startup process has been completed, which allows us to identify bottlenecks during the startup. Therefore, the next step is to provide a set of solutions for common bottlenecks, such as:
 
 - [ ] Jar Index
 
-- [ ] 通用的优化方案
+
+# 5. Contribute to the project.
+
+[CONTRIBUTING](./CONTRIBUTING.md) 
 
 
-# 5. 为项目添砖加瓦
+# 6. 🙏Thank you for your support
 
-查看[CONTRIBUTING](./CONTRIBUTING.md)，同时欢迎提出 [issues](https://github.com/linyimin-bupt/java-profiler-boost/issues) 与 [pull requests](https://github.com/linyimin-bupt/java-profiler-boost/pulls)!。
-
-# 6. 🙏感谢支持
-
-如果这个项目对你产生了一点的帮助，请为这个项目点上一颗 ⭐️
-
+If this project has been helpful to you, please consider giving it a star⭐️
