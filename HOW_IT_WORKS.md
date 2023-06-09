@@ -88,13 +88,13 @@ JVM加载Class时，由于类加载器的实现对于jar路径没有顺序要求
 
 ### 自定义类加载器实现隔离
 
-为了避免本项目(java-profiler-boost)代码对应用的影响，项目进行了代码隔离。在JVM中一个类型实例是通过类加载器+全类名确定的也就是说为了避免不同模块代码间相互影响(两个jar中可能会存在全类名相同，但是逻辑完全不同的类)，可以通过使用不同的ClassLoader进行加载来实现隔离。如arthas、tomcat等都是基于ClassLoader实现代码隔离的，本项目参考了arthas类隔离的实现，也是通过定义了自己的ClassLoader——[ProfilerAgentClassLoader](https://github.com/linyimin0812/java-profiler-boost/blob/main/java-profiler-agent/src/main/java/io/github/linyimin0812/agent/ProfilerAgentClassLoader.java)来实现与应用代码隔离的。
+为了避免本项目(spring-startup-analyzer)代码对应用的影响，项目进行了代码隔离。在JVM中一个类型实例是通过类加载器+全类名确定的也就是说为了避免不同模块代码间相互影响(两个jar中可能会存在全类名相同，但是逻辑完全不同的类)，可以通过使用不同的ClassLoader进行加载来实现隔离。如arthas、tomcat等都是基于ClassLoader实现代码隔离的，本项目参考了arthas类隔离的实现，也是通过定义了自己的ClassLoader——[ProfilerAgentClassLoader](https://github.com/linyimin0812/spring-startup-analyzer/blob/main/spring-profiler-agent/src/main/java/io/github/linyimin0812/agent/ProfilerAgentClassLoader.java)来实现与应用代码隔离的。
 
 > 类加载原则：**加载当前类的加载器，也会用于加载其所依赖的类(当然不一定是此类加载器加载，也可能是遵循双亲委派原则，由双亲加载器加载**)
 
-因为Premain-Class——`io.github.linyimin0812.agent.ProfilerAgentBoostrap`的premain方法是agent的入口方法，启动时由应用JVM加载，一般是ApplicationClassLoader加载器加载。按照上述类加载器的原则，本项目的代码也都会由应用的ApplicationClassLoader加载，无法实现代码隔离。要想实现代码隔离，就要打破上面的类加载原则。
+因为Premain-Class——`ProfilerAgentBoostrap`的premain方法是agent的入口方法，启动时由应用JVM加载，一般是ApplicationClassLoader加载器加载。按照上述类加载器的原则，本项目的代码也都会由应用的ApplicationClassLoader加载，无法实现代码隔离。要想实现代码隔离，就要打破上面的类加载原则。
 
-因为Premain-Class类的pre-main方法是agent的入口方法，一定会由应用类加载器加载。所以讲Premain-Class和自定义类加载器放到一个单独的jar包——[java-profiler-agent](https://github.com/linyimin0812/java-profiler-boost/tree/main/java-profiler-agent)中，由应用类加载器加载，而项目的核心逻辑放到其他jar包当中，由自定义类加载器加载，这样就可以实现应用代码与本项目代码的隔离。
+因为Premain-Class类的pre-main方法是agent的入口方法，一定会由应用类加载器加载。所以讲Premain-Class和自定义类加载器放到一个单独的jar包——[spring-profiler-agent](https://github.com/linyimin0812/spring-startup-analyzer/tree/main/spring-profiler-agent)中，由应用类加载器加载，而项目的核心逻辑放到其他jar包当中，由自定义类加载器加载，这样就可以实现应用代码与本项目代码的隔离。
 
 ![](docs/arch-of-classloader.svg)
 
@@ -105,10 +105,10 @@ Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, L
 Object instance = constructor.newInstance(instrumentation, getManifests());
 ```
 
-1. 首先通过`ProfilerAgentClassLoader`加载[java-profiler-core](https://github.com/linyimin0812/java-profiler-boost/tree/main/java-profiler-core)的初始化类`ProfilerClassFileTransformer`;
+1. 首先通过`ProfilerAgentClassLoader`加载[spring-profiler-core](https://github.com/linyimin0812/spring-startup-analyzer/tree/main/spring-profiler-core)的初始化类`ProfilerClassFileTransformer`;
 2. 通过反射调用的方式进行实例化实现本项目的初始化。
 
-因为`ProfilerClassFileTransformer`是由`ProfilerAgentClassLoader`加载器加载的，`ProfilerClassFileTransformer`负责初始化`java-profiler-core`，按照加载当前类的加载器，也会用于加载其所依赖的类原则，`ProfilerClassFileTransformer`依赖的类也会由`ProfilerAgentClassLoader`加载，所以就是实现了本项目与应用的隔离。
+因为`ProfilerClassFileTransformer`是由`ProfilerAgentClassLoader`加载器加载的，`ProfilerClassFileTransformer`负责初始化`spring-profiler-core`，按照加载当前类的加载器，也会用于加载其所依赖的类原则，`ProfilerClassFileTransformer`依赖的类也会由`ProfilerAgentClassLoader`加载，所以就是实现了本项目与应用的隔离。
 
 注意：不能将反射调用结果强制转换成`ProfilerClassFileTransformer`，不然会抛ClassCastException。因为左边`ProfilerClassFileTransformer`的类型实例是由应用的ApplicationClassLoader加载的，而右边的`ProfilerClassFileTransformer`的类型实例是由`ProfilerAgentClassLoader`加载的，class实例不同不能进行转换。
 
@@ -127,21 +127,21 @@ ProfilerClassFileTransformer instance = constructor.newInstance(instrumentation,
 
 ![](docs/app-can-not-invoke-profiler-class.svg)
 
-本项目采用了Arthas中的方案，引入了一个[java-profiler-bridge](https://github.com/linyimin0812/java-profiler-boost/tree/main/java-profiler-bridge)模块，相当与在应用和本项目之间架起了一座桥梁。此模块中只有一个`Bridge`类文件，由BoostrapClassLoader加载，所以Bridge对于ApplicationClassLoader和ProfilerAgentClassLoader都是可见的，应用通过Bridge实现对本项目的调用，从而实现功能的增强。
+本项目采用了Arthas中的方案，引入了一个[spring-profiler-bridge](https://github.com/linyimin0812/spring-startup-analyzer/tree/main/spring-profiler-bridge)模块，相当与在应用和本项目之间架起了一座桥梁。此模块中只有一个`Bridge`类文件，由BoostrapClassLoader加载，所以Bridge对于ApplicationClassLoader和ProfilerAgentClassLoader都是可见的，应用通过Bridge实现对本项目的调用，从而实现功能的增强。
 
 ```java
 File spyJarFile = new File(LIB_HOME + BRIDGE_JAR);
 instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(spyJarFile));
 ```
 
-1. 将java-profiler-bridge.jar添加到应用的BootstrapClassLoader的搜索路径中
+1. 将spring-profiler-bridge.jar添加到应用的BootstrapClassLoader的搜索路径中
 2. 按照类加载的双亲委派原则，加载Bridge类时，会优先委托给BootstrapClassLoader，所以Bridge会被根类加载器加载，而不是本项目中自定义的ProfilerAgentClassLoader加载
 
 
-Bridge类中定义了不同时机的静态增强处理函数，具体的处理逻辑由抽象类AbstractBridge的子类[EventDispatcher](https://github.com/linyimin0812/java-profiler-boost/blob/main/java-profiler-core/src/main/java/io/github/linyimin0812/profiler/core/enhance/EventDispatcher.java)实现。
+Bridge类中定义了不同时机的静态增强处理函数，具体的处理逻辑由抽象类AbstractBridge的子类[EventDispatcher](https://github.com/linyimin0812/spring-startup-analyzer/blob/main/spring-profiler-core/src/main/java/io/github/linyimin0812/profiler/core/enhance/EventDispatcher.java)实现。
 
 
-因为AbstractBridge是Bridge的内部静态类，在Bridge中定义了一个静态属性，所以AbstractBridge也会由BoostrapClassLoader加载。而EventDispatcher在java-profiler-core模块中实现，所以会被本项目自定义类加载器ProfilerAgentClassLoader加载。
+因为AbstractBridge是Bridge的内部静态类，在Bridge中定义了一个静态属性，所以AbstractBridge也会由BoostrapClassLoader加载。而EventDispatcher在spring-profiler-core模块中实现，所以会被本项目自定义类加载器ProfilerAgentClassLoader加载。
 
 所以本项目可以通过调用Bridge的setBridge方法设置增强代码的具体执行逻辑。因为AbstractBridge由BoostrapClassLoader加载，EventDispatcher由ProfilerAgentClassLoader加载，所以EventDispatcher的实例可以向上类型转换成AbstractBridge实例，完成赋值操作。
 

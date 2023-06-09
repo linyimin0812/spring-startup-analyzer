@@ -1,22 +1,22 @@
 MVN=mvn
-PROJECT_NAME=java-profiler-boost
+PROJECT_NAME=spring-startup-analyzer
 INSTALL_DIR=${HOME}/${PROJECT_NAME}
 
 .PYTHON: clean
 clean:
 	$(MVN) clean
-	cd ./java-profiler-extension && ${MVN} clean
+	cd ./spring-profiler-extension && ${MVN} clean
 
 .PYTHON: package
 package: clean install
 	${MVN} package
-	cd ./java-profiler-extension && ${MVN} package
+	cd ./spring-profiler-extension && ${MVN} package
 	${MVN} package
 
 .PYTHON: install
 install: clean
 	${MVN} install
-	cd ./java-profiler-extension && ${MVN} install
+	cd ./spring-profiler-extension && ${MVN} install
 
 .PYTHON: deploy
 deploy: clean

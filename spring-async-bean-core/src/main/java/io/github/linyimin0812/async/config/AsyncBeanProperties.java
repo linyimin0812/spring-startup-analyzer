@@ -12,7 +12,7 @@ import java.util.List;
  **/
 public class AsyncBeanProperties {
 
-    public static final String PREFIX = "java.profiler.boost.spring.async";
+    public static final String PREFIX = "spring-startup-analyzer.boost.spring.async";
 
     /**
      * Switch to prioritize async initialization of beans, disabled by default

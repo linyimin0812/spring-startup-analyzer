@@ -11,26 +11,26 @@
   </parent>
 
   <groupId>io.github.linyimin0812</groupId>
-  <artifactId>java-profiler-boost</artifactId>
+  <artifactId>spring-startup-analyzer</artifactId>
   <packaging>pom</packaging>
-  <version>1.2.0</version>
+  <version>1.0.0-SNAPSHOT</version>
 
-  <name>java-profiler-boost</name>
+  <name>spring-startup-analyzer</name>
 
   <modules>
-    <module>java-profiler-core</module>
-    <module>java-profiler-bridge</module>
-    <module>java-profiler-agent</module>
-    <module>java-profiler-api</module>
-    <module>java-profiler-common</module>
-    <module>java-profiler-starter</module>
+    <module>spring-profiler-core</module>
+    <module>spring-profiler-bridge</module>
+    <module>spring-profiler-agent</module>
+    <module>spring-profiler-api</module>
+    <module>spring-profiler-common</module>
+    <module>spring-profiler-starter</module>
     <module>spring-async-bean-core</module>
     <module>spring-async-bean-starter</module>
   </modules>
 
-  <url>https://github.com/linyimin5208/java-profiler-boost</url>
+  <url>https://github.com/linyimin5208/spring-startup-analyzer</url>
 
-  <description>java-profiler-boost</description>
+  <description>spring-startup-analyzer</description>
 
   <licenses>
     <license>
@@ -39,9 +39,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com/linyimin5208/java-profiler-boost.git</connection>
-    <developerConnection>scm:git:ssh://github.com/linyimin5208/java-profiler-boost.git</developerConnection>
-    <url>https://github.com/linyimin5208/java-profiler-boost/tree/main</url>
+    <connection>scm:git:git://github.com/linyimin5208/spring-startup-analyzer.git</connection>
+    <developerConnection>scm:git:ssh://github.com/linyimin5208/spring-startup-analyzer.git</developerConnection>
+    <url>https://github.com/linyimin5208/spring-startup-analyzer/tree/main</url>
   </scm>
   <developers>
     <developer>
@@ -65,8 +65,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <output.directory>${user.home}/java-profiler-boost/lib</output.directory>
-    <config.directory>${user.home}/java-profiler-boost/config</config.directory>
+    <output.directory>${user.home}/spring-startup-analyzer/lib</output.directory>
+    <config.directory>${user.home}/spring-startup-analyzer/config</config.directory>
     <sonar.organization>linyimin-bupt</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 

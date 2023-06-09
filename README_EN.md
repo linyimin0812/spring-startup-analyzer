@@ -1,11 +1,11 @@
-[![license](https://img.shields.io/github/license/linyimin0812/java-profiler-boost)](https://github.com/linyimin0812/java-profiler-boost)
-[![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/java-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
-[![](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=alert_status)](https://sonarcloud.io/project/overview?id=linyimin0812_java-profiler-boost)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
+[![license](https://img.shields.io/github/license/linyimin0812/spring-startup-analyzer)](https://github.com/linyimin0812/spring-startup-analyzer)
+[![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/spring-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
+[![](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=alert_status)](https://sonarcloud.io/project/overview?id=linyimin0812_spring-startup-analyzer)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 
 [中文](README.md) |
 [ENGLISH](README_EN.md)
@@ -80,7 +80,7 @@ With the development of business, more and more JAR files are introduced into th
 
 Because the project requires visualization of the Spring Bean initialization timeline and invocation relationships, we have chosen to report the data to [jaeger](https://www.jaegertracing.io/), for display in the Jaeger UI. Therefore, it is necessary to locally start Jaeger.
 
-The collected data will be written to the `$HOME/java-profiler-boost/output/${appName}/${time}-${ip}-all.html` file. If Jaeger environment is not available (such as when the local machine is isolated from the staging environment and cannot access it), you can download this file to your local machine and open it using the Chrome browser to view the collected data. However, please note that this file does not include trace data.
+The collected data will be written to the `$HOME/spring-startup-analyzer/output/${appName}/${time}-${ip}-all.html` file. If Jaeger environment is not available (such as when the local machine is isolated from the staging environment and cannot access it), you can download this file to your local machine and open it using the Chrome browser to view the collected data. However, please note that this file does not include trace data.
 
 ## 2.1 start jaeger
 
@@ -108,63 +108,63 @@ Accessing http://127.0.0.1:16686 successfully indicates that Jaeger has been sta
 
 **1. Manual Installation**
 
-1. Click [realease](https://github.com/linyimin-bupt/java-profiler-boost/releases/download/v1.0.0/java-profiler-boost.tar.gz) to download the latest version tar.gz package 
+1. Click [realease](https://github.com/linyimin-bupt/spring-startup-analyzer/releases/download/v1.0.0/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package 
 
 
 2. Create a new folder and extract the files
 
 ```shell
-mkdir -p ${HOME}/java-profiler-boost
+mkdir -p ${HOME}/spring-startup-analyzer
 cd download_path
-tar -zxvf java-profiler-boost.tar.gz ${HOME}/java-profiler-boost
+tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
 ```
 
 **2. Shell script installation**
 
 ```shell
-curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/main/bin/setup.sh | sh
+curl -sS https://raw.githubusercontent.com/linyimin-bupt/spring-startup-analyzer/main/bin/setup.sh | sh
 ```
 
 ## 2.3 Configuration
 
-Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Djava-profiler.app.status.check.timeout=30`
+Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Dspring-startup-analyzer.app.status.check.timeout=30`
 
-Please make sure to configure the `java-profiler.app.status.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
+Please make sure to configure the `spring-startup-analyzer.app.status.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
 
 
 | configuration option | description                           | default value                       |
 | ---- | ----------- | ---------------------------- |
-| java-profiler.app.status.check.timeout   | application startup check timeout time in minutes  | 20   |
-| **java-profiler.app.status.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:8080/actuator/health |
-| java-profiler.jaeger.grpc.export.endpoint            | export endpoint of jaeger  | http://localhost:14250       |
-| java-profiler.jaeger.ui.endpoint                     | UI endpoint of jaeger  | http://localhost:16686       |
-| java-profiler.invoke.chain.packages                  | package name(s) for tracing method calls, multiple package names can be configured, separated by commas         | package of main class        |
-| java-profiler.jaeger.span.min.sample.duration.millis | Minimum export time (in millis) for Jaeger spans | 10                           |
-| java-profiler.admin.http.server.port                 | management port      | 8065                         |
-| java-profiler.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                         |
-| **java-profiler.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                            |
-| java-profiler.spring.bean.init.min.millis            | Minimum time (in millis) for displaying a Bean in the statistics   | 100     |
+| spring-startup-analyzer.app.status.check.timeout   | application startup check timeout time in minutes  | 20   |
+| **spring-startup-analyzer.app.status.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:8080/actuator/health |
+| spring-startup-analyzer.jaeger.grpc.export.endpoint            | export endpoint of jaeger  | http://localhost:14250       |
+| spring-startup-analyzer.jaeger.ui.endpoint                     | UI endpoint of jaeger  | http://localhost:16686       |
+| spring-startup-analyzer.invoke.chain.packages                  | package name(s) for tracing method calls, multiple package names can be configured, separated by commas         | package of main class        |
+| spring-startup-analyzer.jaeger.span.min.sample.duration.millis | Minimum export time (in millis) for Jaeger spans | 10                           |
+| spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                         |
+| spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                         |
+| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                            |
+| spring-startup-analyzer.spring.bean.init.min.millis            | Minimum time (in millis) for displaying a Bean in the statistics   | 100     |
 
 ## 2.4 Application Startup
 
-This project is started as an agent, so you can add the parameter -javaagent:$HOME/java-profiler-boost/lib/java-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
+This project is started as an agent, so you can add the parameter -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
 
-Path of logs：`$HOME/java-profiler-boost/logs`
+Path of logs：`$HOME/spring-startup-analyzer/logs`
 
 - startup.log: log of startup
 - transform.log: log of re-transform class
 
-After the application has finished starting, the message ======= java-profiler-boost stop, click %s to view detailed info about the startup process ====== will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
+After the application has finished starting, the message ======= spring-startup-analyzer stop, click %s to view detailed info about the startup process ====== will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 
 ## 2.5 Custom extension
 
-Translation: If you want to customize the profiling capabilities, you need to include the `java-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[java-profiler-extension](https://github.com/linyimin-bupt/java-profiler-boost/tree/main/java-profiler-extension)
+Translation: If you want to customize the profiling capabilities, you need to include the `spring-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)
 
 ```xml
 <parent>
     <groupId>io.github.linyimin0812</groupId>
-    <artifactId>java-profiler-starter</artifactId>
-    <version>1.2.0</version>
+    <artifactId>spring-profiler-starter</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 </parent>
 ```
 
@@ -345,7 +345,7 @@ MarkdownStatistics.write(int order, String label, String value);
 
 ### 2.5.3 Package & Run
 
-The `java-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/java-profiler-boost/extension` directory.
+The `spring-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/spring-startup-analyzer/extension` directory.
 
 ```shell
 mvn clean package
@@ -400,7 +400,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>1.2.0</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -408,18 +408,18 @@ public class TestComponent {
 
 ```properties
 # Asynchronous beans may be at the end of the Spring bean initialization order, which may result in suboptimal effects of asynchronous optimization. Open the configuration to prioritize loading asynchronous beans.
-java.profiler.boost.spring.async.bean-priority-load-enable=true
+spring-startup-analyzer.boost.spring.async.bean-priority-load-enable=true
 # name of bean to async init
-java.profiler.boost.spring.async.bean-names=testBean,testComponent
+spring-startup-analyzer.boost.spring.async.bean-names=testBean,testComponent
 # init bean thread pool core size
-java.profiler.boost.spring.async.init-bean-thread-pool-core-size=8
+spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-core-size=8
 # init bean thread pool max size
-java.profiler.boost.spring.async.init-bean-thread-pool-max-size=8
+spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 ```
 
 3. Check if the bean is initialized asynchronously
 
-View the log in the $HOME/java-profiler-boost/logs/startup.log file. For asynchronously initialized methods, a log entry will be written in the following format:
+View the log in the $HOME/spring-startup-analyzer/logs/startup.log file. For asynchronously initialized methods, a log entry will be written in the following format:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}

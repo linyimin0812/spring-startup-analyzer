@@ -2,9 +2,9 @@
 
 set -euxf -o pipefail
 
-PRODUCT_NAME=java-profiler-boost
-LAST_TAG=${1:-v1.2.0}
-PROFILER_HOME=${HOME}/java-profiler-boost
+PRODUCT_NAME=spring-startup-analyzer
+LAST_TAG=${1:-v1.0.0-SNAPSHOT}
+PROFILER_HOME=${HOME}/spring-startup-analyzer
 
 check_permission() {
   if [ ! -w "${HOME}" ]; then
@@ -20,12 +20,12 @@ download_jar() {
 
   download_url="https://github.com/linyimin0812/${PRODUCT_NAME}/releases/download/${LAST_TAG}/${PRODUCT_NAME}.tar.gz"
 
-  echo "Download java-profiler-boost from: ${download_url}"
+  echo "Download spring-startup-analyzer from: ${download_url}"
 
   curl -#Lkf \
       -o "${PROFILER_HOME}/${PRODUCT_NAME}.tar.gz" \
       "${download_url}" \
-    || (echo "Download java-profiler-boost from: ${download_url} error, please install manually!!!" && exit 1)
+    || (echo "Download spring-startup-analyzer from: ${download_url} error, please install manually!!!" && exit 1)
 
 }
 

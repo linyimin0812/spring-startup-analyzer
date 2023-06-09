@@ -5,8 +5,8 @@
 1. 下载源码
 
 ```shell
-git clone https://github.com/linyimin0812/java-profiler-boost.git
-cd java-profiler-boost
+git clone https://github.com/linyimin0812/spring-startup-analyzer.git
+cd spring-startup-analyzer
 ```
 
 2. 编译
@@ -100,11 +100,11 @@ git checkout feat/20230505_support_sample_specify_thread_1
 make
 ```
 
-编译结果会放到build文件夹下，需要将so文件移动到`java-profiler-boost`项目文件中
+编译结果会放到build文件夹下，需要将so文件移动到`spring-startup-analyzer`项目文件中
 
 ```shell
 # linux
-mv ./build/libasyncProfiler.so ${dir}/java-profiler-boost/java-profiler-extension/async-profiler/libasyncProfiler-linux-x64.so
+mv ./build/libasyncProfiler.so ${dir}/spring-startup-analyzer/spring-profiler-extension/async-profiler/libasyncProfiler-linux-x64.so
 # mac
-mv ./build/libasyncProfiler.so ${dir}/java-profiler-boost/java-profiler-extension/async-profiler/libasyncProfiler-mac.so
+mv ./build/libasyncProfiler.so ${dir}/spring-startup-analyzer/spring-profiler-extension/async-profiler/libasyncProfiler-mac.so
 ```

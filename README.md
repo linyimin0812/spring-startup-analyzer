@@ -1,11 +1,11 @@
-[![license](https://img.shields.io/github/license/linyimin0812/java-profiler-boost)](https://github.com/linyimin0812/java-profiler-boost)
-[![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/java-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
-[![](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=alert_status)](https://sonarcloud.io/project/overview?id=linyimin0812_java-profiler-boost)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_java-profiler-boost&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_java-profiler-boost)
+[![license](https://img.shields.io/github/license/linyimin0812/spring-startup-analyzer)](https://github.com/linyimin0812/spring-startup-analyzer)
+[![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/spring-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
+[![](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=alert_status)](https://sonarcloud.io/project/overview?id=linyimin0812_spring-startup-analyzer)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 
 [中文](README.md) |
 [ENGLISH](README_EN.md)
@@ -77,7 +77,7 @@
 
 因为项目需要对Spring Bean初始化时序及调用关系的可视化，选择了将数据上报到[jaeger](https://www.jaegertracing.io/)，由jaeger ui进行展示，所以需要本地启动jaeger。
 
-采集的数据会统一写到`$HOME/java-profiler-boost/output/${appName}/${time}-${ip}-all.html`文件中，如果不能支持jaeger环境(如本地机器与预发环境隔离，本地机器无法访问到预发环境)，可以将此文件下载到本地机器，使用Chrome浏览器打开查看采集的数据。但是此文件不包含trace数据。
+采集的数据会统一写到`$HOME/spring-startup-analyzer/output/${appName}/${time}-${ip}-all.html`文件中，如果不能支持jaeger环境(如本地机器与预发环境隔离，本地机器无法访问到预发环境)，可以将此文件下载到本地机器，使用Chrome浏览器打开查看采集的数据。但是此文件不包含trace数据。
 
 ## 2.1 启动jaeger
 
@@ -105,61 +105,61 @@ linyimin520812/all-in-one:v2.0.0
 
 **1. 手动安装**
 
-1. 点击[realease](https://github.com/linyimin-bupt/java-profiler-boost/releases/download/v1.0.0/java-profiler-boost.tar.gz)下载最新版tar.gz包
+1. 点击[realease](https://github.com/linyimin-bupt/spring-startup-analyzer/releases/download/v1.0.0/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
 2. 新建文件夹，并解压
 
 ```shell
-mkdir -p ${HOME}/java-profiler-boost
+mkdir -p ${HOME}/spring-startup-analyzer
 cd 下载路径
-tar -zxvf java-profiler-boost.tar.gz ${HOME}/java-profiler-boost
+tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
 ```
 
 **2. 脚本安装**
 
 ```shell
-curl -sS https://raw.githubusercontent.com/linyimin-bupt/java-profiler-boost/main/bin/setup.sh | sh
+curl -sS https://raw.githubusercontent.com/linyimin-bupt/spring-startup-analyzer/main/bin/setup.sh | sh
 ```
 
 ## 2.3 配置项
 
-在启动参数中进行配置，如配置超时时间为30分钟：`-Djava-profiler.app.status.check.timeout=30`
+在启动参数中进行配置，如配置超时时间为30分钟：`-Dspring-startup-analyzer.app.status.check.timeout=30`
 
-请务必配置`java-profiler.app.status.check.endpoints`选项，不然会一直采集直到应用启动检查超时(默认20分钟)才会停止，每隔1秒请求一次endpoint，请求响应头状态码为200则认为应用启动完成。
+请务必配置`spring-startup-analyzer.app.status.check.endpoints`选项，不然会一直采集直到应用启动检查超时(默认20分钟)才会停止，每隔1秒请求一次endpoint，请求响应头状态码为200则认为应用启动完成。
 
 
 | 配置项                                               | 说明                                                      | 默认值                       |
 | ---------------------------------------------------- | --------------------------------------------------------- | ---------------------------- |
-| java-profiler.app.status.check.timeout               | 应用启动检查超时时间，单位为分钟                          | 20                           |
-| **java-profiler.app.status.check.endpoints**         | 应用启动成功检查url，可配置多个，以","分隔                | http://127.0.0.1:8080/actuator/health |
-| java-profiler.jaeger.grpc.export.endpoint            | jaeger的export endpoint                                   | http://localhost:14250       |
-| java-profiler.jaeger.ui.endpoint                     | jaeger的UI endpoint                                       | http://localhost:16686       |
-| java-profiler.invoke.chain.packages                  | 进行调用trace的包名，支持配置多个，以","进行分隔          | main方法类所处的包名         |
-| java-profiler.jaeger.span.min.sample.duration.millis | Jaeger span的最小导出时间(ms)                             | 10                           |
-| java-profiler.admin.http.server.port                 | 管理端口                                                  | 8065                         |
-| java-profiler.async.profiler.sample.thread.names     | async profiler采集的线程名称，支持配置多个，以","进行分隔 | main                         |
-| **java-profiler.async.profiler.interval.millis**     | async profiler采集间隔时间(ms)                            | 5                            |
-| java-profiler.spring.bean.init.min.millis            | statistics中展示Bean的最小时间(ms)                        | 100                          |
+| spring-startup-analyzer.app.status.check.timeout               | 应用启动检查超时时间，单位为分钟                          | 20                           |
+| **spring-startup-analyzer.app.status.check.endpoints**         | 应用启动成功检查url，可配置多个，以","分隔                | http://127.0.0.1:8080/actuator/health |
+| spring-startup-analyzer.jaeger.grpc.export.endpoint            | jaeger的export endpoint                                   | http://localhost:14250       |
+| spring-startup-analyzer.jaeger.ui.endpoint                     | jaeger的UI endpoint                                       | http://localhost:16686       |
+| spring-startup-analyzer.invoke.chain.packages                  | 进行调用trace的包名，支持配置多个，以","进行分隔          | main方法类所处的包名         |
+| spring-startup-analyzer.jaeger.span.min.sample.duration.millis | Jaeger span的最小导出时间(ms)                             | 10                           |
+| spring-startup-analyzer.admin.http.server.port                 | 管理端口                                                  | 8065                         |
+| spring-startup-analyzer.async.profiler.sample.thread.names     | async profiler采集的线程名称，支持配置多个，以","进行分隔 | main                         |
+| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler采集间隔时间(ms)                            | 5                            |
+| spring-startup-analyzer.spring.bean.init.min.millis            | statistics中展示Bean的最小时间(ms)                        | 100                          |
 
 ## 2.4 应用启动
 
-此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:$HOME/java-profiler-boost/lib/java-profiler-agent.jar`即可。如果是以java命令行的方式启动应用，则在命令行中添加，如果是在IDEA中启动，则需要在VM options选项中添加。
+此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar`即可。如果是以java命令行的方式启动应用，则在命令行中添加，如果是在IDEA中启动，则需要在VM options选项中添加。
 
-日志文件路径：`$HOME/java-profiler-boost/logs`
+日志文件路径：`$HOME/spring-startup-analyzer/logs`
 
 - startup.log: 启动过程中的日志
 - transform.log: 被re-transform的类/方法信息
 
-应用启动完成后会在console和startup.log文件中输出`======= java-profiler-boost stop, click %s to view detailed info about the startup process ======`，可以通过此输出来判断采集是否完成。
+应用启动完成后会在console和startup.log文件中输出`======= spring-startup-analyzer stop, click %s to view detailed info about the startup process ======`，可以通过此输出来判断采集是否完成。
 
 ## 2.5 自定义扩展
 
-如果需要自定义观测能力，需要引入`java-profiler-starter`的pom作为扩展项目的父pom，然后就可以使用项目对外暴露的接口进行扩展。更多的细节可以参考[java-profiler-extension](https://github.com/linyimin-bupt/java-profiler-boost/tree/main/java-profiler-extension)的实现
+如果需要自定义观测能力，需要引入`spring-profiler-starter`的pom作为扩展项目的父pom，然后就可以使用项目对外暴露的接口进行扩展。更多的细节可以参考[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)的实现
 
 ```xml
 <parent>
     <groupId>io.github.linyimin0812</groupId>
-    <artifactId>java-profiler-starter</artifactId>
-    <version>1.2.0</version>
+    <artifactId>spring-profiler-starter</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 </parent>
 ```
 
@@ -339,7 +339,7 @@ MarkdownStatistics.write(int order, String label, String value);
 
 ### 2.5.3 打包运行
 
-在`java-profiler-starter`的pom中已经定义了打包plugin，默认会将生成的jar包拷贝到`$HOME/java-profiler-boost/extension`文件下。
+在`spring-profiler-starter`的pom中已经定义了打包plugin，默认会将生成的jar包拷贝到`$HOME/spring-startup-analyzer/extension`文件下。
 
 ```shell
 mvn clean package
@@ -393,7 +393,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>1.2.0</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -401,18 +401,18 @@ public class TestComponent {
 
 ```properties
 # 异步化的Bean可能在Spring Bean初始化顺序的末尾，导致异步优化效果不佳，打开配置优先加载异步化的Bean
-java.profiler.boost.spring.async.bean-priority-load-enable=true
+spring-startup-analyzer.boost.spring.async.bean-priority-load-enable=true
 # 指定异步的Bean名称
-java.profiler.boost.spring.async.bean-names=testBean,testComponent
+spring-startup-analyzer.boost.spring.async.bean-names=testBean,testComponent
 # 执行异步化Bean初始化方法线程池的核心线程数
-java.profiler.boost.spring.async.init-bean-thread-pool-core-size=8
+spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-core-size=8
 # 执行异步化Bean初始化方法线程池的最大线程数
-java.profiler.boost.spring.async.init-bean-thread-pool-max-size=8
+spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 ```
 
 3. 检查Bean是否异步初始化
 
-查看日志`$HOME/java-profiler-boost/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
+查看日志`$HOME/spring-startup-analyzer/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
@@ -429,7 +429,7 @@ async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 
 # 5. 为项目添砖加瓦
 
-查看[CONTRIBUTING](./CONTRIBUTING.md)，同时欢迎提出 [issues](https://github.com/linyimin-bupt/java-profiler-boost/issues) 与 [pull requests](https://github.com/linyimin-bupt/java-profiler-boost/pulls)!。
+查看[CONTRIBUTING](./CONTRIBUTING.md)，同时欢迎提出 [issues](https://github.com/linyimin-bupt/spring-startup-analyzer/issues) 与 [pull requests](https://github.com/linyimin-bupt/spring-startup-analyzer/pulls)!。
 
 # 6. 🙏感谢支持
 
