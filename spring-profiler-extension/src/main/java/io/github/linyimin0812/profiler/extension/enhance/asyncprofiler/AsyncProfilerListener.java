@@ -2,11 +2,9 @@ package io.github.linyimin0812.profiler.extension.enhance.asyncprofiler;
 
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.Event;
-import io.github.linyimin0812.profiler.common.jaeger.Jaeger;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-import io.github.linyimin0812.profiler.common.file.FileProcessor;
-import io.github.linyimin0812.profiler.common.utils.IpUtil;
+import io.github.linyimin0812.profiler.common.utils.NameUtil;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.extension.enhance.asyncprofiler.one.profiler.AsyncProfiler;
 import org.kohsuke.MetaInfServices;
@@ -79,10 +77,6 @@ public class AsyncProfilerListener implements EventListener {
             String result = AsyncProfiler.getInstance().execute(command);
             logger.info("AsyncProfiler execute stop command: {}, result is {}", command, result);
 
-            if (IpUtil.isJaegerReachable()) {
-                FileProcessor.upload(getFile());
-            }
-
         } catch (IOException e) {
             logger.info("AsyncProfiler execute stop command error. command: {}, error: {}", command, e);
         }
@@ -127,6 +121,6 @@ public class AsyncProfilerListener implements EventListener {
             file.mkdirs();
         }
 
-        return dir + Jaeger.getServiceName() + ".html";
+        return dir + NameUtil.getStartupInstanceName() + ".html";
     }
 }

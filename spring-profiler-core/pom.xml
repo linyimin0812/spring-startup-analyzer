@@ -131,6 +131,9 @@
                                 <copy todir="${config.directory}">
                                     <fileset file="src/main/resources/spring-startup-analyzer.properties" />
                                 </copy>
+                                <copy todir="${template.directory}">
+                                    <fileset file="src/main/resources/startup-analysis.html" />
+                                </copy>
                             </tasks>
                         </configuration>
                         <goals>

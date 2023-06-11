@@ -1,10 +1,10 @@
 package io.github.linyimin0812.profiler.core.container;
 
-import io.github.linyimin0812.profiler.common.file.FileProcessor;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownStatistics;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
-import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
+import io.github.linyimin0812.profiler.common.ui.StartupVO;
+import io.github.linyimin0812.profiler.common.ui.Statistics;
+import io.github.linyimin0812.profiler.common.utils.NameUtil;
+import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.core.http.SimpleHttpServer;
 import io.github.linyimin0812.profiler.core.monitor.StartupMonitor;
 import io.github.linyimin0812.profiler.api.EventListener;
@@ -14,6 +14,13 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 import org.slf4j.Logger;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -79,19 +86,33 @@ public class IocContainer {
 
         container.dispose();
 
-        MarkdownStatistics.write(0, "Startup Time(s)", String.format("%.2f", startupDuration));
+        StartupVO.addStatistics(new Statistics(0, "Startup Time(s)", String.format("%.2f", startupDuration)));
 
-        MarkdownWriter.flush();
-        FileProcessor.merge();
+        writeStartupVOToHtml();
 
         SimpleHttpServer.stop();
 
-        String endpoint = ProfilerSettings.getProperty("spring-startup-analyzer.jaeger.ui.endpoint");
-        String prompt = String.format("======= spring-startup-analyzer stop, click %s to view detailed info about the startup process ======", endpoint);
+        String prompt = "======= spring-startup-analyzer finished ======";
 
         startupLogger.info(prompt);
         System.out.println(prompt);
 
+    }
+
+    private static void writeStartupVOToHtml() {
+        try {
+            Path analyzerPath = Paths.get(OSUtil.home() + "template" + File.separator + "startup-analysis.html");
+            String content = new String(Files.readAllBytes(analyzerPath), StandardCharsets.UTF_8);
+            content = content.replace("'%startupVO%'", StartupVO.toJSONString());
+
+            String path = OSUtil.home() + "output" + File.separator + NameUtil.getStartupInstanceName() + "-analyzer.html";
+
+            try (FileWriter writer = new FileWriter(path)) {
+                writer.write(content);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T getComponent(Class<T> componentType) {

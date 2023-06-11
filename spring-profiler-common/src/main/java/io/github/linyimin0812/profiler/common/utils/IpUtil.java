@@ -1,8 +1,5 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-
-import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
 
@@ -11,8 +8,6 @@ import java.util.Enumeration;
  * @date 2023/05/07 19:04
  **/
 public class IpUtil {
-
-    private static Boolean isJaegerReachable = null;
 
     public static String getIp() {
         try {
@@ -34,29 +29,5 @@ public class IpUtil {
         }
 
         return "127.0.0.1";
-    }
-
-    public static boolean isJaegerReachable() {
-        if (isJaegerReachable != null) {
-            return isJaegerReachable;
-        }
-
-        String endpoint = ProfilerSettings.getProperty("spring-startup-analyzer.jaeger.ui.endpoint");
-
-        if (endpoint == null || endpoint.isEmpty()) {
-            isJaegerReachable = false;
-            return isJaegerReachable;
-        }
-
-        try {
-            URL url = new URL(endpoint);
-            Socket socket = new Socket(url.getHost(), url.getPort());
-            isJaegerReachable = true;
-            socket.close();
-        } catch (IOException e) {
-            isJaegerReachable = false;
-        }
-
-        return isJaegerReachable;
     }
 }

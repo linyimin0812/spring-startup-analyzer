@@ -7,18 +7,16 @@ import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 
-public class AppNameUtilTest {
-
+public class NameUtilTest {
 
     @After
     public void clean() throws NoSuchFieldException, IllegalAccessException {
-        Class<AppNameUtil> appNameUtilClass = AppNameUtil.class;
+        Class<NameUtil> appNameUtilClass = NameUtil.class;
 
         Field appNameField = appNameUtilClass.getDeclaredField("appName");
         appNameField.setAccessible(true);
         appNameField.set(null, null);
     }
-
 
     @Test
     public void testGetAppNameFromProjectName() {
@@ -28,7 +26,7 @@ public class AppNameUtilTest {
         System.setProperty("spring.application.name", "test-application");
         System.setProperty("sun.java.command", "TestApplication.jar");
 
-        assertEquals("test-project", AppNameUtil.getAppName());
+        assertEquals("test-project", NameUtil.getAppName());
 
     }
 
@@ -40,7 +38,7 @@ public class AppNameUtilTest {
         System.setProperty("spring.application.name", "test-application");
         System.setProperty("sun.java.command", "TestApplication.jar");
 
-        assertEquals("test-application", AppNameUtil.getAppName());
+        assertEquals("test-application", NameUtil.getAppName());
 
     }
 
@@ -52,7 +50,7 @@ public class AppNameUtilTest {
         System.clearProperty("spring.application.name");
         System.setProperty("sun.java.command", "TestApplication.jar");
 
-        assertEquals("TestApplication", AppNameUtil.getAppName());
+        assertEquals("TestApplication", NameUtil.getAppName());
 
     }
 }

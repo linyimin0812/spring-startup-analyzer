@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spring Boot Startup Analysis Report</title>
+
+    <!-- enables tailwindcss @apply -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        td {
+            padding-left: 8px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        summary {
+            cursor: pointer;
+        }
+    </style>
+
+    <style type="text/tailwindcss">
+        .col-icon {
+            @apply w-auto text-center border px-4 py-2;
+        }
+
+        .col-name {
+            @apply w-2/6 border px-4 py-2;
+        }
+
+        .col-duration {
+            @apply w-1/6 border px-4 py-2 text-center;
+
+        }
+
+        .col-details {
+            @apply w-2/6 border px-4 py-2 text-left;
+        }
+
+        .event-table {
+            @apply rounded w-full table-auto break-all bg-gray-100 text-gray-700;
+        }
+
+        .top-header {
+            @apply text-white;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='2880' height='560' preserveAspectRatio='none' viewBox='0 0 2880 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1232%26quot%3b)' fill='none'%3e%3crect width='2880' height='560' x='0' y='0' fill='%230e2a47'%3e%3c/rect%3e%3cpath d='M2880 0L2844.44 0L2880 242.95z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M2844.44 0L2880 242.95L2880 245.85L2824.37 0z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M2824.37 0L2880 245.85L2880 425.25L1507.77 0z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M1507.77 0L2880 425.25L2880 428.06L782.93 0z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M0 560L267.89 560L0 488.67z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M0 488.67L267.89 560L1471.29 560L0 220.12z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M0 220.12L1471.29 560L1660.45 560L0 90.49000000000001z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M0 90.49000000000001L1660.45 560L2235.46 560L0 38.31000000000001z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1232'%3e%3crect width='2880' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="bg-gray-400">
+
+<div id="startup-analyzer-header"></div>
+
+<div id="spring-startup-statistics"></div>
+
+<!-- spring bean initialization table -->
+<div id="spring-bean-initialization"></div>
+
+<!-- bean initialization timeline -->
+<div id="bean-initialization-timeline"></div>
+
+<!-- unused jars after startup -->
+<div id="unused-jars-after-startup"></div>
+
+<!-- spring startup frame graph -->
+<div id="spring-startup-frame-graph"></div>
+
+
+<!-- top-right corner GitHub link -->
+<a href="https://github.com/linyimin0812/spring-startup-analyzer" target="_blank" class="github-corner" aria-label="View source on GitHub">
+    <svg width="65" height="65" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm">
+        </path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body">
+        </path>
+    </svg>
+</a>
+<style>
+    .github-corner:hover
+    .octo-arm {
+        animation:octocat-wave 560ms ease-in-out
+    }
+    @keyframes octocat-wave {
+        0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}
+    }
+    @media (max-width:500px) {
+        .github-corner:hover
+        .octo-arm {
+            animation:none
+        }
+        .github-corner .octo-arm {
+            animation:octocat-wave 560ms ease-in-out
+        }
+    }
+
+</style>
+
+<script type="module">
+    //<![CDATA[
+    // https://github.com/jorgebucaran/hyperapp/tree/main/packages
+    import {h, text, app} from "https://cdn.skypack.dev/hyperapp"
+
+    // data from startup profiler
+    const startupVO = '%startupVO%';
+    let beanInitResultList = JSON.parse(startupVO.beanInitResultList);
+    let statisticsList = JSON.parse(startupVO.statisticsList);
+
+    beanInitResultList.sort((o1, o2) => o2.duration - o1.duration);
+    statisticsList.sort((o1, o2) => o1.order - o2.order);
+
+    // table
+    const colorNames = ['yellow', 'green'];
+    const levels = [100, 200, 300, 400, 500];
+    const colors = ['gray', ...colorNames.flatMap(color => levels.map(l => `${color}-${l}`))];
+
+    const Details = (tags) =>
+        h("ul", {}, Object.entries(tags).map(([k, v]) => h("li", {}, [
+            h("strong", {}, text(k + ": ")),
+            text(v)
+        ])));
+
+    const zoomOut = () =>
+        h("div", {
+            innerHTML: `
+            <svg class="w-6 h-6"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path>
+        </svg>`
+        }, [])
+
+    const zoomIn = () =>
+        h("div", {
+            innerHTML: `
+            <svg xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="1.5"
+             stroke="currentColor"
+             class="w-6 h-6">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/>
+        </svg>`
+        }, [])
+
+    const Placeholder = () =>
+        h("div", {
+            innerHTML: `&nbsp;`,
+            style: {width: '24px'}
+        }, [])
+
+    const Row = (event, expandedEventIds, minDuration, search, level = 0) =>
+        h("tbody", {}, [
+            h("tr", {class: `cursor-pointer hover:bg-blue-200 bg-${colors[level]}`, onclick: [Expand, event]}, [
+                h("td", {class: "col-icon"}, event.children.length > 0 && expandedEventIds.indexOf(event.id) === -1 ? zoomIn() : expandedEventIds.indexOf(event.id) !== -1 ? zoomOut() : Placeholder()),
+                h("td", {class: `col-name`}, text(event.name)),
+                h("td", {class: "col-duration"}, text(event.duration)),
+                h("td", {class: "col-duration"}, text(event.actualDuration)),
+                h("td", {class: "col-details text-sm"}, Details(event.tags))]
+            ),
+            h("tr", {}, [
+                h("td", {colspan: 5, class: {hidden: expandedEventIds.indexOf(event.id) === -1}},
+                    event.children
+                        .filter(event => FilterEvent(event, minDuration, search))
+                        .map(event => Row(event, expandedEventIds, minDuration, search, level + 1))
+                )
+            ])
+        ]);
+
+    const Expand = (state, event) => {
+        if (event.children.length > 0 && state.expandedEventIds.indexOf(event.id) === -1) {
+            return {...state, expandedEventIds: [event.id, ...state.expandedEventIds]};
+        } else {
+            return {...state, expandedEventIds: state.expandedEventIds.filter(it => it !== event.id)};
+        }
+    };
+
+    const OnDurationChange = (state, target) => {
+        return {...state, duration: target.value}
+    }
+
+    const OnSearchChange = (state, target) => {
+        return {...state, search: target.value}
+    }
+
+    function hasMinimumDuration(event, minimumDuration) {
+        return event.duration >= minimumDuration;
+    }
+
+    function labelMatches(event, search) {
+        return search === '' || event.name.toLowerCase().includes(search.toLowerCase()) || Object.entries(event.tags).map(([k, v]) => k+v).filter(it => it.toLowerCase().includes(search.toLowerCase())).length > 0;
+    }
+
+    function childrenMatch(event, minimumDuration, search) {
+
+        if (search === '' || event.children.filter(it => hasMinimumDuration(it, minimumDuration) && labelMatches(it, search)).length > 0) {
+            return true;
+        }
+
+        if (!event.children || event.children.length === 0) {
+            return false;
+        }
+
+        for (const child of event.children) {
+            if (childrenMatch(child, minimumDuration, search)) {
+                return true;
+            }
+        }
+    }
+
+    const FilterEvent = (event, minimumDuration, search) => {
+        return hasMinimumDuration(event, minimumDuration) && (labelMatches(event, search) || childrenMatch(event, minimumDuration, search));
+    }
+
+    // header
+    app({
+        view: (state) => h("div", {}, [
+            h("div", {class: "p-4 w-full bg-gray-100 text-gray-700 top-header"}, [
+                h("h2", {class: "text-3xl"}, text("🍃 Spring Startup Analyzer"))
+            ]),
+        ]),
+        node: document.getElementById("startup-analyzer-header"),
+    });
+
+    // startup-statistics
+    app({
+        view: (state) => h("div", {}, [
+            h("div", {class: "pl-4 pr-4 pt-2 pb-2 w-full bg-gray-300"}, [
+                h("h2", {class: "text-2xl"}, text("Startup Statistics")),
+            ]),
+            h("div", {class: "p-4 w-full bg-gray-400 flex items-center w-full"}, [
+                ...statisticsList.map(statistics => h("div", {class: "flex flex-col items-center border bg-gray-200 border-gray-100 rounded-md ml-8 p-2"}, [
+                    h("div", {class: "text-xs text-gray-0"}, text(statistics.label)),
+                    h("div", {class: "text-base font-bold text-gray-800"}, text(statistics.value)),
+                ]))
+            ]),
+        ]),
+        node: document.getElementById("spring-startup-statistics"),
+    });
+
+    // spring bean initialization
+    app({
+        init: {events: beanInitResultList, expandedEventIds: [], duration: 100, search: ''},
+        view: (state) => h("div", {}, [
+            h("details", {open: true}, [
+                h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                    h("span", {class: "text-2xl"}, text("Spring Bean Initialization")),
+                ]),
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    h("div", {class: "mb-4"}, [
+                        h("span", {
+                            class: 'font-medium mr-2 '
+                        }, [ text("Minimum duration")]),
+                        h("input", {
+                            type: "text",
+                            class: 'px-4 w-16 text-left text-gray-800',
+                            value: state.duration,
+                            oninput: (_, { target }) => [OnDurationChange, target]}, []),
+                        h("span", {
+                            class: 'font-medium mr-2 ml-4'
+                        }, [ text("Search")]),
+                        h("input", {
+                            type: "text",
+                            class: 'px-4 w-64 text-left text-gray-800',
+                            value: state.search,
+                            oninput: (_, { target }) => [OnSearchChange, target]}, [])
+                    ]),
+                    h("table", {class: "event-table"}, [
+                        h("thead", {}, [
+                            h("tr", {class: "font-medium"}, [
+                                h("td", {class: "col-icon"}, text("")),
+                                h("td", {class: "col-name"}, text("Name")),
+                                h("td", {class: "col-duration"}, text("Duration with children (ms)")),
+                                h("td", {class: "col-duration"}, text("Duration (ms)")),
+                                h("td", {class: "col-details"}, text("Details"))
+                            ])
+                        ]),
+                        ...state.events
+                            .filter(event => FilterEvent(event, state.duration, state.search))
+                            .map(event => Row(event, state.expandedEventIds, state.duration, state.search))
+                    ])
+                ])
+            ]),
+        ]),
+        node: document.getElementById("spring-bean-initialization"),
+    });
+
+    // bean initialization timeline
+    app({
+        view: (state) => h("div", {}, [
+            h("details", {open: true}, [
+                h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                    h("span", {class: "text-2xl"}, text("Bean Initailization Timeline")),
+                ]),
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    // TODO:
+                    h("span", {}, text("TODO:")),
+                ]),
+            ]),
+        ]),
+        node: document.getElementById("bean-initialization-timeline"),
+    });
+
+    // unused jars after startup
+    app({
+        view: (state) => h("div", {}, [
+            h("details", {open: true}, [
+                h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                    h("span", {class: "text-2xl"}, text("Unused Jars After Startup")),
+                ]),
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    // TODO:
+                    h("span", {}, text("TODO:")),
+                ]),
+            ]),
+        ]),
+        node: document.getElementById("unused-jars-after-startup"),
+    });
+
+    // Startup Wall Clock Profile
+    app({
+        view: (state) => h("div", {}, [
+            h("details", {open: true}, [
+                h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                    h("span", {class: "text-2xl"}, text("Startup Wall Clock Profile")),
+                ]),
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    h("iframe", {
+                        class: "w-full h-full",
+                        src: "./global-ug-clc-stateengine-s-20230611004611-30.13.177.37.html",
+                        scrolling: false
+                    }, []),
+                ]),
+            ]),
+        ]),
+        node: document.getElementById("spring-startup-frame-graph"),
+    });
+    //]]>
+</script>
+</body>
+</html>

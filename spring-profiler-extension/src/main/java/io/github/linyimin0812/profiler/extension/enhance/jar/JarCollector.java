@@ -2,9 +2,9 @@ package io.github.linyimin0812.profiler.extension.enhance.jar;
 
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownStatistics;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
+import io.github.linyimin0812.profiler.common.ui.StartupVO;
+import io.github.linyimin0812.profiler.common.ui.Statistics;
 import org.kohsuke.MetaInfServices;
 import org.slf4j.Logger;
 
@@ -112,11 +112,9 @@ public class JarCollector implements Lifecycle {
         long usedCount = usedJarMap.values().stream().mapToLong(Collection::size).sum();
         long unusedCount = unusedJarMap.values().stream().mapToLong(Collection::size).sum();
 
-        MarkdownStatistics.write("Used/Total Jars", String.format("%s/%s", usedCount, usedCount + unusedCount));
-        MarkdownStatistics.write("Unused/Total Jars", String.format("%s/%s", unusedCount, usedCount + unusedCount));
-
-        MarkdownStatistics.write("ClassLoader Count", String.valueOf(usedJarMap.size()));
-
+        StartupVO.addStatistics(new Statistics("Used/Total Jars", String.format("%s/%s", usedCount, usedCount + unusedCount)));
+        StartupVO.addStatistics(new Statistics("Unused/Total Jars", String.format("%s/%s", unusedCount, usedCount + unusedCount)));
+        StartupVO.addStatistics(new Statistics("ClassLoader Count", String.valueOf(usedJarMap.size())));
     }
 
     private void reportUnusedJarDetails() {
@@ -151,6 +149,5 @@ public class JarCollector implements Lifecycle {
                     .append("</tr>\n");
         }
         unusedJar.append("</table>").append("</details>\n").append("<hr/>\n");
-        MarkdownWriter.write(Integer.MAX_VALUE, unusedJar.toString());
     }
 }

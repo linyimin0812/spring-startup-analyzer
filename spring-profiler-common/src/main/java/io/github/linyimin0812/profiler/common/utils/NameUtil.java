@@ -1,14 +1,17 @@
 package io.github.linyimin0812.profiler.common.utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author linyimin
  * @date 2023/04/12 21:13
  **/
-public class AppNameUtil {
+public class NameUtil {
 
     private static String appName;
+    private static String startupInstanceName;
 
     // 来自sentinel的实现
     private static void resolveAppName() {
@@ -53,5 +56,15 @@ public class AppNameUtil {
         }
 
         return appName;
+    }
+
+    public static String getStartupInstanceName() {
+
+        if (startupInstanceName == null) {
+            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            startupInstanceName = String.format("%s-%s-%s", NameUtil.getAppName(), currentTime, IpUtil.getIp());
+        }
+
+        return startupInstanceName;
     }
 }

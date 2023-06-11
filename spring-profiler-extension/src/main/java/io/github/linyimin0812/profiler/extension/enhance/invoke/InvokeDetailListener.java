@@ -6,8 +6,6 @@ import io.github.linyimin0812.profiler.api.event.AtExitEvent;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownStatistics;
-import io.github.linyimin0812.profiler.common.markdown.MarkdownWriter;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
@@ -132,8 +130,6 @@ public class InvokeDetailListener implements EventListener {
         }
 
         invokeDetailTable.append("</table>\n").append("</details>\n\n").append("<hr/>\n");
-
-        MarkdownWriter.write(invokeDetailTable.toString());
     }
 
     private String buildTopCostInvokeInfo(List<InvokeDetail> details) {
