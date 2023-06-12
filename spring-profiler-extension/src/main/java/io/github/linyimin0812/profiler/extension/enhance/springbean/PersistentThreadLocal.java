@@ -1,4 +1,4 @@
-package io.github.linyimin0812.profiler.extension.enhance.invoke;
+package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
 import java.util.Collection;
 import java.util.Collections;

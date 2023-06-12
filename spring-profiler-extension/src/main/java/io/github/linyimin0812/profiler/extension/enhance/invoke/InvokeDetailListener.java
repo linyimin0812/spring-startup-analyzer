@@ -7,6 +7,8 @@ import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
+import io.github.linyimin0812.profiler.common.ui.MethodInvokeDetail;
+import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
 import org.slf4j.Logger;
@@ -25,7 +27,7 @@ public class InvokeDetailListener implements EventListener {
 
     private final Logger logger = LogFactory.getStartupLogger();
 
-    private final Map<String /* processId_invokeId */, InvokeDetail> INVOKE_DETAIL_MAP = new ConcurrentHashMap<>();
+    private final Map<String /* processId_invokeId */, MethodInvokeDetail> INVOKE_DETAIL_MAP = new ConcurrentHashMap<>();
 
     private List<String> methodQualifiers = new ArrayList<>();
 
@@ -56,12 +58,13 @@ public class InvokeDetailListener implements EventListener {
         String key = String.format("%s_%s", invokeEvent.processId, invokeEvent.invokeId);
 
         if (event instanceof AtEnterEvent) {
-            InvokeDetail invokeDetail = new InvokeDetail(buildMethodQualifier((AtEnterEvent) event), invokeEvent.args);
+            MethodInvokeDetail invokeDetail = new MethodInvokeDetail(buildMethodQualifier((AtEnterEvent) event), invokeEvent.args);
             INVOKE_DETAIL_MAP.put(key, invokeDetail);
         } else if (event instanceof AtExitEvent) {
             if (INVOKE_DETAIL_MAP.containsKey(key)) {
-                InvokeDetail invokeDetail = INVOKE_DETAIL_MAP.get(key);
-                invokeDetail.endMillis = System.currentTimeMillis();
+                MethodInvokeDetail invokeDetail = INVOKE_DETAIL_MAP.get(key);
+                invokeDetail.setDuration(System.currentTimeMillis() - invokeDetail.getStartMillis());
+                StartupVO.addMethodInvokeDetail(invokeDetail);
             } else {
                 logger.warn("Key: {} does not exist in the Map, there may be an error.", key);
             }
@@ -87,8 +90,6 @@ public class InvokeDetailListener implements EventListener {
     public void stop() {
         logger.info("===============InvokeCountListener stop==================");
 
-        reportInvokeDetail();
-
         INVOKE_DETAIL_MAP.clear();
     }
 
@@ -109,16 +110,16 @@ public class InvokeDetailListener implements EventListener {
                 .append("<th>Average Cost(ms)</th>\n")
                 .append("</tr>");
 
-        Map<String, List<InvokeDetail>> map = INVOKE_DETAIL_MAP.values().stream().collect(Collectors.groupingBy(detail -> detail.methodQualifier));
+        Map<String, List<MethodInvokeDetail>> map = INVOKE_DETAIL_MAP.values().stream().collect(Collectors.groupingBy(MethodInvokeDetail::getMethodQualifier));
 
-        Collection<List<InvokeDetail>> entries = map.values().stream().sorted((o1, o2) -> o2.size() - o1.size()).collect(Collectors.toList());
+        Collection<List<MethodInvokeDetail>> entries = map.values().stream().sorted((o1, o2) -> o2.size() - o1.size()).collect(Collectors.toList());
 
-        for (List<InvokeDetail> list : entries) {
+        for (List<MethodInvokeDetail> list : entries) {
 
-            List<InvokeDetail> invokeDetails = list.stream().filter(detail -> detail.endMillis > 0).collect(Collectors.toList());
+            List<MethodInvokeDetail> invokeDetails = list.stream().filter(detail -> detail.getDuration() > 0).collect(Collectors.toList());
 
             int count = invokeDetails.size();
-            long totalCost = invokeDetails.stream().mapToLong(detail -> detail.endMillis - detail.startMillis).sum();
+            long totalCost = invokeDetails.stream().mapToLong(MethodInvokeDetail::getDuration).sum();
             double averageCost = totalCost / (count * 1D);
 
             invokeDetailTable.append("<tr>")
@@ -132,12 +133,12 @@ public class InvokeDetailListener implements EventListener {
         invokeDetailTable.append("</table>\n").append("</details>\n\n").append("<hr/>\n");
     }
 
-    private String buildTopCostInvokeInfo(List<InvokeDetail> details) {
+    private String buildTopCostInvokeInfo(List<MethodInvokeDetail> details) {
 
-        details.sort(((o1, o2) -> (int) ((o2.endMillis - o2.startMillis) - (o1.endMillis - o1.startMillis))));
-        List<InvokeDetail> invokeDetails = details.subList(0, Math.min(details.size(), 5));
+        details.sort(((o1, o2) -> (int) ((o2.getDuration()) - (o1.getDuration()))));
+        List<MethodInvokeDetail> invokeDetails = details.subList(0, Math.min(details.size(), 5));
 
-        String methodName = invokeDetails.get(0).methodQualifier;
+        String methodName = invokeDetails.get(0).getMethodQualifier();
 
         StringBuilder topDetails = new StringBuilder("<details>\n")
                 .append(String.format("<Summary>%s</summary>", methodName))
@@ -147,20 +148,20 @@ public class InvokeDetailListener implements EventListener {
                 .append("<th>Invoke Cost(ms)</th>\n")
                 .append("</tr>\n");
 
-        for (InvokeDetail detail : invokeDetails) {
+        for (MethodInvokeDetail detail : invokeDetails) {
             topDetails.append("<tr>\n");
 
-            if (detail.args == null || detail.args.length == 0) {
+            if (detail.getArgs() == null || detail.getArgs().length == 0) {
                 topDetails.append("<td>-</td>\n");
             } else {
                 topDetails.append("<td>\n").append("<ul>\n");
-                for (Object obj : detail.args) {
+                for (Object obj : detail.getArgs()) {
                     topDetails.append(String.format("<li>%s</li>\n", obj));
                 }
                 topDetails.append("</ul>\n").append("</td>\n");
             }
 
-            topDetails.append(String.format("<td style='text-align: center;'>%s</td>\n", detail.endMillis - detail.startMillis));
+            topDetails.append(String.format("<td style='text-align: center;'>%s</td>\n", detail.getDuration()));
 
             topDetails.append("</tr>\n");
         }
@@ -176,19 +177,5 @@ public class InvokeDetailListener implements EventListener {
         String className = event.clazz.getSimpleName();
 
         return className + "." + event.methodName;
-    }
-
-    private static class InvokeDetail {
-        public String methodQualifier;
-        public long startMillis;
-        public long endMillis;
-
-        public Object[] args;
-
-        public InvokeDetail(String methodQualifier, Object[] args) {
-            this.methodQualifier = methodQualifier;
-            this.startMillis = System.currentTimeMillis();
-            this.args = args;
-        }
     }
 }

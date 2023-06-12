@@ -55,7 +55,6 @@ public class JarCollector implements Lifecycle {
             urls.add(location.toString());
         }
 
-
         for (Map.Entry<ClassLoader, Set<String>> entry : usedJarMap.entrySet()) {
             ClassLoader loader = entry.getKey();
             Set<String> usedUrls = entry.getValue();
@@ -102,12 +101,10 @@ public class JarCollector implements Lifecycle {
 
         collect();
 
-        reportJarStatistics();
-
         reportUnusedJarDetails();
     }
 
-    private void reportJarStatistics() {
+    private void reportUnusedJarDetails() {
 
         long usedCount = usedJarMap.values().stream().mapToLong(Collection::size).sum();
         long unusedCount = unusedJarMap.values().stream().mapToLong(Collection::size).sum();
@@ -115,39 +112,9 @@ public class JarCollector implements Lifecycle {
         StartupVO.addStatistics(new Statistics("Used/Total Jars", String.format("%s/%s", usedCount, usedCount + unusedCount)));
         StartupVO.addStatistics(new Statistics("Unused/Total Jars", String.format("%s/%s", unusedCount, usedCount + unusedCount)));
         StartupVO.addStatistics(new Statistics("ClassLoader Count", String.valueOf(usedJarMap.size())));
-    }
 
-    private void reportUnusedJarDetails() {
-
-        StringBuilder unusedJar = new StringBuilder("<details open>\n")
-                .append("<summary><h1 style='display: inline'>Unused JARs</h1></summary>\n")
-                .append("<hr/>\n");
-
-        unusedJar.append("<table>\n")
-                .append("<tr>\n")
-                .append("<th>ClassLoader</th>\n")
-                .append("<th>Unused Jar Count</th>\n")
-                .append("</tr>");
-
-        List<Map.Entry<ClassLoader, Set<String>>> entryList = new ArrayList<>(unusedJarMap.entrySet());
-        entryList.sort((o1, o2) -> o2.getValue().size() - o1.getValue().size());
-
-        for (Map.Entry<ClassLoader, Set<String>> entry : entryList) {
-
-            StringBuilder unusedJarUl = new StringBuilder("<details>\n")
-                    .append("<summary>").append(entry.getKey()).append("</summary>\n")
-                    .append("<ul>\n");
-
-            for (String url : entry.getValue()) {
-                unusedJarUl.append("<li>").append(url).append("</li>\n");
-            }
-            unusedJarUl.append("</ul>\n").append("</details>\n");
-
-            unusedJar.append("<tr>\n")
-                    .append(String.format("<td>%s</td>\n", unusedJarUl))
-                    .append(String.format("<td style='text-align: center;'>%s</td>\n", entry.getValue().size()))
-                    .append("</tr>\n");
+        for (Map.Entry<ClassLoader, Set<String>> entry : unusedJarMap.entrySet()) {
+            StartupVO.addUnusedJar(entry);
         }
-        unusedJar.append("</table>").append("</details>\n").append("<hr/>\n");
     }
 }

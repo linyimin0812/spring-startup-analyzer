@@ -1,6 +1,7 @@
 package io.github.linyimin0812.profiler.core.container;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import io.github.linyimin0812.profiler.common.ui.Statistics;
 import io.github.linyimin0812.profiler.common.utils.NameUtil;
@@ -43,6 +44,8 @@ public class IocContainer {
 
     private static long startTimeMillis = 0;
 
+    private static long numOfBean = 0;
+
     /**
      * 启动服务容器
      */
@@ -68,6 +71,7 @@ public class IocContainer {
 
         SimpleHttpServer.start();
 
+        numOfBean = 0;
         startTimeMillis = System.currentTimeMillis();
 
     }
@@ -87,6 +91,8 @@ public class IocContainer {
         container.dispose();
 
         StartupVO.addStatistics(new Statistics(0, "Startup Time(s)", String.format("%.2f", startupDuration)));
+        acquireNumOfBean(StartupVO.getBeanInitResultList());
+        StartupVO.addStatistics(new Statistics(1, "Num of Bean", String.valueOf(numOfBean)));
 
         writeStartupVOToHtml();
 
@@ -121,5 +127,12 @@ public class IocContainer {
 
     public static <T> List<T> getComponents(Class<T> componentType) {
         return container.getComponents(componentType);
+    }
+
+    private static void acquireNumOfBean(List<BeanInitResult> beanInitResultList) {
+        numOfBean += beanInitResultList.size();
+        for (BeanInitResult beanInitResult : beanInitResultList) {
+            acquireNumOfBean(beanInitResult.getChildren());
+        }
     }
 }

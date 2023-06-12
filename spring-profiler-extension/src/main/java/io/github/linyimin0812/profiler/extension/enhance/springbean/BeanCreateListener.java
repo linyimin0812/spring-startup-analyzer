@@ -1,5 +1,6 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
+import com.alibaba.fastjson2.JSON;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
@@ -7,7 +8,6 @@ import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
-import io.github.linyimin0812.profiler.extension.enhance.invoke.PersistentThreadLocal;
 import org.kohsuke.MetaInfServices;
 import org.slf4j.Logger;
 
@@ -109,5 +109,8 @@ public class BeanCreateListener implements EventListener {
     @Override
     public void stop() {
         logger.info("============BeanCreateListener stop=============");
+        if (!profilerResultThreadLocal.getAll().isEmpty()) {
+            logger.warn("profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(profilerResultThreadLocal.getAll()));
+        }
     }
 }
