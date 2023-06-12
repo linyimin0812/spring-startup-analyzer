@@ -1,8 +1,10 @@
 package io.github.linyimin0812.profiler.common.ui;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author linyimin
@@ -48,7 +50,8 @@ public class StartupVO {
         map.put("statisticsList", JSON.toJSONString(statisticsList));
         map.put("beanInitResultList", JSON.toJSONString(beanInitResultList));
         map.put("unusedJarMap", JSON.toJSONString(unusedJarMap));
-        map.put("methodInvokeDetailList", JSON.toJSONString(methodInvokeDetailList));
+
+        map.put("methodInvokeDetailList", JSON.toJSONString(calculateInvokeMetrics(), SerializerFeature.IgnoreNonFieldGetter));
 
         return JSON.toJSONString(map);
     }
@@ -67,5 +70,24 @@ public class StartupVO {
 
     public static void clearMethodInvokeDetailList() {
         methodInvokeDetailList.clear();
+    }
+
+    private static List<MethodInvokeMetrics> calculateInvokeMetrics() {
+
+        List<MethodInvokeMetrics> metricsList = new ArrayList<>();
+
+        Map<String, List<MethodInvokeDetail>> invokeMap = methodInvokeDetailList.stream().collect(Collectors.groupingBy(MethodInvokeDetail::getMethodQualifier));
+
+        for (Map.Entry<String, List<MethodInvokeDetail>> entry : invokeMap.entrySet()) {
+
+            long totalCost = entry.getValue().stream().mapToLong(MethodInvokeDetail::getDuration).sum();
+            double averageCost = totalCost / (1.0 * entry.getValue().size());
+            List<MethodInvokeDetail> top100 = entry.getValue().stream().sorted((o1, o2) -> (int) (o2.getDuration() - o1.getDuration())).limit(100).collect(Collectors.toList());
+
+            metricsList.add(new MethodInvokeMetrics(entry.getKey(), entry.getValue().size(), totalCost, averageCost, top100));
+
+        }
+
+        return metricsList;
     }
 }

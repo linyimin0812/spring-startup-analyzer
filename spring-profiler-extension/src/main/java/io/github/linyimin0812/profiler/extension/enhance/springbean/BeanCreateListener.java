@@ -1,6 +1,6 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
@@ -22,7 +22,7 @@ public class BeanCreateListener implements EventListener {
 
     private final Logger logger = LogFactory.getStartupLogger();
 
-    private final PersistentThreadLocal<Stack<BeanInitResult>> profilerResultThreadLocal = new PersistentThreadLocal<>(Stack::new);
+    private final PersistentThreadLocal<Stack<BeanInitResult>> profilerResultThreadLocal = new PersistentThreadLocal<Stack<BeanInitResult>>(Stack::new);
 
     @Override
     public boolean filter(String className) {

@@ -18,6 +18,11 @@
         summary {
             cursor: pointer;
         }
+        summary::-webkit-details-marker {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 
     <style type="text/tailwindcss">
@@ -25,12 +30,21 @@
             @apply w-auto text-center border px-4 py-2;
         }
 
+
         .col-name {
             @apply w-2/6 border px-4 py-2;
         }
 
         .col-jar-name {
             @apply w-5/6 border px-4 py-2;
+        }
+
+        .col-invoke-method {
+            @apply w-3/6 border px-4 py-2;
+        }
+
+        .col-invoke-other {
+            @apply w-1/6 border px-4 py-2;
         }
 
         .col-duration {
@@ -63,6 +77,9 @@
 
 <!-- bean initialization timeline -->
 <div id="bean-initialization-timeline"></div>
+
+<!-- method invoke detail table -->
+<div id="method-invoke-detail"></div>
 
 <!-- unused jars after startup -->
 <div id="unused-jars-after-startup"></div>
@@ -107,15 +124,17 @@
     // data from startup profiler
     const startupVO = '%startupVO%';
 
-    let beanInitResultList = JSON.parse(startupVO.beanInitResultList);
-    let statisticsList = JSON.parse(startupVO.statisticsList);
+    let beanInitResultList = JSON.parse(startupVO.beanInitResultList ? startupVO.beanInitResultList : '[]');
+    beanInitResultList = beanInitResultList.filter(beanInitResult => beanInitResult.parentId === 0);
+    beanInitResultList.sort((o1, o2) => o2.duration - o1.duration);
+
+    let statisticsList = JSON.parse(startupVO.statisticsList ? startupVO.statisticsList : '[]');
+    statisticsList.sort((o1, o2) => o1.order - o2.order);
 
     const unusedJarMap = JSON.parse(startupVO.unusedJarMap ? startupVO.unusedJarMap : '{}');
     const unusedJarEntries = Object.entries(unusedJarMap).sort((o1, o2) => o2[1].length - o1[1].length);
 
-    beanInitResultList = beanInitResultList.filter(beanInitResult => beanInitResult.parentId === 0);
-    beanInitResultList.sort((o1, o2) => o2.duration - o1.duration);
-    statisticsList.sort((o1, o2) => o1.order - o2.order);
+    const methodInvokeDetailList = JSON.parse(startupVO.methodInvokeDetailList ? startupVO.methodInvokeDetailList : '[]');
 
     // table
     const colorNames = ['yellow', 'green'];
@@ -183,7 +202,7 @@
 
     const UnusedJarMapRow = (entry) => h("tbody", {}, [
         h("tr", {class: 'cursor-pointer hover:bg-blue-200 bg-grey-100'}, [
-            h("td", {class: `col-jar-name`}, [
+            h("td", {class: 'col-jar-name'}, [
                 h("details", {}, [
                     h("summary", {class: "p-2"}, [
                         h('span', {class: 'font-medium mr-2 ml-4'}, text(entry[0]))
@@ -194,6 +213,37 @@
                 ])
             ]),
             h("td", {class: "col-duration"}, text(entry[1].length)),
+        ]),
+    ]);
+
+    const MethodInvokeDetailRow = (invokeDetail) => h("tbody", {}, [
+        h("tr", {class: 'cursor-pointer hover:bg-blue-200 bg-grey-100'}, [
+            h("td", {class: 'col-invoke-method'}, [
+                h("details", {}, [
+                    h("summary", {class: "p-2"}, [
+                        h('span', {class: 'font-medium mr-2 ml-4'}, text(invokeDetail.method))
+                    ]),
+                    h("table", {class: "event-table"}, [
+                        h("thead", {}, [
+                            h("tr", {class: "font-medium"}, [
+                                h("td", {class: "col-invoke-method text-center"}, text("Argument")),
+                                h("td", {class: "col-invoke-other text-center"}, text("Cost(ms)")),
+                            ]),
+                            ...invokeDetail.invokeDetails.map(detail => h("tr", {class: 'cursor-pointer hover:bg-blue-200 bg-grey-100'}, [
+                                h("td", {class: "col-invoke-method"}, [
+                                    h('ul', {class: "p-2"}, [
+                                        ...detail.args.map((arg, index) => h('li', {}, text(`${index + 1}. ${arg}`)))
+                                    ])
+                                ]),
+                                h("td", {class: "col-invoke-other text-center"}, text(detail.duration)),
+                            ]))
+                        ])
+                    ])
+                ])
+            ]),
+            h("td", {class: "col-invoke-other text-center"}, text(invokeDetail.invokeCount)),
+            h("td", {class: "col-invoke-other text-center"}, text(invokeDetail.totalCost)),
+            h("td", {class: "col-invoke-other text-center"}, text(invokeDetail.averageCost)),
         ]),
     ]);
 
@@ -256,7 +306,7 @@
     app({
         view: () => h("div", {}, [
             h("div", {class: "pl-4 pr-4 pt-2 pb-2 w-full bg-gray-300"}, [
-                h("h2", {class: "text-2xl"}, text("Startup Statistics")),
+                h("h2", {class: "font-medium ml-2"}, text("Startup Statistics")),
             ]),
             h("div", {class: "p-4 w-full bg-gray-400 flex items-center w-full"}, [
                 ...statisticsList.map(statistics => h("div", {class: "flex flex-col items-center border bg-gray-200 border-gray-100 rounded-md ml-8 p-2"}, [
@@ -271,10 +321,10 @@
     // spring bean initialization
     app({
         init: {events: beanInitResultList, expandedEventIds: [], duration: 100, search: ''},
-        view: (state) => h("div", {}, [
+        view: (state) => h("div", {class: 'border-t border-gray-100'}, [
             h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
-                    h("span", {class: "text-2xl"}, text("Spring Bean Initialization")),
+                    h("span", {class: "font-medium ml-2"}, text("Spring Bean Initialization")),
                 ]),
                 h("div", {class: "p-4 w-full bg-gray-400"}, [
                     h("div", {class: "mb-4"}, [
@@ -317,10 +367,10 @@
 
     // bean initialization timeline
     app({
-        view: () => h("div", {}, [
+        view: () => h("div", {class: 'border-t border-gray-100'}, [
             h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
-                    h("span", {class: "text-2xl"}, text("Bean Initailization Timeline")),
+                    h("span", {class: "font-medium ml-2"}, text("Bean Initailization Timeline")),
                 ]),
                 h("div", {class: "p-4 w-full bg-gray-400"}, [
                     // TODO:
@@ -331,12 +381,37 @@
         node: document.getElementById("bean-initialization-timeline"),
     });
 
-    // unused jars after startup
+    // method invoke detail
     app({
-        view: () => h("div", {}, [
+        view: () => h("div", {class: 'border-t border-gray-100'}, [
             h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
-                    h("span", {class: "text-2xl"}, text("Unused Jars After Startup")),
+                    h("span", {class: "font-medium ml-2"}, text("Details of Method Invoke")),
+                ]),
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    h("table", {class: "event-table"}, [
+                        h("thead", {}, [
+                            h("tr", {class: "font-medium"}, [
+                                h("td", {class: "col-invoke-method text-center"}, text("Method")),
+                                h("td", {class: "col-invoke-other text-center"}, text("Invoke Count")),
+                                h("td", {class: "col-invoke-other text-center"}, text("Total Cost(ms)")),
+                                h("td", {class: "col-invoke-other text-center"}, text("Average Cost(ms)")),
+                            ])
+                        ]),
+                        ...methodInvokeDetailList.map(invokeDetail => MethodInvokeDetailRow(invokeDetail))
+                    ])
+                ]),
+            ]),
+        ]),
+        node: document.getElementById("method-invoke-detail"),
+    });
+
+    // unused jars after startup
+    app({
+        view: () => h("div", {class: 'border-t border-gray-100'}, [
+            h("details", {open: true}, [
+                h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                    h("span", {class: "font-medium ml-2"}, text("Unused Jars After Startup")),
                 ]),
                 h("div", {class: "p-4 w-full bg-gray-400"}, [
                     h("table", {class: "event-table"}, [
@@ -356,10 +431,10 @@
 
     // Startup Wall Clock Profile
     app({
-        view: () => h("div", {}, [
+        view: () => h("div", {class: 'border-t border-gray-100'}, [
             h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
-                    h("span", {class: "text-2xl"}, text("Startup Wall Clock Profile")),
+                    h("span", {class: "font-medium ml-2"}, text("Startup Wall Clock Profile")),
                 ]),
                 h("div", {class: "p-4 w-full bg-gray-400"}, [
                     h("iframe", {
