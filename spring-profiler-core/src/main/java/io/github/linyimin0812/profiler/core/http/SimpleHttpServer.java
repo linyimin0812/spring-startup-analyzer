@@ -1,6 +1,7 @@
 package io.github.linyimin0812.profiler.core.http;
 
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
+import io.github.linyimin0812.profiler.common.utils.NameUtil;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -10,6 +11,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -26,13 +30,12 @@ public class SimpleHttpServer {
     }
 
     public static void start() {
-        int serverPort = Integer.parseInt(ProfilerSettings.getProperty("spring-startup-analyzer.admin.http.server.port", "8065"));
         try {
-            server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+            server = HttpServer.create(new InetSocketAddress(getPort()), 0);
             server.createContext("/", new RootHandler());
             server.setExecutor(null);
             server.start();
-            System.out.println("Server listening on port " + serverPort);
+            System.out.println("Server listening on port " + getPort());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -42,32 +45,35 @@ public class SimpleHttpServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            String path = exchange.getRequestURI().getPath();
+            String url = exchange.getRequestURI().getPath();
 
-            String message;
+            byte[] content;
 
-            if ("/".equals(path) || "/help".equals(path)) {
-                message = "stop: /stop";
-            } else if ("/stop".equals(path)) {
-                message = "Agent stop.";
+            if ("/stop".equals(url)) {
+                content = "Agent stop.".getBytes(StandardCharsets.UTF_8);
                 IocContainer.stop();
+            } if (url.endsWith("flame-graph.html")) {
+                Path path = Paths.get(NameUtil.getOutputPath(), url);
+                content = Files.readAllBytes(path);
             } else {
-                message = "Not support operations.";
+                Path path = Paths.get(NameUtil.getOutputPath(), NameUtil.getAnalysisHtmlName());
+                content = Files.readAllBytes(path);
             }
 
-            exchange.sendResponseHeaders(HTTP_OK, message.length());
+            exchange.getResponseHeaders().set("Content-Type", "text/html");
+            exchange.sendResponseHeaders(HTTP_OK, content.length);
             OutputStream os = exchange.getResponseBody();
-            os.write(message.getBytes(StandardCharsets.UTF_8));
+            os.write(content);
             os.close();
 
         }
     }
 
-    public static void stop() {
-        if (server == null) {
-            return;
-        }
+    public static int getPort() {
+        return Integer.parseInt(ProfilerSettings.getProperty("spring-startup-analyzer.admin.http.server.port", "8065"));
+    }
 
-        server.stop(30);
+    public static String endpoint() {
+        return "http://localhost:" + getPort();
     }
 }

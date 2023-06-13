@@ -71,7 +71,9 @@ public class AsyncProfilerListener implements EventListener {
     public void stop() {
         logger.info("==============AsyncProfilerListener stop========================");
 
-        String command = "stop,file=" + getFile();
+        long interval = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.async.profiler.interval.millis", "10")) * 1000_000;
+
+        String command = "stop,interval=" + interval + ",file=" + getFile();
 
         try {
             String result = AsyncProfiler.getInstance().execute(command);
@@ -121,6 +123,6 @@ public class AsyncProfilerListener implements EventListener {
             file.mkdirs();
         }
 
-        return dir + NameUtil.getStartupInstanceName() + ".html";
+        return dir + NameUtil.getFlameGraphHtmlName();
     }
 }

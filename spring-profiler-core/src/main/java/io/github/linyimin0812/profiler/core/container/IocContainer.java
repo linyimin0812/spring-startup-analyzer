@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  **/
 public class IocContainer {
 
-
     private static final Logger startupLogger = LogFactory.getStartupLogger();
 
     private static final MutablePicoContainer container = new PicoBuilder().withSetterInjection().withCaching().withLifecycle().build();
@@ -96,9 +95,7 @@ public class IocContainer {
 
         writeStartupVOToHtml();
 
-        SimpleHttpServer.stop();
-
-        String prompt = "======= spring-startup-analyzer finished ======";
+        String prompt = String.format("======= spring-startup-analyzer finished, click %s to visit details. ======", SimpleHttpServer.endpoint());
 
         startupLogger.info(prompt);
         System.out.println(prompt);
@@ -109,9 +106,11 @@ public class IocContainer {
         try {
             Path analyzerPath = Paths.get(OSUtil.home() + "template" + File.separator + "startup-analysis.html");
             String content = new String(Files.readAllBytes(analyzerPath), StandardCharsets.UTF_8);
-            content = content.replace("'%startupVO%'", StartupVO.toJSONString());
+            content = content.replace("/*startupVO:*/{}", StartupVO.toJSONString());
 
-            String path = OSUtil.home() + "output" + File.separator + NameUtil.getStartupInstanceName() + "-analyzer.html";
+            content = content.replace("/*flameGraphUrl*/''", "'./" + NameUtil.getFlameGraphHtmlName() + "'");
+
+            String path = NameUtil.getOutputPath() + NameUtil.getAnalysisHtmlName();
 
             try (FileWriter writer = new FileWriter(path)) {
                 writer.write(content);

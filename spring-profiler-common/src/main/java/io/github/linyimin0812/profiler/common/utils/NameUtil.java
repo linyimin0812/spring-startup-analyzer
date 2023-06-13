@@ -67,4 +67,16 @@ public class NameUtil {
 
         return startupInstanceName;
     }
+
+    public static String getFlameGraphHtmlName() {
+        return getStartupInstanceName() + "-flame-graph.html";
+    }
+
+    public static String getAnalysisHtmlName() {
+        return getStartupInstanceName() + "-analyzer.html";
+    }
+
+    public static String getOutputPath() {
+        return OSUtil.home() + File.separator + "output" + File.separator;
+    }
 }

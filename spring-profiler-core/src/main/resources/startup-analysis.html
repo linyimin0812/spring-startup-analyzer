@@ -122,7 +122,8 @@
     import {h, text, app} from "https://cdn.skypack.dev/hyperapp"
 
     // data from startup profiler
-    const startupVO = '%startupVO%';
+    const startupVO = /*startupVO:*/{};
+    const flameGraphUrl = /*flameGraphUrl*/'';
 
     let beanInitResultList = JSON.parse(startupVO.beanInitResultList ? startupVO.beanInitResultList : '[]');
     beanInitResultList = beanInitResultList.filter(beanInitResult => beanInitResult.parentId === 0);
@@ -432,15 +433,14 @@
     // Startup Wall Clock Profile
     app({
         view: () => h("div", {class: 'border-t border-gray-100'}, [
-            h("details", {open: true}, [
+            h("details", {open: false}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
                     h("span", {class: "font-medium ml-2"}, text("Startup Wall Clock Profile")),
                 ]),
-                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                h("div", {class: "w-full p-4 bg-gray-400", style: { height: "1000px"},}, [
                     h("iframe", {
                         class: "w-full h-full",
-                        src: "./global-ug-clc-stateengine-s-20230611004611-30.13.177.37.html",
-                        scrolling: false
+                        src: flameGraphUrl,
                     }, []),
                 ]),
             ]),
