@@ -5,8 +5,6 @@ import java.util.Locale;
 
 /**
  * @author linyimin
- * @date 2023/04/24 10:40
- * @description retrieve the name of OS
  **/
 public class OSUtil {
 

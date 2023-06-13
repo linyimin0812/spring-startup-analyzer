@@ -2,8 +2,6 @@ package io.github.linyimin0812.profiler.api.event;
 
 /**
  * @author linyimin
- * @date 2023/04/19 20:48
- * @description
  **/
 public class AtExitEvent extends InvokeEvent {
 

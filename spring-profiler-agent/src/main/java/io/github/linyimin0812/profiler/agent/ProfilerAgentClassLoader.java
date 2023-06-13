@@ -3,6 +3,9 @@ package io.github.linyimin0812.profiler.agent;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * @author yiminlin
+ **/
 public class ProfilerAgentClassLoader extends URLClassLoader {
 
     private static final String BRIDGE_CLASS = "io.github.linyimin0812.Bridge";

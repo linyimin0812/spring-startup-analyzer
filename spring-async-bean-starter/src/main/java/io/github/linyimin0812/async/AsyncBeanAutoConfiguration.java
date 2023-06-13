@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author yiminlin
- * @date 2023/05/14 16:58
  **/
 @Configuration
 @EnableConfigurationProperties(AsyncSpringBeanProperties.class)

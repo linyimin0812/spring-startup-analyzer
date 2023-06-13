@@ -17,8 +17,6 @@ import java.util.*;
 
 /**
  * @author linyimin
- * @date 2023/05/01 12:18
- * @description Collect Jar files under the classloader
  **/
 @MetaInfServices(Lifecycle.class)
 public class JarCollector implements Lifecycle {

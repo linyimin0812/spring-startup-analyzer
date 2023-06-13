@@ -27,9 +27,8 @@ import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * 生命周期实例容器，由容器统一控制
  * @author linyimin
- * @date 2023/04/13 11:45
- * @description 生命周期实例容器，由容器统一控制
  **/
 public class IocContainer {
 

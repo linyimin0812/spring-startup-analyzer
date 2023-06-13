@@ -2,7 +2,6 @@ package io.github.linyimin0812.async.config;
 
 /**
  * @author yiminlin
- * @date 2023/05/14 17:28
  **/
 public class AsyncConfig {
     private static final AsyncConfig INSTANCE = new AsyncConfig();

@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @author linyimin
- * @date 2023/04/25 17:23
  **/
 public class LogFactory {
 

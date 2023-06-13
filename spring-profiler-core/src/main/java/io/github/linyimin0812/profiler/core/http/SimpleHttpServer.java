@@ -19,7 +19,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
  * @author linyimin
- * @date 2023/04/24 16:25
  **/
 public class SimpleHttpServer {
 

@@ -2,7 +2,6 @@ package io.github.linyimin0812.profiler.api.event;
 
 /**
  * @author linyimin
- * @date 2023/04/19 20:38
  **/
 public abstract class InvokeEvent extends Event {
 

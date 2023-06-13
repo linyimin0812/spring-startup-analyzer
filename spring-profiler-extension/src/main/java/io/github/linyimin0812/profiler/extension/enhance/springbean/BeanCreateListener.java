@@ -15,7 +15,6 @@ import java.util.*;
 
 /**
  * @author linyimin
- * @date 2023/04/18 17:05
  **/
 @MetaInfServices(EventListener.class)
 public class BeanCreateListener implements EventListener {

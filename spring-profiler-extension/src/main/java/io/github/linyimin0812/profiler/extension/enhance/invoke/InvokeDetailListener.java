@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author linyimin
- * @date 2023/05/03 17:52
- * @description
  **/
 @MetaInfServices(EventListener.class)
 public class InvokeDetailListener implements EventListener {

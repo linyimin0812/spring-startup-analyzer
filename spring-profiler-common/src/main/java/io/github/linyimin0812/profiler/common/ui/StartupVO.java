@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author linyimin
- * @date 2023/06/11 16:27
  **/
 public class StartupVO {
 

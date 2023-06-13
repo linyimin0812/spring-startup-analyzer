@@ -2,8 +2,6 @@ package io.github.linyimin0812.profiler.core.monitor.check;
 
 /**
  * @author linyimin
- * @date 2023/04/20 17:41
- * @description app状态
  **/
 public enum AppStatus {
     /**

@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 
 /**
  * @author yiminlin
- * @date 2023/05/14 01:56
  **/
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
 

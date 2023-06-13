@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author linyimin
- * @date 2023/06/10 14:55
  **/
 public class BeanInitResult {
 

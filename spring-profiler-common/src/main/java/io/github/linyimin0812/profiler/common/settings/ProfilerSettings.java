@@ -11,7 +11,6 @@ import java.util.Properties;
 
 /**
  * @author linyimin
- * @date 2023/04/23 22:00
  **/
 public class ProfilerSettings {
 

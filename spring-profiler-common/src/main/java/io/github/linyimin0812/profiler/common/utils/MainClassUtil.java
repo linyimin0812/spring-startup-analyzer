@@ -15,8 +15,6 @@ import java.util.jar.Manifest;
 
 /**
  * @author linyimin
- * @date 2023/05/08 10:32
- * @description Get the package name of the class containing main method
  **/
 public class MainClassUtil {
 

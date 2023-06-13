@@ -2,7 +2,6 @@ package io.github.linyimin0812.profiler.common.ui;
 
 /**
  * @author linyimin
- * @date 2023/06/11 16:01
  **/
 public class Statistics {
     private static final int DEFAULT_ORDER = 100;

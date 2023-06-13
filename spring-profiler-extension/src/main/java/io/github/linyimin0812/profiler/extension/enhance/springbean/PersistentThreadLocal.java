@@ -8,8 +8,6 @@ import java.util.function.Supplier;
 
 /**
  * @author linyimin
- * @date 2023/04/22 14:44
- * @description
  **/
 public class PersistentThreadLocal<T> extends ThreadLocal<T> {
 

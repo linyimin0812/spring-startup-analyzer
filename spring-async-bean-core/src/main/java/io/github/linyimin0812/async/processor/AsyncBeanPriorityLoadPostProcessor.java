@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * @author yiminlin
- * @date 2023/05/14 15:32
  **/
 public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryAware {
 

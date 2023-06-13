@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * @author yiminlin
- * @date 2023/05/14 16:40
  **/
 public class AsyncBeanProperties {
 

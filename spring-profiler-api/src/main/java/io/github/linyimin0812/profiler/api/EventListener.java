@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * @author linyimin
- * @date 2023/04/19 17:46
  **/
 public interface EventListener extends Startable {
     /**

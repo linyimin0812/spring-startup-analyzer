@@ -16,9 +16,8 @@ import java.util.concurrent.TimeUnit;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
+ * 通过endpoint检查app状态
  * @author linyimin
- * @date 2023/04/20 17:54
- * @description 通过endpoint检查app状态
  **/
 @MetaInfServices
 public class EndpointCheckService implements AppStatusCheckService {

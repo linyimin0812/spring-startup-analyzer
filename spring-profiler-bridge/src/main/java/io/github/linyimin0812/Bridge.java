@@ -7,7 +7,6 @@ package io.github.linyimin0812;
 
 /**
  * @author linyimin
- * @date 2023/04/18 15:25
  **/
 public class Bridge {
 

@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 /**
  * @author linyimin
- * @date 2023/04/24 16:53
  **/
 
 public class OSUtilTest {

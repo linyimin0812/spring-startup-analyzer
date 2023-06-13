@@ -9,9 +9,8 @@ import org.kohsuke.MetaInfServices;
 import org.slf4j.Logger;
 
 /**
+ * 应用启动检测
  * @author linyimin
- * @date 2023/04/20 17:47
- * @description 应用启动检测
  **/
 @MetaInfServices
 public class StartupMonitor implements Lifecycle {

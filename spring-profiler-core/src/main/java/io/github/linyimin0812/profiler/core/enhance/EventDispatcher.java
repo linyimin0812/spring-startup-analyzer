@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author linyimin
- * @date 2023/04/19 21:10
  **/
 public class EventDispatcher extends Bridge.AbstractBridge {
 

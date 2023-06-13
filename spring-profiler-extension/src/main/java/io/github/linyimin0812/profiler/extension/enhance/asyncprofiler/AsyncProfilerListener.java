@@ -20,8 +20,6 @@ import java.util.List;
 
 /**
  * @author linyimin
- * @date 2023/04/24 10:58
- * @description
  **/
 @MetaInfServices(EventListener.class)
 public class AsyncProfilerListener implements EventListener {
@@ -117,12 +115,11 @@ public class AsyncProfilerListener implements EventListener {
     }
     private String getFile() {
 
-        String dir = OSUtil.home() + "output" + File.separator;
-        File file = new File(dir);
-        if (!file.exists()) {
-            file.mkdirs();
+        File file = new File(NameUtil.getOutputPath());
+        if (!file.exists() && file.mkdirs()) {
+            logger.warn("create dir: {} failed.", NameUtil.getOutputPath());
         }
 
-        return dir + NameUtil.getFlameGraphHtmlName();
+        return NameUtil.getOutputPath() + NameUtil.getFlameGraphHtmlName();
     }
 }

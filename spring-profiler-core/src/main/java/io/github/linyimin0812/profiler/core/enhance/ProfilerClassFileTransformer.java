@@ -30,7 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 此类由agent加载，入口为构造函数
  * @author linyimin
- * @date 2023/04/17 17:43
  **/
 public class ProfilerClassFileTransformer implements ClassFileTransformer {
 

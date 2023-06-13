@@ -8,7 +8,6 @@ import io.github.linyimin0812.Bridge;
 
 /**
  * @author linyimin
- * @date 2023/04/17 21:39
  **/
 public class Interceptor {
 

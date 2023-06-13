@@ -10,9 +10,8 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
+ * 启动超时检查
  * @author linyimin
- * @date 2023/04/20 17:56
- * @description 启动超时检查
  **/
 @MetaInfServices
 public class TimeoutCheckService implements AppStatusCheckService {
