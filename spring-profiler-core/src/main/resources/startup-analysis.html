@@ -313,7 +313,7 @@
     ]);
 
     const spanTreeOffset = (level) => {
-        const spanTreeOffsets = [];
+        const spanTreeOffsets = [h("span", { class: "SpanTreeOffset--indentGuide" })];
         for (let i = 0; i < level; i++) {
             spanTreeOffsets.push(h("span", { class: "SpanTreeOffset--indentGuide" }));
         }
