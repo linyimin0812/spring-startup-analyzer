@@ -349,9 +349,9 @@
     };
 
     const BeanInitResultTimeLineRow = (beanInitResult, level) => h("div", { class: "VirtualizedTraceView--row" }, [
-        h("div", { class: "flex-row span-row" }, [
+        h("div", { class: "flex-row span-row hover:bg-blue-200" }, [
             h("div", { class: "ub-relative span-name-column w-1/2 max-w-1/2" }, [
-                h("div", { class: "span-name-wrapper" }, [
+                h("div", { class: "span-name-wrapper hover:bg-blue-200" }, [
                     h("span", { class: "SpanTreeOffset is-parent"}, [
                         ...spanTreeOffset(level),
                         ...spanTreeOffsetIcon(beanInitResult.children && beanInitResult.children.length > 0)
