@@ -17,6 +17,7 @@ public class BeanInitResult {
     private long parentId;
     private final String name;
     private long startMillis;
+    private long endMillis;
     private long duration;
     private long actualDuration;
     private final Map<String, String> tags;
@@ -52,7 +53,8 @@ public class BeanInitResult {
     }
 
     public void duration() {
-        this.duration = System.currentTimeMillis() - this.startMillis;
+        this.endMillis = System.currentTimeMillis();
+        this.duration = this.endMillis - this.startMillis;
         long childrenDuration = this.children.stream().mapToLong(BeanInitResult::getActualDuration).sum();
         this.actualDuration = duration - childrenDuration;
     }
@@ -72,6 +74,10 @@ public class BeanInitResult {
 
     public long getStartMillis() {
         return startMillis;
+    }
+
+    public long getEndMillis() {
+        return endMillis;
     }
 
     public void setStartMillis(long startMillis) {

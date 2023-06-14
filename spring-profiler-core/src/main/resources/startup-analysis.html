@@ -23,6 +23,112 @@
             margin-left: auto;
             margin-right: auto;
         }
+        .VirtualizedTraceView--rowsWrapper, .VirtualizedTraceView--row {
+            width: 100%;
+        }
+        .flex-row {
+            display: flex;
+            flex: 0 1 auto;
+            flex-direction: row;
+        }
+        .ub-relative {
+            position: relative;
+        }
+        .span-name-column {
+            position: relative;
+            white-space: nowrap;
+            z-index: 1;
+        }
+        .span-name-wrapper {
+            background: #f8f8f8;
+            line-height: 27px;
+            overflow: hidden;
+            display: flex;
+        }
+        .SpanTreeOffset {
+            color: #000;
+            position: relative;
+        }
+        .SpanTreeOffset--indentGuide {
+            /* The size of the indentGuide is based off of the iconWrapper */
+            padding-right: calc(0.5rem + 12px);
+            height: 100%;
+            border-left: 3px solid transparent;
+            display: inline-flex;
+        }
+
+        .SpanTreeOffset--indentGuide:before {
+            content: " ";
+            padding-left: 1px;
+            background-color: #d3d3d3;
+        }
+
+        .SpanTreeOffset--iconWrapper {
+            position: absolute;
+            right: 0.25rem;
+        }
+
+        .span-name:after {
+            background: transparent;
+            bottom: 0;
+            content: " ";
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 1000px;
+        }
+        .span-name {
+            color: #000;
+            cursor: pointer;
+            flex: 1 1 auto;
+            outline: none;
+            overflow: hidden;
+            padding-left: 4px;
+            padding-right: 0.25em;
+            position: relative;
+            text-overflow: ellipsis;
+        }
+        .span-name:before {
+            content: "  ";
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 0;
+            border-left: 4px solid;
+            border-left-color: inherit;
+        }
+        .span-svc-name {
+            padding: 0 0.25rem 0 0.5rem;
+            font-size: 1.05em;
+        }
+        .SpanBar--wrapper {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .SpanBar--bar {
+            border-radius: 3px;
+            min-width: 2px;
+            position: absolute;
+            height: 36%;
+            top: 32%;
+        }
+        .SpanBar--label.is-right {
+            left: 100%;
+        }
+        .SpanBar--label {
+            color: #aaa;
+            font-size: 12px;
+            font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+            line-height: 1em;
+            white-space: nowrap;
+            padding: 0 0.5em;
+            position: absolute;
+        }
     </style>
 
     <style type="text/tailwindcss">
@@ -129,6 +235,11 @@
     beanInitResultList = beanInitResultList.filter(beanInitResult => beanInitResult.parentId === 0);
     beanInitResultList.sort((o1, o2) => o2.duration - o1.duration);
 
+    const beanInitResultTimeLineList = [...beanInitResultList].sort((o1, o2) => o1.startMillis - o2.startMillis);
+    const maxEndMillis = beanInitResultTimeLineList.reduce((prev, current) => prev.endMillis > current.endMillis ? prev : current).endMillis;
+    const minStartMillis = beanInitResultTimeLineList.reduce((prev, current) => prev.startMillis < current.startMillis ? prev : current).startMillis;
+    const totalDuration = beanInitResultList.reduce((sum, current) => sum + current.duration, 0);
+
     let statisticsList = JSON.parse(startupVO.statisticsList ? startupVO.statisticsList : '[]');
     statisticsList.sort((o1, o2) => o1.order - o2.order);
 
@@ -199,6 +310,66 @@
                     .map(event => BeanInitResultRow(event, expandedEventIds, minDuration, search, level + 1))
             )
         ])
+    ]);
+
+    const spanTreeOffset = (level) => {
+        const spanTreeOffsets = [];
+        for (let i = 0; i < level; i++) {
+            spanTreeOffsets.push(h("span", { class: "SpanTreeOffset--indentGuide" }));
+        }
+
+        return spanTreeOffsets;
+    };
+
+    const spanTreeOffsetIcon = (hasChildren) => {
+        if (hasChildren) {
+            return [
+                h("span", { class: "SpanTreeOffset--iconWrapper" }, [
+                    h("svg", { class: "fill-current text-current inline-block align-middle w-4 h-4", viewBox: "0 0 40 40"}, [
+                        h("g", {}, [
+                            h("path", { d: "m23.3 20l-13.1-13.6c-0.3-0.3-0.3-0.9 0-1.2l2.4-2.4c0.3-0.3 0.9-0.4 1.2-0.1l16 16.7c0.1 0.1 0.2 0.4 0.2 0.6s-0.1 0.5-0.2 0.6l-16 16.7c-0.3 0.3-0.9 0.3-1.2 0l-2.4-2.5c-0.3-0.3-0.3-0.9 0-1.2z" }),
+                        ]),
+                    ]),
+                ])
+            ];
+        }
+
+        return [];
+    }
+
+    const calculateLeftPercent = (beanInitResult) => {
+        let percent = (beanInitResult.startMillis - minStartMillis) / (maxEndMillis - minStartMillis) * 100;
+
+        percent = percent > 95 ? 95 : percent;
+        return percent + '%';
+    };
+
+    const calculateWidthPercent = (beanInitResult) => {
+        return beanInitResult.duration / totalDuration * 100 + '%';
+    };
+
+    const BeanInitResultTimeLineRow = (beanInitResult, level) => h("div", { class: "VirtualizedTraceView--row" }, [
+        h("div", { class: "flex-row span-row" }, [
+            h("div", { class: "ub-relative span-name-column w-1/2 max-w-1/2" }, [
+                h("div", { class: "span-name-wrapper" }, [
+                    h("span", { class: "SpanTreeOffset is-parent"}, [
+                        ...spanTreeOffset(level),
+                        ...spanTreeOffsetIcon(beanInitResult.children && beanInitResult.children.length > 0)
+                    ]),
+                    h("a", { class: "span-name bl border-teal-500"}, [
+                        h("span", { class: "span-svc-name is-children-collapsed" }, text(beanInitResult.name)),
+                    ]),
+                ]),
+            ]),
+            h("div", { class: "ub-relative span-view cursor-pointer flex-grow-0 flex-shrink-0 max-w-1/2 w-1/2" }, [
+                h("div", { class: "SpanBar--wrapper" }, [
+                    h("div", { class: 'SpanBar--bar bg-teal-500', style: {left: `${calculateLeftPercent(beanInitResult)}`, width: `${calculateWidthPercent(beanInitResult)}`}}, [
+                        h("div", { class: "SpanBar--label is-right" }, text(beanInitResult.duration + 'ms')),
+                    ]),
+                ]),
+            ]),
+        ]),
+        ...beanInitResult.children.map(beanInitResult => BeanInitResultTimeLineRow(beanInitResult, level + 1))
     ]);
 
     const UnusedJarMapRow = (entry) => h("tbody", {}, [
@@ -373,10 +544,11 @@
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
                     h("span", {class: "font-medium ml-2"}, text("Bean Initailization Timeline")),
                 ]),
-                h("div", {class: "p-4 w-full bg-gray-400"}, [
-                    // TODO:
-                    h("span", {}, text("TODO:")),
-                ]),
+                h("div", {class: "p-2 w-full bg-gray-400"}, [
+                    h("div", {class: "p-1 w-full bg-white"}, [
+                        ...beanInitResultTimeLineList.map(beanInitResult => BeanInitResultTimeLineRow(beanInitResult, 0))
+                    ]),
+                ])
             ]),
         ]),
         node: document.getElementById("bean-initialization-timeline"),
