@@ -26,6 +26,7 @@
         .VirtualizedTraceView--rowsWrapper, .VirtualizedTraceView--row {
             width: 100%;
         }
+
         .flex-row {
             display: flex;
             flex: 0 1 auto;
@@ -128,6 +129,24 @@
             white-space: nowrap;
             padding: 0 0.5em;
             position: absolute;
+        }
+        .divider-horizontal {
+            display: block;
+            clear: both;
+            height: 1px;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+            background: #ddd;
+        }
+        .divider-vertical {
+            position: relative;
+            top: -0.06em;
+            display: inline-block;
+            width: 1px;
+            height: 0.9em;
+            margin: 0 8px;
+            vertical-align: middle;
+            background: #ddd;
         }
     </style>
 
@@ -287,7 +306,7 @@
                   stroke-linejoin="round"
                   d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/>
         </svg>`
-        }, [])
+        }, []);
 
     const Placeholder = () =>
         h("div", {
@@ -321,17 +340,30 @@
         return spanTreeOffsets;
     };
 
-    const spanTreeOffsetIcon = (hasChildren) => {
-        if (hasChildren) {
-            return [
-                h("span", { class: "SpanTreeOffset--iconWrapper" }, [
-                    h("svg", { class: "fill-current text-current inline-block align-middle w-4 h-4", viewBox: "0 0 40 40"}, [
-                        h("g", {}, [
-                            h("path", { d: "m23.3 20l-13.1-13.6c-0.3-0.3-0.3-0.9 0-1.2l2.4-2.4c0.3-0.3 0.9-0.4 1.2-0.1l16 16.7c0.1 0.1 0.2 0.4 0.2 0.6s-0.1 0.5-0.2 0.6l-16 16.7c-0.3 0.3-0.9 0.3-1.2 0l-2.4-2.5c-0.3-0.3-0.3-0.9 0-1.2z" }),
-                        ]),
-                    ]),
-                ])
-            ];
+    const timeLineZoomIn = (event) => h("span", { class: "SpanTreeOffset--iconWrapper" }, [
+        h("svg", { class: "fill-current text-current inline-block align-middle w-4 h-4 cursor-pointer", viewBox: "0 0 40 40", onclick: [Expand, event]}, [
+            h("g", {}, [
+                h("path", { d: "m23.3 20l-13.1-13.6c-0.3-0.3-0.3-0.9 0-1.2l2.4-2.4c0.3-0.3 0.9-0.4 1.2-0.1l16 16.7c0.1 0.1 0.2 0.4 0.2 0.6s-0.1 0.5-0.2 0.6l-16 16.7c-0.3 0.3-0.9 0.3-1.2 0l-2.4-2.5c-0.3-0.3-0.3-0.9 0-1.2z" }),
+            ]),
+        ]),
+    ]);
+
+    const timeLineZoomOut = (event) => h("span", { class: "SpanTreeOffset--iconWrapper" }, [
+        h("svg", { class: "fill-current text-current inline-block align-middle w-4 h-4 cursor-pointer", viewBox: "0 0 40 40", onclick: [Expand, event]}, [
+            h("g", {}, [
+                h("path", { d: "m31 12.5l1.5 1.6-12.5 13.4-12.5-13.4 1.5-1.6 11 11.7z" }),
+            ]),
+        ]),
+    ]);
+
+    const spanTreeOffsetIcon = (event, expandedEventIds) => {
+
+        if (event.children.length > 0) {
+
+            if (expandedEventIds.indexOf(event.id) === -1) {
+                return [timeLineZoomIn(event)];
+            }
+            return [timeLineZoomOut(event)];
         }
 
         return [];
@@ -340,7 +372,7 @@
     const calculateLeftPercent = (beanInitResult) => {
         let percent = (beanInitResult.startMillis - minStartMillis) / (maxEndMillis - minStartMillis) * 100;
 
-        percent = percent > 95 ? 95 : percent;
+        percent = percent > 94 ? 94 : percent;
         return percent + '%';
     };
 
@@ -348,28 +380,75 @@
         return beanInitResult.duration / totalDuration * 100 + '%';
     };
 
-    const BeanInitResultTimeLineRow = (beanInitResult, level) => h("div", { class: "VirtualizedTraceView--row" }, [
+    const ExpandDetails = (state, event) => {
+        if (state.expandDetailIds.indexOf(event.id) === -1) {
+            return {...state, expandDetailIds: [event.id, ...state.expandDetailIds]};
+        } else {
+            return {...state, expandDetailIds: state.expandDetailIds.filter(it => it !== event.id)};
+        }
+    };
+
+    const BeanInitResultTagRow = (key, value) => h("tbody", {}, [
+        h("tr", {class: 'cursor-pointer hover:bg-blue-200'}, [
+            h("td", {class: "col-invoke-other"}, text(key)),
+            h("td", {class: "col-name"}, text(value)),
+        ])
+    ]);
+
+    const BeanInitResultTimeLineRow = (event, expandedEventIds, expandDetailIds, minDuration, search, level) => h("div", { class: `VirtualizedTraceView--row ${level < 0 ? 'hidden' : ''} ` }, [
         h("div", { class: "flex-row span-row hover:bg-blue-200" }, [
             h("div", { class: "ub-relative span-name-column w-1/2 max-w-1/2" }, [
-                h("div", { class: "span-name-wrapper hover:bg-blue-200" }, [
+                h("div", { class: "span-name-wrapper flex hover:bg-blue-200" }, [
                     h("span", { class: "SpanTreeOffset is-parent"}, [
                         ...spanTreeOffset(level),
-                        ...spanTreeOffsetIcon(beanInitResult.children && beanInitResult.children.length > 0)
+                        ...spanTreeOffsetIcon(event, expandedEventIds)
                     ]),
-                    h("a", { class: "span-name bl border-teal-500"}, [
-                        h("span", { class: "span-svc-name is-children-collapsed" }, text(beanInitResult.name)),
+                    h("a", { class: "span-name bl border-teal-500", onclick: [ExpandDetails, event] }, [
+                        h("span", { class: "span-svc-name is-children-collapsed" }, text(event.name)),
                     ]),
                 ]),
             ]),
-            h("div", { class: "ub-relative span-view cursor-pointer flex-grow-0 flex-shrink-0 max-w-1/2 w-1/2" }, [
+            h("div", { class: "ub-relative span-view cursor-pointer flex-grow-0 flex-shrink-0 max-w-1/2 w-1/2", onclick: [ExpandDetails, event] }, [
                 h("div", { class: "SpanBar--wrapper" }, [
-                    h("div", { class: 'SpanBar--bar bg-teal-500', style: {left: `${calculateLeftPercent(beanInitResult)}`, width: `${calculateWidthPercent(beanInitResult)}`}}, [
-                        h("div", { class: "SpanBar--label is-right" }, text(beanInitResult.duration + 'ms')),
+                    h("div", { class: 'SpanBar--bar bg-teal-500', style: {left: `${calculateLeftPercent(event)}`, width: `${calculateWidthPercent(event)}`}}, [
+                        h("div", { class: "SpanBar--label is-right" }, text(event.duration + 'ms')),
                     ]),
                 ]),
             ]),
         ]),
-        ...beanInitResult.children.map(beanInitResult => BeanInitResultTimeLineRow(beanInitResult, level + 1))
+        h("div", {class: {hidden: expandDetailIds.indexOf(event.id) === -1}}, [
+            h("div", {style: {paddingLeft: `${(level + 1) * 24}px`}}, [
+                h("span", {class: `divider-horizontal`}, []),
+                h("span", {class: 'text-gray-600 mr-2 text-sm'}, text("Bean Name:")),
+                h("strong", {class: 'text-sm'}, text(event.name)),
+                h("span", {class: 'divider-vertical'}, []),
+                h("span", {class: 'text-gray-600 mr-2 text-sm'}, text("Start Time:")),
+                h("strong", {class: 'text-sm'}, text(new Date(event.startMillis).toLocaleString())),
+                h("span", {class: 'divider-vertical'}, []),
+                h("span", {class: 'text-gray-600 mr-2 text-sm'}, text("Duration:")),
+                h("strong", {class: 'text-sm'}, text(event.actualDuration + 'ms')),
+                h("span", {class: 'divider-vertical'}, []),
+                h("span", {class: 'text-gray-600 mr-2 text-sm'}, text("Duration with Children:")),
+                h("strong", {class: 'text-sm'}, text(event.duration + 'ms')),
+                h("div", {}, [
+                    h("table", {class: "event-table"}, [
+                        h("thead", {}, [
+                            h("tr", {class: "font-medium"}, [
+                                h("td", {class: "col-invoke-other"}, text("Key")),
+                                h("td", {class: "col-name"}, text("Value")),
+                            ])
+                        ]),
+                        ...Object.entries(event.tags ? event.tags : {}).map(([key, value]) => BeanInitResultTagRow(key, value))
+                    ])
+                ]),
+                h("span", {class: `divider-horizontal`}, []),
+            ])
+        ]),
+        h("div", {colspan: 5, class: {hidden: expandedEventIds.indexOf(event.id) === -1}},
+            event.children
+                .filter(event => FilterEvent(event, minDuration, search))
+                .map(event => BeanInitResultTimeLineRow(event, expandedEventIds, expandDetailIds, minDuration, search, level + 1))
+        )
     ]);
 
     const UnusedJarMapRow = (entry) => h("tbody", {}, [
@@ -464,6 +543,25 @@
         return hasMinimumDuration(event, minimumDuration) && (labelMatches(event, search) || childrenMatch(event, minimumDuration, search));
     }
 
+    const FilterView = (state) => h("div", {class: "mb-4"}, [
+        h("span", {
+            class: 'font-medium mr-2 '
+        }, [ text("Minimum duration")]),
+        h("input", {
+            type: "text",
+            class: 'px-4 w-32 text-left text-gray-800',
+            value: state.duration,
+            oninput: (_, { target }) => [OnDurationChange, target]}, []),
+        h("span", {
+            class: 'font-medium mr-2 ml-4'
+        }, [ text("Search")]),
+        h("input", {
+            type: "text",
+            class: 'px-4 w-64 text-left text-gray-800',
+            value: state.search,
+            oninput: (_, { target }) => [OnSearchChange, target]}, [])
+    ]);
+
     // header
     app({
         view: () => h("div", {}, [
@@ -499,24 +597,7 @@
                     h("span", {class: "font-medium ml-2"}, text("Spring Bean Initialization")),
                 ]),
                 h("div", {class: "p-4 w-full bg-gray-400"}, [
-                    h("div", {class: "mb-4"}, [
-                        h("span", {
-                            class: 'font-medium mr-2 '
-                        }, [ text("Minimum duration")]),
-                        h("input", {
-                            type: "text",
-                            class: 'px-4 w-16 text-left text-gray-800',
-                            value: state.duration,
-                            oninput: (_, { target }) => [OnDurationChange, target]}, []),
-                        h("span", {
-                            class: 'font-medium mr-2 ml-4'
-                        }, [ text("Search")]),
-                        h("input", {
-                            type: "text",
-                            class: 'px-4 w-64 text-left text-gray-800',
-                            value: state.search,
-                            oninput: (_, { target }) => [OnSearchChange, target]}, [])
-                    ]),
+                    FilterView(state),
                     h("table", {class: "event-table"}, [
                         h("thead", {}, [
                             h("tr", {class: "font-medium"}, [
@@ -539,14 +620,18 @@
 
     // bean initialization timeline
     app({
-        view: () => h("div", {class: 'border-t border-gray-100'}, [
+        init: {events: beanInitResultTimeLineList, expandedEventIds: [], expandDetailIds: [], duration: 100, search: ''},
+        view: (state) => h("div", {class: 'border-t border-gray-100'}, [
             h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
                     h("span", {class: "font-medium ml-2"}, text("Bean Initailization Timeline")),
                 ]),
-                h("div", {class: "p-2 w-full bg-gray-400"}, [
+                h("div", {class: "p-4 w-full bg-gray-400"}, [
+                    FilterView(state),
                     h("div", {class: "p-1 w-full bg-white"}, [
-                        ...beanInitResultTimeLineList.map(beanInitResult => BeanInitResultTimeLineRow(beanInitResult, 0))
+                        ...state.events
+                            .filter(event => FilterEvent(event, state.duration, state.search))
+                            .map(event => BeanInitResultTimeLineRow(event, state.expandedEventIds, state.expandDetailIds, state.duration, state.search, 0))
                     ]),
                 ])
             ]),
@@ -605,7 +690,7 @@
     // Startup Wall Clock Profile
     app({
         view: () => h("div", {class: 'border-t border-gray-100'}, [
-            h("details", {open: false}, [
+            h("details", {open: true}, [
                 h("summary", {class: "p-2 w-full bg-gray-300"}, [
                     h("span", {class: "font-medium ml-2"}, text("Startup Wall Clock Profile")),
                 ]),
