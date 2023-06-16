@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -14,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.GZIPOutputStream;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -51,7 +54,7 @@ public class SimpleHttpServer {
             if ("/stop".equals(url)) {
                 content = "Agent stop.".getBytes(StandardCharsets.UTF_8);
                 IocContainer.stop();
-            } if (url.endsWith("flame-graph.html")) {
+            } else if (url.endsWith("flame-graph.html")) {
                 Path path = Paths.get(NameUtil.getOutputPath(), url);
                 content = Files.readAllBytes(path);
             } else {
@@ -60,9 +63,31 @@ public class SimpleHttpServer {
             }
 
             exchange.getResponseHeaders().set("Content-Type", "text/html");
-            exchange.sendResponseHeaders(HTTP_OK, content.length);
+
+            String acceptEncoding = exchange.getRequestHeaders().getFirst("Accept-Encoding");
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            if (acceptEncoding != null && acceptEncoding.contains("gzip")) {
+                exchange.getResponseHeaders().set("Content-Encoding", "gzip");
+
+                try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(baos)) {
+                    gzipOutputStream.write(content);
+                }
+
+            } else if (acceptEncoding != null && acceptEncoding.contains("deflate")) {
+                exchange.getResponseHeaders().set("Content-Encoding", "deflate");
+                try (DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(baos)) {
+                    deflaterOutputStream.write(content);
+                }
+            }
+
+            byte[] compressData = baos.toByteArray();
+
+            exchange.sendResponseHeaders(HTTP_OK, compressData.length);
+
             OutputStream os = exchange.getResponseBody();
-            os.write(content);
+            os.write(compressData);
             os.close();
 
         }
