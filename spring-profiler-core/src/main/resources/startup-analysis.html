@@ -108,8 +108,7 @@
             position: absolute;
             right: 0;
             top: 0;
-            overflow: hidden;
-            z-index: 0;
+            width: 95%;
         }
         .SpanBar--bar {
             border-radius: 3px;
@@ -314,9 +313,26 @@
             style: {width: '24px'}
         }, [])
 
+    const BeanInitResultRowIcon = (event, expandedEventIds, minDuration, search) => {
+
+        const children = event.children.filter(child => FilterEvent(child, minDuration, search));
+
+        if (children.length > 0) {
+            if (expandedEventIds.indexOf(event.id) === -1) {
+                return zoomIn();
+            }
+
+            if (expandedEventIds.indexOf(event.id) !== -1) {
+                return zoomOut();
+            }
+        }
+
+        return Placeholder();
+    }
+
     const BeanInitResultRow = (event, expandedEventIds, minDuration, search, level = 0) => h("tbody", {}, [
         h("tr", {class: `cursor-pointer hover:bg-blue-200 bg-${colors[level]}`, onclick: [Expand, event]}, [
-            h("td", {class: "col-icon"}, event.children.length > 0 && expandedEventIds.indexOf(event.id) === -1 ? zoomIn() : expandedEventIds.indexOf(event.id) !== -1 ? zoomOut() : Placeholder()),
+            h("td", {class: "col-icon"}, BeanInitResultRowIcon(event, expandedEventIds, minDuration, search)),
             h("td", {class: `col-name`}, text(event.name)),
             h("td", {class: "col-duration"}, text(event.duration)),
             h("td", {class: "col-duration"}, text(event.actualDuration)),
@@ -356,9 +372,11 @@
         ]),
     ]);
 
-    const spanTreeOffsetIcon = (event, expandedEventIds) => {
+    const spanTreeOffsetIcon = (event, expandedEventIds, minDuration, search) => {
 
-        if (event.children.length > 0) {
+        const children = event.children.filter(child => FilterEvent(child, minDuration, search));
+
+        if (children.length > 0) {
 
             if (expandedEventIds.indexOf(event.id) === -1) {
                 return [timeLineZoomIn(event)];
@@ -370,10 +388,7 @@
     }
 
     const calculateLeftPercent = (beanInitResult) => {
-        let percent = (beanInitResult.startMillis - minStartMillis) / (maxEndMillis - minStartMillis) * 100;
-
-        percent = percent > 94 ? 94 : percent;
-        return percent + '%';
+        return (beanInitResult.startMillis - minStartMillis) / (maxEndMillis - minStartMillis) * 100 + '%';
     };
 
     const calculateWidthPercent = (beanInitResult) => {
@@ -397,18 +412,18 @@
 
     const BeanInitResultTimeLineRow = (event, expandedEventIds, expandDetailIds, minDuration, search, level) => h("div", { class: `VirtualizedTraceView--row ${level < 0 ? 'hidden' : ''} ` }, [
         h("div", { class: "flex-row span-row hover:bg-blue-200" }, [
-            h("div", { class: "ub-relative span-name-column w-1/2 max-w-1/2" }, [
+            h("div", { class: "ub-relative span-name-column w-2/5 max-w-2/5" }, [
                 h("div", { class: "span-name-wrapper flex hover:bg-blue-200" }, [
                     h("span", { class: "SpanTreeOffset is-parent"}, [
                         ...spanTreeOffset(level),
-                        ...spanTreeOffsetIcon(event, expandedEventIds)
+                        ...spanTreeOffsetIcon(event, expandedEventIds, minDuration, search)
                     ]),
                     h("a", { class: "span-name bl border-teal-500", onclick: [ExpandDetails, event] }, [
                         h("span", { class: "span-svc-name is-children-collapsed" }, text(event.name)),
                     ]),
                 ]),
             ]),
-            h("div", { class: "ub-relative span-view cursor-pointer flex-grow-0 flex-shrink-0 max-w-1/2 w-1/2", onclick: [ExpandDetails, event] }, [
+            h("div", { class: "ub-relative span-view cursor-pointer flex-grow-0 flex-shrink-0 max-w-3/5 w-3/5", onclick: [ExpandDetails, event] }, [
                 h("div", { class: "SpanBar--wrapper" }, [
                     h("div", { class: 'SpanBar--bar bg-teal-500', style: {left: `${calculateLeftPercent(event)}`, width: `${calculateWidthPercent(event)}`}}, [
                         h("div", { class: "SpanBar--label is-right" }, text(event.duration + 'ms')),
