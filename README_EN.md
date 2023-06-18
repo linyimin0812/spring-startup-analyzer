@@ -64,7 +64,7 @@ Provides two installation methods: **manual installation** and **one-click scrip
 
 **1. Manual Installation**
 
-1. Click [realease](https://github.com/linyimin-bupt/spring-startup-analyzer/releases/download/v1.0.0/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package 
+1. Click [realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package 
 
 2. Create a new folder and extract the files
 
@@ -77,7 +77,7 @@ tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
 **2. Shell script installation**
 
 ```shell
-curl -sS https://raw.githubusercontent.com/linyimin-bupt/spring-startup-analyzer/main/bin/setup.sh | sh
+curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/main/bin/install.sh | sh
 ```
 
 ## Configuration
