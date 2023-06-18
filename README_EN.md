@@ -10,106 +10,61 @@
 [中文](README.md) |
 [ENGLISH](README_EN.md)
 
-# 1. Introduction
+- [🤩Highlight](#highlight)
+    - [📈Spring Startup Analysis Report](#spring-startup-analysis-report)
+    - [🚀Optimization of Spring Startup](#optimization-of-spring-startup)
+- [📈Spring Startup Data Collection](#spring-startup-data-collection)
+    - [Installation](#installation)
+    - [Configuration](#configuration)
+    - [Application Startup](#application-startup)
+    - [Custom extension](#custom-extension)
+- [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
+    - [Types of Bean for Async](#types-of-bean-for-async)
+    - [Usage](#usage)
 
-With the development of business, more and more JAR files are introduced into the application. Some fat JAR files have a size of more than 200MB, and the startup time is around 6-7 minutes, which seriously affects the response speed to online problems and also affects the development efficiency. It is necessary to optimize the startup time of the application. **No observation, no optimization**. This project implements the observation of the overall startup process of an application and provides some methods for optimizing startup time. It mainly includes the following capabilities.
+# Spring Startup Ananlyzer
 
+**Spring Startup Analyzer** generates an interactive Spring application startup report that lets you understand what contributes to the application startup time and helps to optimize it.
 
-## 1.1 Application startup data collection
+[analyzer report demo](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
 
-<details open>
-  <summary style='cursor: pointer'><strong>UI homepage</strong></summary>
+# 🤩Highlight
 
-![](./docs/home-ui.jpg)
-</details>
+## 📈Spring Startup Analysis Report
 
-<details>
-  <summary style='cursor: pointer'><strong>timeline of Spring bean loading</strong></summary>
+**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks.
 
-![](./docs/spring-bean-timeline.jpg)
-</details>
+- Spring Bean Initialization Details
+  ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
 
-<details>
-  <summary style='cursor: pointer'><strong>Call chain tracking</strong></summary>
+- Spring Bean Initialization Timeline
+  ![Spring Bean Timeline](./docs/spring-bean-timeline.png)
 
-![](./docs/invoke-tracer.jpg)
-</details>
+- Method Invocation Count and Time Statistics
+  ![Details of Method Invoke](./docs/details-of-method-invoke.png)
 
-<details>
-  <summary style='cursor: pointer'><strong>Wall clock flame graph of application startup(supports specifying thread names)</strong></summary>
+- Unused Jars
+  ![Unused Jars](./docs/unused-jars.png)
 
-![](./docs/flame-graph.jpg)
-</details>
-
-<details>
-  <summary style='cursor: pointer'><strong>Loading time of Beans</strong></summary>
-
-![](./docs/details-of-bean.png)
-</details>
-
-<details>
-  <summary style='cursor: pointer'><strong>Method invocation count and time statistics (support for custom methods)</strong></summary>
-
-![](./docs/details-of-invoke.jpg)
-</details>
-
-<details>
-  <summary style='cursor: pointer'><strong>Unloaded JAR files in the application (help with slimming down fat JAR)</strong></summary>
-
-![](./docs/unused-jar.jpg)
-
-<strong>&emsp;It should be noted that some JAR files may be loaded at runtime. To remove JAR files that are not loaded at startup, it is important to perform thorough testing to avoid encountering ClassNotFoundException errors in production</strong>
-</details>
-
-<details open>
-  <summary style='cursor: pointer'><strong>Support for custom extensions at the method/class/package</strong></summary>
-    &emsp;&emsp;The system has reserved extension interfaces that can be implemented to achieve custom functionality extensions,<a href="#25-custom-extension">details</a>
-</details>
+- Application Startup Thread Wall Clock Profile
+  ![Flame Gragh](./docs/flame-graph.png)
 
 
-## 1.2 Optimization of application startup time
+## 🚀Optimization of Spring Startup
 
-<details open>
-  <summary style='cursor: pointer'><strong>Asynchronous init method of Spring Bean</strong></summary>
-    &emsp;&emsp;For beans with longer initialization time, execute the init and @PostConstruct methods asynchronously,<a href="#3-optimization-of-application-startup-time">details</a>
-</details>
+Provide a Spring Bean asynchronous initialization jar package, which asynchronously executes the `init` and `@PostConstruct` methods for beans with longer initialization time to improve application startup speed.
 
 
+# 📈Spring Startup Data Collection
 
-# 2. Application startup data collection
 
-Because the project requires visualization of the Spring Bean initialization timeline and invocation relationships, we have chosen to report the data to [jaeger](https://www.jaegertracing.io/), for display in the Jaeger UI. Therefore, it is necessary to locally start Jaeger.
+## Installation
 
-The collected data will be written to the `$HOME/spring-startup-analyzer/output/${appName}/${time}-${ip}-all.html` file. If Jaeger environment is not available (such as when the local machine is isolated from the staging environment and cannot access it), you can download this file to your local machine and open it using the Chrome browser to view the collected data. However, please note that this file does not include trace data.
-
-## 2.1 start jaeger
-
-```shell
-docker run -d \
---name jaeger  \
--e COLLECTOR_ZIPKIN_HOST_PORT=:9411  \
--e COLLECTOR_OTLP_ENABLED=true  \
--p 6831:6831/udp  \
--p 6832:6832/udp  \
--p 5778:5778 \
--p 16686:16686 \
--p 4317:4317 \
--p 4318:4318 \
--p 14250:14250  \
--p 14268:14268 \
--p 14269:14269  \
--p 9411:9411 \
-linyimin520812/all-in-one:v2.0.0
-```
-
-Accessing http://127.0.0.1:16686 successfully indicates that Jaeger has been started and is ready.
-
-## 2.2 Installation
+Provides two installation methods: **manual installation** and **one-click script installation**.
 
 **1. Manual Installation**
 
 1. Click [realease](https://github.com/linyimin-bupt/spring-startup-analyzer/releases/download/v1.0.0/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package 
-
 
 2. Create a new folder and extract the files
 
@@ -125,27 +80,22 @@ tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
 curl -sS https://raw.githubusercontent.com/linyimin-bupt/spring-startup-analyzer/main/bin/setup.sh | sh
 ```
 
-## 2.3 Configuration
+## Configuration
 
-Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Dspring-startup-analyzer.app.status.check.timeout=30`
+Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Dspring-startup-analyzer.app.health.check.timeout=30`
 
-Please make sure to configure the `spring-startup-analyzer.app.status.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
+Please make sure to configure the `spring-startup-analyzer.app.health.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
 
 
-| configuration option | description                           | default value                       |
-| ---- | ----------- | ---------------------------- |
-| spring-startup-analyzer.app.status.check.timeout   | application startup check timeout time in minutes  | 20   |
-| **spring-startup-analyzer.app.status.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:8080/actuator/health |
-| spring-startup-analyzer.jaeger.grpc.export.endpoint            | export endpoint of jaeger  | http://localhost:14250       |
-| spring-startup-analyzer.jaeger.ui.endpoint                     | UI endpoint of jaeger  | http://localhost:16686       |
-| spring-startup-analyzer.invoke.chain.packages                  | package name(s) for tracing method calls, multiple package names can be configured, separated by commas         | package of main class        |
-| spring-startup-analyzer.jaeger.span.min.sample.duration.millis | Minimum export time (in millis) for Jaeger spans | 10                           |
-| spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                         |
-| spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                         |
-| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                            |
-| spring-startup-analyzer.spring.bean.init.min.millis            | Minimum time (in millis) for displaying a Bean in the statistics   | 100     |
+| configuration option | description                           | default value                         |
+| ---- | ----------- |---------------------------------------|
+| spring-startup-analyzer.app.health.check.timeout   | application startup check timeout time in minutes  | 20                                    |
+| **spring-startup-analyzer.app.health.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:7002/actuator/health |
+| spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                                  |
+| spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
+| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                                     |
 
-## 2.4 Application Startup
+## Application Startup
 
 This project is started as an agent, so you can add the parameter -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
 
@@ -154,9 +104,9 @@ Path of logs：`$HOME/spring-startup-analyzer/logs`
 - startup.log: log of startup
 - transform.log: log of re-transform class
 
-After the application has finished starting, the message ======= spring-startup-analyzer stop, click %s to view detailed info about the startup process ====== will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
+After the application has finished starting, the message `======= spring-startup-analyzer finished, click http://localhost:8065 to visit details. ======` will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 
-## 2.5 Custom extension
+## Custom extension
 
 Translation: If you want to customize the profiling capabilities, you need to include the `spring-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)
 
@@ -168,7 +118,7 @@ Translation: If you want to customize the profiling capabilities, you need to in
 </parent>
 ```
 
-### 2.5.1 Extension Interfaces
+### Extension Interfaces
 
 <details>
 <summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
@@ -282,68 +232,8 @@ public class FindResourceCounter implements EventListener {
 
 It is important to note that **the implementation of the EventListener interface should be annotated with @MetaInfServices**. This is because the extension interface is loaded through the Service Provider Interface (SPI). When you use the `@MetaInfServices` annotation, the implementation class will be automatically written to the `META-INF/services/io.github.linyimin0812.profiler.api.EventListener` file during the code compilation process. If you don't use the `@MetaInfServices` annotation, you need to manually write the fully qualified name of the implementation class into the META-INF/services/io.github.linyimin0812.profiler.api.EventListener file`. Otherwise, the extension implementation will not be loaded.
 
-### 2.5.2 UI Extension Interfaces
 
-After implementing an extension for a specific class/method, if you want to synchronize the statistical data to be displayed in the Jaeger UI, you can use the related UI interfaces. This project provides two types of interfaces:
-
-**1. If you need to display the invocation relationships, you can use the Jaeger Tracer interface**
-
-<details>
-    <summary style='cursor: pointer'>UI format</summary>
-
-![](./docs/home-ui.jpg)
-</details>
-
-```java
-Jaeger jaeger = new Jaeger();
-jaeger.start();
-
-Tracer tracer = jaeger.createTracer("xxx-tracer");
-
-Span span = tracer.spanBuilder("xxx-span").startSpan();
-
-try (Scope scope = span.makeCurrent()) {
-
-} finally {
-span.end();
-}
-
-jaeger.stop();
-```
-
-**2. markdown content interface**
-
-<details>
-    <summary style='cursor: pointer'>UI format</summary>
-
-![](./docs/markdown-content.jpg)
-
-</details>
-
-```java
-// markdown content, default order value is 100, the smaller the order, the higher the priority for display
-MarkdownWriter.write(String content);
-// specify order
-MarkdownWriter.write(int order, String content);
-```
-
-**3. markdown statistics interfaces**
-
-<details>
-    <summary style='cursor: pointer'>UI format</summary>
-
-![](./docs/markdown-statistics.jpg)
-</details>
-
-```java
-// markdown statistics, default order value is 100, the smaller the order, the higher the priority for display
-MarkdownStatistics.write(String label, String value);
-// specify order
-MarkdownStatistics.write(int order, String label, String value);
-```
-
-
-### 2.5.3 Package & Run
+### Package & Run
 
 The `spring-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/spring-startup-analyzer/extension` directory.
 
@@ -353,7 +243,7 @@ mvn clean package
 
 Once you have installed this project by following the steps in the [Installation](#22-Installation) section, you can execute the packaging command mentioned above. After the packaging is complete, you can start the application as described in the [Application Startup](#24-application-startup) section to load the extension JAR file.
 
-# 3. Optimization of application startup time
+# 🚀Optimization of Spring Startup
 
  From the [Application startup data collection](#2-application-startup-data-collection)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
 
@@ -365,7 +255,7 @@ NOTE:
 - **For Beans that are not dependent on other Beans, you can confidently proceed with asynchronous initialization**，You can determine if a Bean is dependent on other Beans by examining the `Root Bean` in  [Loading time of Beans](#11-application-startup-data-collection) session
 - **Careful analysis is required for Beans that are dependent on other Beans. They should not be called by other Beans during the application startup process, as it may lead to issues**
 
-## 3.1 Types of Bean for Async
+## Types of Bean for Async
 
 Supports initialization of beans through @Bean, @PostConstruct, and @ImportResource. demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
 
@@ -392,7 +282,7 @@ public class TestComponent {
 ```
 
 
-## 3.2 Usage
+## Usage
 
 1. Import Dependency
 
@@ -424,19 +314,3 @@ View the log in the $HOME/spring-startup-analyzer/logs/startup.log file. For asy
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
-
-# 4. Future Plans
-
-Currently, the observation of the application startup process has been completed, which allows us to identify bottlenecks during the startup. Therefore, the next step is to provide a set of solutions for common bottlenecks, such as:
-
-- [ ] Jar Index
-
-
-# 5. Contribute to the project.
-
-[CONTRIBUTING](./CONTRIBUTING.md) 
-
-
-# 6. 🙏Thank you for your support
-
-If this project has been helpful to you, please consider giving it a star⭐️

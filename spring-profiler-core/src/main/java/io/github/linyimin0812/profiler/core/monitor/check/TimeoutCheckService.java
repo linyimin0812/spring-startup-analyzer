@@ -25,7 +25,7 @@ public class TimeoutCheckService implements AppStatusCheckService {
 
     @Override
     public void init() {
-        long minutes = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.app.status.check.timeout", "20"));
+        long minutes = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.app.health.check.timeout", "20"));
         duration = Duration.ofMinutes(minutes);
         startInstant = Instant.now();
         logger.info("timeout duration: {} minutes", minutes);

@@ -31,7 +31,7 @@ public class EndpointCheckService implements AppStatusCheckService {
     @Override
     public void init() {
         client = new OkHttpClient().newBuilder().callTimeout(3, TimeUnit.SECONDS).build();
-        String endpoints = ProfilerSettings.getProperty("spring-startup-analyzer.app.status.check.endpoints", "http://127.0.0.1:7002/health");
+        String endpoints = ProfilerSettings.getProperty("spring-startup-analyzer.app.health.check.endpoints", "http://127.0.0.1:7002/health");
         healthEndpoints = Arrays.asList(endpoints.split(","));
         logger.info("endpoints: {}", healthEndpoints);
     }
