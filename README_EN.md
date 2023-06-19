@@ -245,7 +245,7 @@ Once you have installed this project by following the steps in the [Installation
 
 # 🚀Optimization of Spring Startup
 
- From the [Application startup data collection](#2-application-startup-data-collection)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
+ From the [Application startup data collection](#spring-startup-analysis-report)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
 
 
 NOTE:
