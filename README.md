@@ -7,106 +7,108 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 
-[中文](README.md) |
-[ENGLISH](README_EN.md)
+[ENGLISH](README.md) |
+[中文](README_ZH.md)
 
-
-- [🤩核心能力](#核心能力)
-  - [📈Spring应用启动数据采集报告](#spring应用启动数据采集报告)
-  - [🚀应用启动时长优化](#应用启动时长优化)
-- [📈Spring应用启动数据采集报告](#spring应用启动数据采集报告-1)
-  - [安装jar包](#安装jar包)
-  - [配置项](#配置项)
-  - [应用启动](#应用启动)
-  - [自定义扩展](#自定义扩展)
-- [🚀应用启动时长优化](#应用启动时长优化-1)
-  - [支持异步化的Bean类型](#支持异步化的bean类型)
-  - [接入异步Bean优化](#接入异步bean优化)
-    
+- [🤩Highlight](#highlight)
+  - [📈Spring Startup Analysis Report](#spring-startup-analysis-report)
+  - [🚀Optimization of Spring Startup](#optimization-of-spring-startup)
+- [📈Spring Startup Data Collection](#spring-startup-data-collection)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Application Startup](#application-startup)
+  - [Custom extension](#custom-extension)
+- [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
+  - [Types of Bean for Async](#types-of-bean-for-async)
+  - [Usage](#usage)
 
 # Spring Startup Ananlyzer
 
-**Spring Startup Ananlyzer** 采集Spring应用启动过程数据，生成交互式分析报告([HTML](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html))，用于分析Spring应用启动卡点，优化Spring应用启动速度。
+**Spring Startup Analyzer** generates an interactive Spring application startup report that lets you understand what contributes to the application startup time and helps to optimize it.
 
 [analyzer report demo](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
 
-# 🤩核心能力
+# 🤩Highlight
 
-## 📈Spring应用启动数据采集报告
+## 📈Spring Startup Analysis Report
 
-**Spring Bean初始化详情信息**，支持初始化耗时/beanName搜索、**Spring Bean初始化时序图**、**方法调用次数及耗时统计**(支持自定义方法)、**应用未加载的jar包**(帮助fatjar瘦身)及**应用启动过程线程wall clock火焰图**，帮助开发者快速分析定位应用启动卡点
+**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks.
 
-- Spring Bean初始化详情
-![Spring Bean Initialization](./docs/spring-bean-initialization.png)
+- Spring Bean Initialization Details
+  ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
 
-- Spring Bean初始化时序图
-![Spring Bean Timeline](./docs/spring-bean-timeline.png)
+- Spring Bean Initialization Timeline
+  ![Spring Bean Timeline](./docs/spring-bean-timeline.png)
 
-- 方法调用次数、耗时统计(支持自定义方法)
-![Details of Method Invoke](./docs/details-of-method-invoke.png)
+- Method Invocation Count and Time Statistics
+  ![Details of Method Invoke](./docs/details-of-method-invoke.png)
 
-- 应用未加载的jar包(帮助fatjar瘦身)
-![Unused Jars](./docs/unused-jars.png)
+- Unused Jars
+  ![Unused Jars](./docs/unused-jars.png)
 
-- 应用启动过程线程wall clock火焰图(支持指定线程名称，不指定则采集全部线程)
-![Flame Gragh](./docs/flame-graph.png)
+- Application Startup Thread Wall Clock Profile
+  ![Flame Gragh](./docs/flame-graph.png)
 
-## 🚀应用启动时长优化
 
-提供一个Spring Bean异步初始化jar包，针对初始化耗时比较长的bean，异步执行init和@PostConstruct方法提高应用启动速度。
+## 🚀Optimization of Spring Startup
 
-# 📈Spring应用启动数据采集报告
+Provide a Spring Bean asynchronous initialization jar package, which asynchronously executes the `init` and `@PostConstruct` methods for beans with longer initialization time to improve application startup speed.
 
-## 安装jar包
 
-提供了**手动安装**和**一键脚本安装**两种安装方式
+# 📈Spring Startup Data Collection
 
-**1. 手动安装**
 
-1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
-2. 新建文件夹，并解压
+## Installation
+
+Provides two installation methods: **manual installation** and **one-click script installation**.
+
+**1. Manual Installation**
+
+1. Click [realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package
+
+2. Create a new folder and extract the files
 
 ```shell
 mkdir -p ${HOME}/spring-startup-analyzer
-cd 下载路径
+cd download_path
 tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
 ```
 
-**2. 脚本安装**
+**2. Shell script installation**
 
 ```shell
 curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/main/bin/install.sh | sh
 ```
 
-## 配置项
+## Configuration
 
-在启动参数中进行配置，如配置超时时间为30分钟：`-Dspring-startup-analyzer.app.health.check.timeout=30`
+Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Dspring-startup-analyzer.app.health.check.timeout=30`
 
-请务必配置`spring-startup-analyzer.app.health.check.endpoints`选项，不然会一直采集直到应用启动检查超时时间(默认20分钟)才会停止，每隔1秒请求一次endpoint，请求响应头状态码为200则认为应用启动完成。默认健康检查URL：`http://127.0.0.1:7002/actuator/health`
+Please make sure to configure the `spring-startup-analyzer.app.health.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
 
 
-| 配置项                                               | 说明                                    | 默认值                                   |
-| ---------------------------------------------------- |---------------------------------------|---------------------------------------|
-| spring-startup-analyzer.app.health.check.timeout               | 应用启动健康检查超时时间，单位为分钟                    | 20 |
-| **spring-startup-analyzer.app.health.check.endpoints**         | 应用启动成功检查url，可配置多个，以","分隔              | http://127.0.0.1:7002/actuator/health |
-| spring-startup-analyzer.admin.http.server.port                 | 管理端口                                  | 8065            |
-| spring-startup-analyzer.async.profiler.sample.thread.names     | async profiler采集的线程名称，支持配置多个，以","进行分隔 | main |
-| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler采集间隔时间(ms)              | 5       |
+| configuration option | description                           | default value                         |
+| ---- | ----------- |---------------------------------------|
+| spring-startup-analyzer.app.health.check.timeout   | application startup check timeout time in minutes  | 20                                    |
+| **spring-startup-analyzer.app.health.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:7002/actuator/health |
+| spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                                  |
+| spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
+| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                                     |
 
-## 应用启动
+## Application Startup
 
-此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar`即可。如果是以java命令行的方式启动应用，则在命令行中添加，如果是在IDEA中启动，则需要在VM options选项中添加。
+This project is started as an agent, so you can add the parameter -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
 
-日志文件路径：`$HOME/spring-startup-analyzer/logs`
+Path of logs：`$HOME/spring-startup-analyzer/logs`
 
-- startup.log: 启动过程中的日志
-- transform.log: 被re-transform的类/方法信息
+- startup.log: log of startup
+- transform.log: log of re-transform class
 
-应用启动完成后会在console和startup.log文件中输出`======= spring-startup-analyzer finished, click http://localhost:8065 to visit details. ======`，可以通过此输出来判断采集是否完成。
+After the application has finished starting, the message `======= spring-startup-analyzer finished, click http://localhost:8065 to visit details. ======` will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 
-## 自定义扩展
+## Custom extension
 
-如果需要自定义观测能力，需要引入`spring-profiler-starter`的pom作为扩展项目的父pom，然后就可以使用项目对外暴露的接口进行扩展。更多的细节可以参考[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)的实现
+Translation: If you want to customize the profiling capabilities, you need to include the `spring-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)
 
 ```xml
 <parent>
@@ -116,7 +118,7 @@ curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/
 </parent>
 ```
 
-### 扩展接口
+### Extension Interfaces
 
 <details>
 <summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
@@ -125,42 +127,42 @@ curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/
 public interface EventListener extends Startable {
 
     /**
-     * 应用启动时调用
+     * Invocation during application startup
      */
     void start();
 
     /**
-     * 应用启动完成后调用
+     * Invocation after application startup completion
      */
     void stop();
     
     /**
-     * 需要增强的类
-     * @param className 类全限定名, 如果为空, 默认返回为true
+     * class need to be enhance
+     * @param className
 
-     * @return true: 进行增强, false: 不进行增强
+     * @return true: enhance, false: not enhance
      */
     boolean filter(String className);
 
     /**
-     * 需要增强的方法(此方法会依赖filter(className), 只有filter(className)返回true时，才会执行到此方法)
-     * @param methodName 方法名
-     * @param methodTypes 方法参数列表
-     * @return true: 进行增强, false: 不进行增强
+     * Methods to be enhanced (This method relies on the filter(className) condition. It will only be executed if filter(className) returns true.)
+     * @param methodName
+     * @param methodTypes
+     * @return true: enhance, false: not enhance
      */
     default boolean filter(String methodName, String[] methodTypes) {
         return true;
     }
 
     /**
-     * 事件响应处理逻辑
-     * @param event 触发的事件
+     * Event response processing logic
+     * @param event fire  event
      */
     void onEvent(Event event);
 
     /**
-     * 监听的事件
-     * @return 需要监听的事件列表
+     * events to listen
+     * @return events need to be listened
      */
     List<Event.Type> listen();
 
@@ -168,9 +170,10 @@ public interface EventListener extends Startable {
 ```
 </details>
 
-其中`start()和stop()`方法代表系统的生命周期，分别在应用开始启动和应用启动完成时调用。`filter()`方法指定需要增强的类/方法。`listen()`方法指定监听的事件，包括`进入方法`和`方法返回`两种事件。`onEvent()`方法在监听的事件发生时会被调用
+The `start()` and `stop()` methods represent the lifecycle of the system, called respectively at the beginning and completion of application startup. The `filter()` method specifies the classes/methods that need to be enhanced. The `listen()` method specifies the events to listen for, including `method enter` and `method return` events. The `onEvent()` method is called when the listened events occur.
 
-例如下面是一个统计应用启动过程中java.net.URLClassLoader.findResource(String)方法调用次数的扩展
+For example, the following is an extension that counts the number of invocations of the java.net.URLClassLoader.findResource(String) method during the application startup process:
+
 
 <details>
     <summary style='cursor: pointer'>FindResourceCounter demo</summary>
@@ -198,12 +201,12 @@ public class FindResourceCounter implements EventListener {
     @Override
     public void onEvent(Event event) {
         if (event instanceof AtEnterEvent) {
-            // 开始进入findResource方法
+            // enter findResource method
         } else if (event instanceof AtExitEvent) {
-            // findResource方法返回
+            // findResource return
         }
 
-        // 统计调用次数
+        //  counts the number of invocations
         COUNT.incrementAndGet();
 
     }
@@ -227,32 +230,36 @@ public class FindResourceCounter implements EventListener {
 ```
 </details>
 
-### 打包运行
+It is important to note that **the implementation of the EventListener interface should be annotated with @MetaInfServices**. This is because the extension interface is loaded through the Service Provider Interface (SPI). When you use the `@MetaInfServices` annotation, the implementation class will be automatically written to the `META-INF/services/io.github.linyimin0812.profiler.api.EventListener` file during the code compilation process. If you don't use the `@MetaInfServices` annotation, you need to manually write the fully qualified name of the implementation class into the META-INF/services/io.github.linyimin0812.profiler.api.EventListener file`. Otherwise, the extension implementation will not be loaded.
 
-在`spring-profiler-starter`的pom中已经定义了打包plugin，默认会将生成的jar包拷贝到`$HOME/spring-startup-analyzer/extension`文件下。
+
+### Package & Run
+
+The `spring-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/spring-startup-analyzer/extension` directory.
 
 ```shell
 mvn clean package
 ```
 
-只要按照步骤[安装jar包](#22-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#24-应用启动)即可加载扩展jar包。
+Once you have installed this project by following the steps in the [Installation](#22-Installation) section, you can execute the packaging command mentioned above. After the packaging is complete, you can start the application as described in the [Application Startup](#24-application-startup) section to load the extension JAR file.
 
-# 🚀应用启动时长优化
+# 🚀Optimization of Spring Startup
 
-从[应用启动数据采集](#spring应用启动数据采集报告-1)中，可以获取初始化耗时长的Bean，因为Spring启动过程是单线程完成的，为了优化应用的启动时长，可以考虑将这些耗时长的Bean的初始化方法异步化，查看[实现原理](./HOW_IT_WORKS.md#spring-bean异步加载原理)。
+From the [Application startup data collection](#spring-startup-analysis-report)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
 
-需要注意：
 
-- **应该优先从代码层面优化初始化时间长的Bean，从根本上解决Bean初始化耗时长问题**
-- **对于二方包/三方包中初始化耗时长的Bean(无法进行代码优化)再考虑Bean的异步化**
-- **对于不被依赖的Bean可以放心进行异步化**，可以通过[各个Bean加载耗时](#11-应用启动数据采集)中的`Root Bean`判断Bean是否被其他Bean依赖
-- **对于被依赖的Bean需要小心分析，在应用启动过程中不能其他Bean被调用，否则可能会存在问题**
+NOTE:
 
-## 支持异步化的Bean类型
+- **It is advisable to prioritize optimizing the code of Beans to fundamentally address the issue of long initialization time**
+- **For Beans with long initialization time in second-party or third-party packages (where code optimization is not possible), consider asynchronous initialization of those Beans.**
+- **For Beans that are not dependent on other Beans, you can confidently proceed with asynchronous initialization**，You can determine if a Bean is dependent on other Beans by examining the `Root Bean` in  [Loading time of Beans](#11-application-startup-data-collection) session
+- **Careful analysis is required for Beans that are dependent on other Beans. They should not be called by other Beans during the application startup process, as it may lead to issues**
 
-支持@Bean, @PostConstruct及@ImportResource 方式初始化bean，使用demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
+## Types of Bean for Async
 
-1. `@Bean(initMethod = "init")`标识的Bean
+Supports initialization of beans through @Bean, @PostConstruct, and @ImportResource. demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
+
+1. Bean annotated with `@Bean(initMethod = "init")`
 
 ```java
 @Bean(initMethod = "init")
@@ -261,7 +268,7 @@ public TestBean testBean() {
 }
 ```
 
-2. `@PostConstruct`标识的Bean
+2. Bean annotated with `@PostConstruct`
 
 
 ```java
@@ -275,9 +282,9 @@ public class TestComponent {
 ```
 
 
-## 接入异步Bean优化
+## Usage
 
-1. 添加pom依赖
+1. Import Dependency
 
 ```xml
 <dependency>
@@ -287,24 +294,23 @@ public class TestComponent {
 </dependency>
 ```
 
-2. 配置一步加载信息
+2. Configuration
 
 ```properties
-# 异步化的Bean可能在Spring Bean初始化顺序的末尾，导致异步优化效果不佳，打开配置优先加载异步化的Bean
+# Asynchronous beans may be at the end of the Spring bean initialization order, which may result in suboptimal effects of asynchronous optimization. Open the configuration to prioritize loading asynchronous beans.
 spring-startup-analyzer.boost.spring.async.bean-priority-load-enable=true
-# 指定异步的Bean名称
+# name of bean to async init
 spring-startup-analyzer.boost.spring.async.bean-names=testBean,testComponent
-# 执行异步化Bean初始化方法线程池的核心线程数
+# init bean thread pool core size
 spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-core-size=8
-# 执行异步化Bean初始化方法线程池的最大线程数
+# init bean thread pool max size
 spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 ```
 
-3. 检查Bean是否异步初始化
+3. Check if the bean is initialized asynchronously
 
-查看日志`$HOME/spring-startup-analyzer/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
+View the log in the $HOME/spring-startup-analyzer/logs/startup.log file. For asynchronously initialized methods, a log entry will be written in the following format:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
-
