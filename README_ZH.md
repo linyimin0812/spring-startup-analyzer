@@ -36,20 +36,27 @@
 
 **Spring Bean初始化详情信息**，支持初始化耗时/beanName搜索、**Spring Bean初始化时序图**、**方法调用次数及耗时统计**(支持自定义方法)、**应用未加载的jar包**(帮助fatjar瘦身)及**应用启动过程线程wall clock火焰图**，帮助开发者快速分析定位应用启动卡点
 
+![](./docs/full-page.png)
+
 - Spring Bean初始化详情
-  ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
+
+![Spring Bean Initialization](./docs/spring-bean-initialization.png)
 
 - Spring Bean初始化时序图
-  ![Spring Bean Timeline](./docs/spring-bean-timeline.png)
+
+![Spring Bean Timeline](./docs/spring-bean-timeline.png)
 
 - 方法调用次数、耗时统计(支持自定义方法)
-  ![Details of Method Invoke](./docs/details-of-method-invoke.png)
+
+![Details of Method Invoke](./docs/details-of-method-invoke.png)
 
 - 应用未加载的jar包(帮助fatjar瘦身)
-  ![Unused Jars](./docs/unused-jars.png)
+  
+![Unused Jars](./docs/unused-jars.png)
 
 - 应用启动过程线程wall clock火焰图(支持指定线程名称，不指定则采集全部线程)
-  ![Flame Gragh](./docs/flame-graph.png)
+
+![Flame Gragh](./docs/full-flame-graph.png)
 
 ## 🚀应用启动时长优化
 

@@ -34,20 +34,27 @@
 
 **Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks.
 
+![](./docs/full-page.png)
+
 - Spring Bean Initialization Details
-  ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
+
+![Spring Bean Initialization](./docs/spring-bean-initialization.png)
 
 - Spring Bean Initialization Timeline
-  ![Spring Bean Timeline](./docs/spring-bean-timeline.png)
+  
+![Spring Bean Timeline](./docs/spring-bean-timeline.png)
 
 - Method Invocation Count and Time Statistics
-  ![Details of Method Invoke](./docs/details-of-method-invoke.png)
+  
+![Details of Method Invoke](./docs/details-of-method-invoke.png)
 
 - Unused Jars
-  ![Unused Jars](./docs/unused-jars.png)
+  
+![Unused Jars](./docs/unused-jars.png)
 
 - Application Startup Thread Wall Clock Profile
-  ![Flame Gragh](./docs/flame-graph.png)
+  
+![Flame Gragh](./docs/full-flame-graph.png)
 
 
 ## 🚀Optimization of Spring Startup
