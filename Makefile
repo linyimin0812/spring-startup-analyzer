@@ -24,7 +24,7 @@ deploy: clean
 
 .PYTHON: tar
 tar:
-	cd ${INSTALL_DIR} && tar -zcvf ${PROJECT_NAME}.tar.gz ./lib/ ./config/
+	cd ${INSTALL_DIR} && tar -zcvf ${PROJECT_NAME}.tar.gz ./lib/ ./config/ ./template
 
 .PYTHON: all
 all: clean install package tar
