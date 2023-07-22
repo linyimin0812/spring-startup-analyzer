@@ -8,12 +8,18 @@ public class MethodInvokeDetail {
     private final long startMillis;
     private long duration;
 
-    private final Object[] args;
+    private Object[] args;
 
     public MethodInvokeDetail(String methodQualifier, Object[] args) {
         this.methodQualifier = methodQualifier;
         this.startMillis = System.currentTimeMillis();
         this.args = args;
+    }
+
+    public MethodInvokeDetail(String methodQualifier, long startMillis, long duration) {
+        this.methodQualifier = methodQualifier;
+        this.startMillis = startMillis;
+        this.duration = duration;
     }
 
     public void setDuration(long duration) {

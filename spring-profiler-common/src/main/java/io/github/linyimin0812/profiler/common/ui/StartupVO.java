@@ -2,6 +2,8 @@ package io.github.linyimin0812.profiler.common.ui;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,6 +12,8 @@ import java.util.stream.Collectors;
  * @author linyimin
  **/
 public class StartupVO {
+
+    private static final Logger logger = LogFactory.getStartupLogger();
 
     private static final List<BeanInitResult> beanInitResultList = new ArrayList<>();
     private static final List<Statistics> statisticsList = new ArrayList<>();
@@ -75,16 +79,21 @@ public class StartupVO {
 
         List<MethodInvokeMetrics> metricsList = new ArrayList<>();
 
-        Map<String, List<MethodInvokeDetail>> invokeMap = methodInvokeDetailList.stream().collect(Collectors.groupingBy(MethodInvokeDetail::getMethodQualifier));
+        try {
+            Map<String, List<MethodInvokeDetail>> invokeMap = methodInvokeDetailList.stream().collect(Collectors.groupingBy(MethodInvokeDetail::getMethodQualifier));
 
-        for (Map.Entry<String, List<MethodInvokeDetail>> entry : invokeMap.entrySet()) {
+            for (Map.Entry<String, List<MethodInvokeDetail>> entry : invokeMap.entrySet()) {
 
-            long totalCost = entry.getValue().stream().mapToLong(MethodInvokeDetail::getDuration).sum();
-            double averageCost = totalCost / (1.0 * entry.getValue().size());
-            List<MethodInvokeDetail> top100 = entry.getValue().stream().sorted((o1, o2) -> (int) (o2.getDuration() - o1.getDuration())).limit(100).collect(Collectors.toList());
+                long totalCost = entry.getValue().stream().mapToLong(MethodInvokeDetail::getDuration).sum();
+                double averageCost = totalCost / (1.0 * entry.getValue().size());
+                List<MethodInvokeDetail> top100 = entry.getValue().stream().sorted((o1, o2) -> (int) (o2.getDuration() - o1.getDuration())).limit(100).collect(Collectors.toList());
 
-            metricsList.add(new MethodInvokeMetrics(entry.getKey(), entry.getValue().size(), totalCost, averageCost, top100));
+                metricsList.add(new MethodInvokeMetrics(entry.getKey(), entry.getValue().size(), totalCost, averageCost, top100));
 
+            }
+        } catch (Exception ex) {
+            List<MethodInvokeDetail> copies = methodInvokeDetailList.stream().map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration())).collect(Collectors.toList());
+            logger.error("calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, SerializerFeature.IgnoreNonFieldGetter), ex);
         }
 
         return metricsList;

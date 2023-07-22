@@ -108,8 +108,15 @@ public class BeanCreateListener implements EventListener {
     @Override
     public void stop() {
         logger.info("============BeanCreateListener stop=============");
-        if (!profilerResultThreadLocal.getAll().isEmpty()) {
-            logger.warn("profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(profilerResultThreadLocal.getAll()));
+
+        List<BeanInitResult> remainInitResult = new ArrayList<>();
+
+        for (Stack<BeanInitResult> stack : profilerResultThreadLocal.getAll()) {
+            remainInitResult.addAll(stack);
+        }
+
+        if (!remainInitResult.isEmpty()) {
+            logger.warn("profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(remainInitResult));
         }
     }
 }

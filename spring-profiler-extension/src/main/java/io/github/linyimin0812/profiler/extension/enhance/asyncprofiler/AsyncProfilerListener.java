@@ -116,7 +116,7 @@ public class AsyncProfilerListener implements EventListener {
     private String getFile() {
 
         File file = new File(NameUtil.getOutputPath());
-        if (!file.exists() && file.mkdirs()) {
+        if (!file.exists() && !file.mkdirs()) {
             logger.warn("create dir: {} failed.", NameUtil.getOutputPath());
         }
 

@@ -67,7 +67,7 @@ Provides two installation methods: **manual installation** and **one-click scrip
 
 **1. Manual Installation**
 
-1. Click [realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.1/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package
+1. Click [realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.2/spring-startup-analyzer.tar.gz) to download the latest version tar.gz package
 
 2. Create a new folder and extract the files
 
@@ -117,7 +117,7 @@ Translation: If you want to customize the profiling capabilities, you need to in
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-profiler-starter</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 </parent>
 ```
 
@@ -293,7 +293,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 </dependency>
 ```
 

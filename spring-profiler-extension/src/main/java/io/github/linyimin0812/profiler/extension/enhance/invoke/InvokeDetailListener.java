@@ -82,6 +82,8 @@ public class InvokeDetailListener implements EventListener {
         methodQualifiers = Arrays.stream(
                 ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", "").split("\\|")
         ).map(StringUtils::trim).collect(Collectors.toList());
+
+        logger.info("config spring-startup-analyzer.invoke.count.methods is {}", ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", ""));
     }
 
     @Override
