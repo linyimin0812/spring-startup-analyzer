@@ -703,22 +703,24 @@
     });
 
     // Startup Wall Clock Profile
-    app({
-        view: () => h("div", {class: 'border-t border-gray-100'}, [
-            h("details", {open: true}, [
-                h("summary", {class: "p-2 w-full bg-gray-300"}, [
-                    h("span", {class: "font-medium ml-2"}, text("Startup Wall Clock Profile")),
-                ]),
-                h("div", {class: "w-full p-4 bg-gray-400", style: { height: "1000px"},}, [
-                    h("iframe", {
-                        class: "w-full h-full",
-                        src: flameGraphUrl,
-                    }, []),
+    if (flameGraphUrl !== '') {
+        app({
+            view: () => h("div", {class: 'border-t border-gray-100'}, [
+                h("details", {open: true}, [
+                    h("summary", {class: "p-2 w-full bg-gray-300"}, [
+                        h("span", {class: "font-medium ml-2"}, text("Startup Wall Clock Profile")),
+                    ]),
+                    h("div", {class: "w-full p-4 bg-gray-400", style: { height: "1000px"},}, [
+                        h("iframe", {
+                            class: "w-full h-full",
+                            src: flameGraphUrl,
+                        }, []),
+                    ]),
                 ]),
             ]),
-        ]),
-        node: document.getElementById("spring-startup-frame-graph"),
-    });
+            node: document.getElementById("spring-startup-frame-graph"),
+        });
+    }
     //]]>
 </script>
 </body>

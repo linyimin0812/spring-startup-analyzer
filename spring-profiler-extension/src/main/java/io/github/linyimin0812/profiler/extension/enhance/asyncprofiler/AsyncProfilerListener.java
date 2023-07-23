@@ -58,6 +58,13 @@ public class AsyncProfilerListener implements EventListener {
         }
 
         try {
+
+            AsyncProfiler instance = AsyncProfiler.getInstance();
+            if (instance == null) {
+                logger.warn("AsyncProfiler instance is null, can't execute start command.");
+                return;
+            }
+
             String result = AsyncProfiler.getInstance(getProfilerSoPath()).execute(command);
             logger.info("AsyncProfiler execute command: {}, result is {}", command, result);
         } catch (IOException e) {
@@ -74,7 +81,13 @@ public class AsyncProfilerListener implements EventListener {
         String command = "stop,interval=" + interval + ",file=" + getFile();
 
         try {
-            String result = AsyncProfiler.getInstance().execute(command);
+            AsyncProfiler instance = AsyncProfiler.getInstance();
+            if (instance == null) {
+                logger.warn("AsyncProfiler instance is null, can't execute stop command.");
+                return;
+            }
+
+            String result = instance.execute(command);
             logger.info("AsyncProfiler execute stop command: {}, result is {}", command, result);
 
         } catch (IOException e) {
@@ -91,7 +104,8 @@ public class AsyncProfilerListener implements EventListener {
         } else if (OSUtil.isLinux()) {
             profilerSoPath = "async-profiler/libasyncProfiler-linux-x64.so";
         } else {
-            throw new IllegalStateException("Current OS do not support AsyncProfiler, Only support Linux/Mac.");
+            logger.warn("Current OS do not support AsyncProfiler, Only support Linux/Mac.");
+            return null;
         }
 
         CodeSource source = AsyncProfilerListener.class.getProtectionDomain().getCodeSource();

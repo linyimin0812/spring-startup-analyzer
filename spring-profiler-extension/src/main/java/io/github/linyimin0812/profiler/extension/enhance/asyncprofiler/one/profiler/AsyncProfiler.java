@@ -16,6 +16,8 @@
 
 package io.github.linyimin0812.profiler.extension.enhance.asyncprofiler.one.profiler;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 
 /**
@@ -39,13 +41,11 @@ public class AsyncProfiler implements AsyncProfilerMXBean {
             return instance;
         }
 
-        if (libPath == null) {
-            System.loadLibrary("asyncProfiler");
-        } else {
+        if (StringUtils.isNotBlank(libPath)) {
             System.load(libPath);
+            instance = new AsyncProfiler();
         }
 
-        instance = new AsyncProfiler();
         return instance;
     }
 

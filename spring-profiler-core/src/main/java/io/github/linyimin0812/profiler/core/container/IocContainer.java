@@ -107,7 +107,9 @@ public class IocContainer {
             String content = new String(Files.readAllBytes(analyzerPath), StandardCharsets.UTF_8);
             content = content.replace("/*startupVO:*/{}", StartupVO.toJSONString());
 
-            content = content.replace("/*flameGraphUrl*/''", "'./" + NameUtil.getFlameGraphHtmlName() + "'");
+            if (new File(NameUtil.getOutputPath(), NameUtil.getFlameGraphHtmlName()).exists()) {
+                content = content.replace("/*flameGraphUrl*/''", "'./" + NameUtil.getFlameGraphHtmlName() + "'");
+            }
 
             String path = NameUtil.getOutputPath() + NameUtil.getAnalysisHtmlName();
 
