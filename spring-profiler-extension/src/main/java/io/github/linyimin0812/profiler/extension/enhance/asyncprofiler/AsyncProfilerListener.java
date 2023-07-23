@@ -59,13 +59,13 @@ public class AsyncProfilerListener implements EventListener {
 
         try {
 
-            AsyncProfiler instance = AsyncProfiler.getInstance();
+            AsyncProfiler instance = AsyncProfiler.getInstance(getProfilerSoPath());
             if (instance == null) {
                 logger.warn("AsyncProfiler instance is null, can't execute start command.");
                 return;
             }
 
-            String result = AsyncProfiler.getInstance(getProfilerSoPath()).execute(command);
+            String result = instance.execute(command);
             logger.info("AsyncProfiler execute command: {}, result is {}", command, result);
         } catch (IOException e) {
             logger.error("AsyncProfiler execute command: {} error. error: {}", command, e);
