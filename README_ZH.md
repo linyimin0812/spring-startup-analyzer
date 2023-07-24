@@ -68,7 +68,7 @@
 
 **1. 手动安装**
 
-1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.3/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
+1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.4/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
 2. 新建文件夹，并解压
 
 ```shell
@@ -117,7 +117,7 @@ curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-profiler-starter</artifactId>
-    <version>2.0.3</version>
+    <version>${latest_version}</version>
 </parent>
 ```
 
@@ -288,7 +288,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>2.0.3</version>
+    <version>${latest_version}</version>
 </dependency>
 ```
 
