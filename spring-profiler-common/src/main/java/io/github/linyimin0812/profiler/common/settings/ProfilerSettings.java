@@ -30,13 +30,17 @@ public class ProfilerSettings {
     }
 
     public static String getProperty(String key, String defaultValue) {
-        if (System.getProperties().contains(key)) {
+        if (isNotBlank(System.getProperty(key))) {
+            logger.info("Key: {} from command line, value is {}", key, System.getProperty(key));
             return System.getProperty(key);
         }
 
         if(properties.containsKey(key)) {
+            logger.info("Key: {} from configuration file, value is {}", key, properties.getProperty(key));
             return properties.getProperty(key);
         }
+
+        logger.info("Key: {} from default value, value is {}", key, defaultValue);
 
         return defaultValue;
     }
@@ -50,6 +54,10 @@ public class ProfilerSettings {
 
     public static boolean contains(String key) {
         return properties.containsKey(key);
+    }
+
+    public static boolean isNotBlank(String text) {
+        return text != null && text.length() > 0;
     }
 
 }
