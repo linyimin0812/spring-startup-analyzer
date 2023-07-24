@@ -2,29 +2,48 @@ MVN=mvn
 PROJECT_NAME=spring-startup-analyzer
 INSTALL_DIR=${HOME}/${PROJECT_NAME}
 
-.PYTHON: clean
+.PHONY: clean
 clean:
+ifeq ($(strip $(VERSION)),)
 	$(MVN) clean
-	cd ./spring-profiler-extension && ${MVN} clean
+	cd ./spring-profiler-extension && $(MVN) clean
+else
+	$(MVN) clean -Drevision=$(VERSION)
+	cd ./spring-profiler-extension && $(MVN) clean -Drevision=$(VERSION)
+endif
 
-.PYTHON: package
+.PHONY: package
 package: clean install
+ifeq ($(strip $(VERSION)),)
 	${MVN} package
 	cd ./spring-profiler-extension && ${MVN} package
-	${MVN} package
+else
+	${MVN} package -Drevision=$(VERSION)
+	cd ./spring-profiler-extension && ${MVN} package -Drevision=$(VERSION)
+endif
 
-.PYTHON: install
+.PHONY: install
 install: clean
+ifeq ($(strip $(VERSION)),)
 	${MVN} install
 	cd ./spring-profiler-extension && ${MVN} install
+else
+	${MVN} install -Drevision=$(VERSION)
+	cd ./spring-profiler-extension && ${MVN} install -Drevision=$(VERSION)
+endif
 
-.PYTHON: deploy
+.PHONY: deploy
 deploy: clean
+ifeq ($(strip $(VERSION)),)
 	${MVN} deploy
+else
+	${MVN} deploy -Drevision=$(VERSION)
+endif
 
-.PYTHON: tar
+
+.PHONY: tar
 tar:
 	cd ${INSTALL_DIR} && tar -zcvf ${PROJECT_NAME}.tar.gz ./lib/ ./config/ ./template
 
-.PYTHON: all
+.PHONY: all
 all: clean install package tar

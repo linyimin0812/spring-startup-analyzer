@@ -117,7 +117,7 @@ Translation: If you want to customize the profiling capabilities, you need to in
 <parent>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-profiler-starter</artifactId>
-    <version>2.0.3</version>
+    <version>latest_version</version>
 </parent>
 ```
 
@@ -293,7 +293,7 @@ public class TestComponent {
 <dependency>
     <groupId>io.github.linyimin0812</groupId>
     <artifactId>spring-async-bean-starter</artifactId>
-    <version>2.0.3</version>
+    <version>${latest_version}</version>
 </dependency>
 ```
 
