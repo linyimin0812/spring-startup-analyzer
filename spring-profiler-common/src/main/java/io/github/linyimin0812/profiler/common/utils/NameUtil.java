@@ -76,6 +76,6 @@ public class NameUtil {
     }
 
     public static String getOutputPath() {
-        return OSUtil.home() + File.separator + "output" + File.separator;
+        return AgentHomeUtil.home() + File.separator + "output" + File.separator;
     }
 }

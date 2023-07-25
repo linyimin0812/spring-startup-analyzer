@@ -4,8 +4,8 @@ import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import io.github.linyimin0812.profiler.common.ui.Statistics;
+import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
 import io.github.linyimin0812.profiler.common.utils.NameUtil;
-import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.core.http.SimpleHttpServer;
 import io.github.linyimin0812.profiler.core.monitor.StartupMonitor;
 import io.github.linyimin0812.profiler.api.EventListener;
@@ -103,7 +103,7 @@ public class IocContainer {
 
     private static void writeStartupVOToHtml() {
         try {
-            Path analyzerPath = Paths.get(OSUtil.home() + "template" + File.separator + "startup-analysis.html");
+            Path analyzerPath = Paths.get(AgentHomeUtil.home() + "template" + File.separator + "startup-analysis.html");
             String content = new String(Files.readAllBytes(analyzerPath), StandardCharsets.UTF_8);
             content = content.replace("/*startupVO:*/{}", StartupVO.toJSONString());
 

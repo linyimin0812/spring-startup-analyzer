@@ -23,9 +23,7 @@ public class ProfilerAgentBoostrap {
     private static final String BRIDGE_JAR = "spring-profiler-bridge.jar";
 
     private static final Logger logger = Logger.getLogger(ProfilerAgentBoostrap.class.getSimpleName());
-
-    private static final String AGENT_HOME = System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator;
-    private static final String LIB_HOME = AGENT_HOME + "lib" + File.separator;
+    private static final String LIB_HOME = getLibHome();
     private static final String EXTENSION_HOME = LIB_HOME + "extension" + File.separator;
 
     public static void premain(String args, Instrumentation instrumentation) {
@@ -116,6 +114,23 @@ public class ProfilerAgentBoostrap {
         }
 
         return packages;
+    }
+
+    private static String getLibHome() {
+
+        String currentFilePath = ProfilerAgentBoostrap.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath();
+
+        File file = new File(currentFilePath);
+
+        if (!file.exists()) {
+            return System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator;
+        }
+
+        return file.getParent() + File.separator;
+
     }
 
 }
