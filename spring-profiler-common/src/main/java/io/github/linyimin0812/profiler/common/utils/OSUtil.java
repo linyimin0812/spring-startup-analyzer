@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import java.io.File;
 import java.util.Locale;
 
 /**
@@ -23,10 +22,6 @@ public class OSUtil {
             platform = PlatformEnum.UNKNOWN;
         }
 
-    }
-
-    public static String home() {
-        return System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator;
     }
 
     private OSUtil() {}

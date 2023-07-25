@@ -8,7 +8,7 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
-import io.github.linyimin0812.profiler.common.utils.OSUtil;
+import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -99,6 +99,6 @@ public class LogFactory {
 
     private static String getLogPath() {
         // ~/spring-startup-analyzer/logs/
-        return OSUtil.home() + "logs" + File.separator;
+        return AgentHomeUtil.home() + "logs" + File.separator;
     }
 }

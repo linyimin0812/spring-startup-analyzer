@@ -1,6 +1,7 @@
 package io.github.linyimin0812.profiler.common.settings;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import org.slf4j.Logger;
 
@@ -19,7 +20,7 @@ public class ProfilerSettings {
 
     static {
 
-        String settingFile = OSUtil.home() + "config" + File.separator + "spring-startup-analyzer.properties";
+        String settingFile = AgentHomeUtil.home() + "config" + File.separator + "spring-startup-analyzer.properties";
 
         try (FileInputStream fileInputStream = new FileInputStream(settingFile)) {
             properties.load(fileInputStream);
