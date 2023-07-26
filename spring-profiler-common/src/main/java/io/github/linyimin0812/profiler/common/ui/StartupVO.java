@@ -2,6 +2,8 @@ package io.github.linyimin0812.profiler.common.ui;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import org.slf4j.Logger;
 
@@ -56,7 +58,8 @@ public class StartupVO {
 
         map.put("methodInvokeDetailList", JSON.toJSONString(calculateInvokeMetrics(), SerializerFeature.IgnoreNonFieldGetter));
 
-        return JSON.toJSONString(map);
+        // fix Use JSONObject#toJSONString to serialize a Map. The Map contains a large string and OOM appears
+        return JSONObject.toJSONString(map, JSONWriter.Feature.LargeObject);
     }
 
     public static void clearBeanInitResultList() {
