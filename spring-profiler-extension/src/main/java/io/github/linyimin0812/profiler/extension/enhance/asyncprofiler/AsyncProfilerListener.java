@@ -68,7 +68,7 @@ public class AsyncProfilerListener implements EventListener {
             String result = instance.execute(command);
             logger.info("AsyncProfiler execute command: {}, result is {}", command, result);
         } catch (IOException e) {
-            logger.error("AsyncProfiler execute command: {} error. error: {}", command, e);
+            logger.error("AsyncProfiler execute command: {} error. error: ", command, e);
         }
     }
 
@@ -91,7 +91,7 @@ public class AsyncProfilerListener implements EventListener {
             logger.info("AsyncProfiler execute stop command: {}, result is {}", command, result);
 
         } catch (IOException e) {
-            logger.info("AsyncProfiler execute stop command error. command: {}, error: {}", command, e);
+            logger.error("AsyncProfiler execute stop command error. command: {}, error:", command, e);
         }
     }
 
