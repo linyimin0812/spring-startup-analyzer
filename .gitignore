@@ -40,3 +40,5 @@ build/
 .DS_Store
 
 .idea
+
+logs
