@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -48,9 +47,9 @@ public class ProfilerAgentBoostrap {
         try {
             agentLoader = createAgentClassLoader();
             Class<?> transFormer = agentLoader.loadClass("io.github.linyimin0812.profiler.core.enhance.ProfilerClassFileTransformer");
-            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class, List.class);
+            Constructor<?> constructor = transFormer.getConstructor(Instrumentation.class);
             Method retransform = transFormer.getDeclaredMethod("retransformLoadedClass");
-            Object instance = constructor.newInstance(instrumentation, getManifests());
+            Object instance = constructor.newInstance(instrumentation);
 
             instrumentation.addTransformer((ClassFileTransformer) instance, true);
 
@@ -98,22 +97,6 @@ public class ProfilerAgentBoostrap {
 
         return urlList;
 
-    }
-
-    private static List<URL> getManifests() {
-
-        List<URL> packages = new ArrayList<>();
-
-        try {
-            Enumeration<URL> urls = ProfilerAgentBoostrap.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
-            while (urls.hasMoreElements()) {
-                packages.add(urls.nextElement());
-            }
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "getManifests error. error: " + e.getMessage());
-        }
-
-        return packages;
     }
 
     private static String getLibHome() {

@@ -12,7 +12,6 @@ import com.alibaba.deps.org.objectweb.asm.tree.MethodNode;
 import io.github.linyimin0812.Bridge;
 import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import io.github.linyimin0812.profiler.common.utils.MainClassUtil;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
 import org.slf4j.Logger;
 
@@ -20,7 +19,6 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
-import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +37,10 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
     private final Map<String, Object> enhancedObject = new ConcurrentHashMap<>();
 
 
-    public ProfilerClassFileTransformer(Instrumentation instrumentation, List<URL> manifestPackages) {
+    public ProfilerClassFileTransformer(Instrumentation instrumentation) {
 
         Bridge.setBridge(new EventDispatcher());
         InstrumentationHolder.setInstrumentation(instrumentation);
-
-        MainClassUtil.resolveMainClassPackage(manifestPackages);
 
         IocContainer.start();
 
@@ -98,7 +94,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
                     interceptor.process(methodProcessor);
                     logger.info("transform: {}", getCacheKey(loader, classNode, methodNode));
                 } catch (Exception e) {
-                    logger.error("enhancer error, class: {}, method: {}, interceptor: {}, error: {}",
+                    logger.error("enhancer error, class: {}, method: {}, interceptor: {}, error:",
                             classNode.name, methodNode.name, interceptor.getClass().getName(), e);
                 }
             }
@@ -111,6 +107,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
 
     }
 
+    // NOTE: Reflective call, DON'T REMOVE
     public void retransformLoadedClass() {
         Instrumentation instrumentation = InstrumentationHolder.getInstrumentation();
 
