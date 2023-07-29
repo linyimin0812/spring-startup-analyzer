@@ -36,8 +36,10 @@ endif
 deploy: clean
 ifeq ($(strip $(VERSION)),)
 	${MVN} deploy
+	cd ./spring-profiler-extension && ${MVN} deploy
 else
 	${MVN} deploy -Drevision=$(VERSION)
+	cd ./spring-profiler-extension && ${MVN} deploy -Drevision=$(VERSION)
 endif
 
 
