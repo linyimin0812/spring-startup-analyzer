@@ -163,12 +163,6 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [build]
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: spring-startup-analyzer
-          path: /home/runner/
-
       - name: Setup Alpine Linux x86-64 environment
         uses: jirutka/setup-alpine@v1
         with:
@@ -177,6 +171,13 @@ jobs:
           shell-name: alpine-x86_64.sh
           packages: >
             build-base linux-headers openjdk11
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
+
       - name: Run test inside Alpine Linux x86-64 environment
         run: |
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
@@ -208,11 +209,6 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [build]
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: spring-startup-analyzer
-          path: /home/runner/
 
       - name: Setup Alpine Linux aarch64 environment
         uses: jirutka/setup-alpine@v1
@@ -222,6 +218,12 @@ jobs:
           shell-name: alpine-aarch64.sh
           packages: >
             build-base linux-headers openjdk11
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
