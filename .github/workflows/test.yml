@@ -73,10 +73,10 @@ jobs:
           
           for ((i=1; i<=200; i++)); do
             echo "0---------------------"
-            ls -al /Users/runner/spring-startup-analyzer/output/
+            ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "mac-demo"
             file_count=2
             echo "1---------------------"
-            http_status=$(curl -o /dev/null -s -w "%{http_code}" http://127.0.0.1:8066)
+            curl -o /dev/null -s -w "%{http_code}" http://127.0.0.1:8066
             echo "2---------------------"
             if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
               echo "++++++++++++++++++++++++"
