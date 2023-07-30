@@ -72,6 +72,8 @@ jobs:
           file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "mac-demo")
           if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
+            echo "================startup log================"
+            cat /Users/runner/spring-startup-analyzer/logs/startup.log
             exit 0
           fi
           exit 1
@@ -107,6 +109,8 @@ jobs:
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-x64-demo")
           if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
+            echo "================startup log================"
+            cat /Users/runner/spring-startup-analyzer/logs/startup.log
             exit 0
           fi
           exit 1
@@ -148,6 +152,8 @@ jobs:
             file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
             if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
+            echo "================startup log================"
+            cat /Users/runner/spring-startup-analyzer/logs/startup.log
             exit 0
             fi
             exit 1
@@ -189,6 +195,8 @@ jobs:
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
           if [ "$file_count" -eq 2 ]; then
           echo "mac-test success"
+          echo "================startup log================"
+          cat /Users/runner/spring-startup-analyzer/logs/startup.log
           exit 0
           fi
           exit 1
@@ -233,6 +241,8 @@ jobs:
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
           echo "mac-test success"
+          echo "================startup log================"
+          cat /Users/runner/spring-startup-analyzer/logs/startup.log
           exit 0
           fi
           exit 1
