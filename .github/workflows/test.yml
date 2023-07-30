@@ -70,7 +70,7 @@ jobs:
           sleep 3
           
           for ((i=1; i<=10; i++)); do
-            file_count=$(ll /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
+            file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
             http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
             if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
               echo "mac-test success"
