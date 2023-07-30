@@ -110,7 +110,7 @@ jobs:
           if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
             echo "================startup log================"
-            cat /Users/runner/spring-startup-analyzer/logs/startup.log
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
             exit 0
           fi
           exit 1
@@ -139,6 +139,7 @@ jobs:
             java -version
             which java
             
+            cd /home/runner
             ls -lrt
             mkdir -p ./spring-startup-analyzer/output
             tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
@@ -153,7 +154,7 @@ jobs:
             if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
             echo "================startup log================"
-            cat /Users/runner/spring-startup-analyzer/logs/startup.log
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
             exit 0
             fi
             exit 1
@@ -183,6 +184,8 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
+          
+          cd /home/runner
           ls -lrt
           mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
@@ -197,7 +200,7 @@ jobs:
           if [ "$file_count" -eq 2 ]; then
           echo "mac-test success"
           echo "================startup log================"
-          cat /Users/runner/spring-startup-analyzer/logs/startup.log
+          cat /home/runner/spring-startup-analyzer/logs/startup.log
           exit 0
           fi
           exit 1
@@ -230,6 +233,8 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
+          
+          cd /home/runner
           ls -lrt
           mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
@@ -244,7 +249,7 @@ jobs:
           if [ "$file_count" -eq 2 ]; then
           echo "mac-test success"
           echo "================startup log================"
-          cat /Users/runner/spring-startup-analyzer/logs/startup.log
+          cat /home/runner/spring-startup-analyzer/logs/startup.log
           exit 0
           fi
           exit 1
