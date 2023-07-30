@@ -246,16 +246,19 @@ jobs:
           ls -lrt
         working-directory: tmp-async-profiler
       # 将编译好的 libasyncProfiler 动态链接库文件 push 到 arthas 代码仓库的 master 分支 async-profiler/ 目录下
-      - name: Commit and Push libasyncProfiler files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          mv tmp-async-profiler/* spring-profiler-extension/async-profiler/
-          git add spring-profiler-extension/async-profiler/
-          git commit -m "Upload async-profiler libs"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Add libasyncProfiler files
+        run: mv tmp-async-profiler/* spring-profiler-extension/async-profiler/
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          force: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: build and update libasyncProfiler files
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: build/$(date +%s)_update_async_profiler_1
+          delete-branch: false
+          title: 'Update async profiler'
+          body: build and update async profiler tag ${{ inputs.async-profiler-tag-name }}
+          draft: false
