@@ -31,14 +31,14 @@ jobs:
         run: |
           make all
           curl -#Lkf \
-            -o spring-boot-demo.jar \
+            -o /Users/runner/spring-startup-analyzer/spring-boot-demo.jar \
             https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
           ls -lrt
 
       - uses: actions/upload-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: ./
+          path: /Users/runner/spring-startup-analyzer/
           if-no-files-found: error
 
   test-mac:
@@ -60,7 +60,7 @@ jobs:
       - name: Execute spring-boot-demo.jar
         run: |
           ls -lrt
-          java -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar spring-boot-demo.jar
@@ -68,7 +68,7 @@ jobs:
           sleep 3
           
           for ((i=1; i<=10; i++)); do
-            file_count=$(ll $HOME/spring-startup-analyzer/output/ | grep -c "demo-mac")
+            file_count=$(ll /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
             http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
             if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
               echo "mac-test success"
