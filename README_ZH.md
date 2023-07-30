@@ -74,7 +74,7 @@
 ```shell
 mkdir -p ${HOME}/spring-startup-analyzer
 cd 下载路径
-tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
+tar -zxvf spring-startup-analyzer.tar.gz -C ${HOME}/spring-startup-analyzer
 ```
 
 **2. 脚本安装**

@@ -74,7 +74,7 @@ Provides two installation methods: **manual installation** and **one-click scrip
 ```shell
 mkdir -p ${HOME}/spring-startup-analyzer
 cd download_path
-tar -zxvf spring-startup-analyzer.tar.gz ${HOME}/spring-startup-analyzer
+tar -zxvf spring-startup-analyzer.tar.gz -C ${HOME}/spring-startup-analyzer
 ```
 
 **2. Shell script installation**
