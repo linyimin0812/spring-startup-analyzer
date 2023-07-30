@@ -60,7 +60,7 @@ jobs:
       - name: Execute spring-boot-demo.jar
         run: |
           ls -lrt
-          mkdir -p spring-startup-analyzer
+          mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
