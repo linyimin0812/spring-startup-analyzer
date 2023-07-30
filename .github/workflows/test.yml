@@ -32,7 +32,7 @@ jobs:
           make all
           curl -#Lkf \
             -o spring-boot-demo.jar \
-            https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v1.2.0/spring-boot-demo.jar
+            https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
           ls -lrt
 
   test-mac:
