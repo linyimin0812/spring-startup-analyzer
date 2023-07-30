@@ -1,0 +1,69 @@
+name: Test Push
+on: push
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'zulu' # Alternative distribution options are available.
+      - name: Import GPG secret key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          make all
+          curl -#Lkf \
+            -o spring-boot-demo.jar \
+            https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v1.2.0/spring-boot-demo.jar
+          ls -lrt
+
+  test-mac:
+    runs-on: macos-12
+    needs: [build]
+    steps:
+      # 安装 Liberica JDK 11
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "liberica"
+          java-version: "11"
+      # 从 async-profiler 源码编译出 libasyncProfiler-mac.so(兼容 arthas-core 中 ProfilerCommand.java 固定的 so 文件名称未使用 libasyncProfiler.dylib)
+      # grep -m1 PROFILER_VERSION Makefile 用于输出 async-profiler 版本, 下同
+      - name: Execute spring-boot-demo.jar
+        run: |
+          echo $HOME
+          java -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=demo-mac \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar spring-boot-demo.jar
+          
+          sleep 3
+          
+          for ((i=1; i<=10; i++)); do
+            file_count=$(ll $HOME/spring-startup-analyzer/output/ | grep -c "demo-mac")
+            http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
+            if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
+              echo "mac-test success"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "File does not exist after 10 seconds."
+          exit 1
