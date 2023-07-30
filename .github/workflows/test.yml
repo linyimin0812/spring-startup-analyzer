@@ -31,14 +31,14 @@ jobs:
         run: |
           make all
           curl -#Lkf \
-            -o /Users/runner/spring-startup-analyzer/spring-boot-demo.jar \
+            -o /home/runner/spring-startup-analyzer/spring-boot-demo.jar \
             https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
           ls -lrt
 
       - uses: actions/upload-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /Users/runner/spring-startup-analyzer/
+          path: /home/runner/spring-startup-analyzer/
           if-no-files-found: error
 
   test-mac:
