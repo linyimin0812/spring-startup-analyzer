@@ -111,3 +111,130 @@ jobs:
           fi
           exit 1
         working-directory: /home/runner/
+
+  test-generic-linux-arm64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
+      - name: Execute test inside CentOS 7 aarch64 docker container environment via QEMU
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: none
+          distro: none
+          base_image: arm64v8/centos:7
+          run: |
+            cat /etc/system-release
+            uname -m
+            yum -y update && yum install -y java-11-openjdk-devel gcc-c++ make which file
+            JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+            java -version
+            which java
+            
+            ls -lrt
+            mkdir -p ./spring-startup-analyzer/output
+            tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
+            nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=generic-linux-arm64-demo \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar /home/runner/spring-boot-demo.jar &
+  
+            sleep 30
+  
+            file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
+            if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            exit 0
+            fi
+            exit 1
+          working-directory: /home/runner/
+
+  test-alpine-linux-x64:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
+
+      - name: Setup Alpine Linux x86-64 environment
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: x86_64
+          branch: v3.15
+          shell-name: alpine-x86_64.sh
+          packages: >
+            build-base linux-headers openjdk11
+      - name: Run test inside Alpine Linux x86-64 environment
+        run: |
+          grep -m1 PROFILER_VERSION Makefile
+          JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+          java -version
+          which java
+          ls -lrt
+          mkdir -p ./spring-startup-analyzer/output
+          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          -Dproject.name=alpine-linux-x64-demo \
+          -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -jar /home/runner/spring-boot-demo.jar &
+
+          sleep 30
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
+          if [ "$file_count" -eq 2 ]; then
+          echo "mac-test success"
+          exit 0
+          fi
+          exit 1
+        working-directory: /home/runner/
+        shell: alpine-x86_64.sh {0}
+
+
+  test-alpine-linux-arm64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
+
+      - name: Setup Alpine Linux aarch64 environment
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: aarch64
+          branch: v3.15
+          shell-name: alpine-aarch64.sh
+          packages: >
+            build-base linux-headers openjdk11
+
+      - name: Run test inside Alpine Linux aarch64 environment
+        run: |
+          grep -m1 PROFILER_VERSION Makefile
+          JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+          java -version
+          which java
+          ls -lrt
+          mkdir -p ./spring-startup-analyzer/output
+          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          -Dproject.name=alpine-linux-arm64-demo \
+          -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -jar /home/runner/spring-boot-demo.jar &
+
+          sleep 30
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
+          if [ "$file_count" -eq 2 ]; then
+          echo "mac-test success"
+          exit 0
+          fi
+          exit 1
+        working-directory: /home/runner/
+        shell: alpine-aarch64.sh {0}
