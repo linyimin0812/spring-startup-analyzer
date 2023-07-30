@@ -173,7 +173,6 @@ jobs:
             build-base linux-headers openjdk11
       - name: Run test inside Alpine Linux x86-64 environment
         run: |
-          grep -m1 PROFILER_VERSION Makefile
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
@@ -218,7 +217,6 @@ jobs:
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
-          grep -m1 PROFILER_VERSION Makefile
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
