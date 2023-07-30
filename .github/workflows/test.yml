@@ -67,17 +67,21 @@ jobs:
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar /Users/runner/spring-boot-demo.jar &
           
-          sleep 10
+          echo "=========================="
           
           for ((i=1; i<=200; i++)); do
+            echo "---------------------"
+            ls -lrt
             file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
             http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
             if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
+              echo "++++++++++++++++++++++++"
               echo "mac-test success"
               exit 0
             fi
             sleep 1
           done
+          echo "aaaaaaaaaaaaaaa"
           echo "File does not exist after 10 seconds."
           exit 1
         working-directory: /Users/runner/
