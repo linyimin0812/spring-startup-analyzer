@@ -257,7 +257,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: build/$(date +%s)_update_async_profiler_1
+          branch: build/update_async_profiler_${{ inputs.async-profiler-tag-name }}_1
           delete-branch: false
           title: 'Update async profiler'
           body: build and update async profiler tag ${{ inputs.async-profiler-tag-name }}
