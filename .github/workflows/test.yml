@@ -63,11 +63,12 @@ jobs:
           mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
-            -Dproject.name=demo-mac \
+            -Dproject.name=mac-demo \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar /Users/runner/spring-boot-demo.jar &
                     
-          sleep 60
+          sleep 30
+          
           file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "mac-demo")
           if [ "$file_count" -eq 2 ]; then
             echo "mac-test success"
