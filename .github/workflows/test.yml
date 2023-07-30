@@ -72,7 +72,7 @@ jobs:
           for ((i=1; i<=200; i++)); do
             echo "0---------------------"
             ls -al /Users/runner/spring-startup-analyzer/output/
-#            file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
+      
             file_count=2
             echo "1---------------------"
             http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
