@@ -34,6 +34,14 @@ jobs:
             -o spring-boot-demo.jar \
             https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
           ls -lrt
+          mkdir spring-startup-analyzer
+          cp -r . spring-startup-analyzer
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: ./
+          if-no-files-found: error
 
   test-mac:
     runs-on: macos-12
@@ -44,11 +52,17 @@ jobs:
         with:
           distribution: "liberica"
           java-version: "11"
-      # 从 async-profiler 源码编译出 libasyncProfiler-mac.so(兼容 arthas-core 中 ProfilerCommand.java 固定的 so 文件名称未使用 libasyncProfiler.dylib)
-      # grep -m1 PROFILER_VERSION Makefile 用于输出 async-profiler 版本, 下同
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: ${{ github.workspace }}
+
+
       - name: Execute spring-boot-demo.jar
         run: |
-          echo $HOME
+          echo "工作空间路径：${{ github.workspace }}"
           ls -lrt
           java -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
@@ -68,3 +82,4 @@ jobs:
           done
           echo "File does not exist after 10 seconds."
           exit 1
+        working-directory: ${{ github.workspace }}
