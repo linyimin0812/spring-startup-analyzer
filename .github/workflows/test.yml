@@ -60,7 +60,8 @@ jobs:
       - name: Execute spring-boot-demo.jar
         run: |
           ls -lrt
-          tar -zxvf spring-startup-analyzer.tar.gz -C /Users/runner/spring-startup-analyzer
+          mkdir -p spring-startup-analyzer
+          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
