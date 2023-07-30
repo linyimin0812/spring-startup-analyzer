@@ -67,7 +67,7 @@ jobs:
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar /Users/runner/spring-boot-demo.jar &
           
-          sleep 3
+          sleep 10
           
           for ((i=1; i<=10; i++)); do
             file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
