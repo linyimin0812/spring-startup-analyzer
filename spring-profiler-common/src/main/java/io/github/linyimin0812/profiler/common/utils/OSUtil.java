@@ -63,6 +63,10 @@ public class OSUtil {
         return arch;
     }
 
+    public static String platform() {
+        return platform.name();
+    }
+
     public static boolean isArm32() {
         return "arm_32".equals(arch);
     }
