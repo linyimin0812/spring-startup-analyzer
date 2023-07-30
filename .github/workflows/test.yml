@@ -70,10 +70,12 @@ jobs:
           echo "=========================="
           
           for ((i=1; i<=200; i++)); do
-            echo "---------------------"
+            echo "0---------------------"
             ls -lrt
             file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "demo-mac")
+            echo "1---------------------"
             http_status=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8066)
+            echo "2---------------------"
             if [ "$file_count" -eq 2 ] && [ "$http_status" -eq 200 ]; then
               echo "++++++++++++++++++++++++"
               echo "mac-test success"
