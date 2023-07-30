@@ -49,6 +49,7 @@ jobs:
       - name: Execute spring-boot-demo.jar
         run: |
           echo $HOME
+          ls -lrt
           java -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
