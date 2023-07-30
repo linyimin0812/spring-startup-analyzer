@@ -34,8 +34,6 @@ jobs:
             -o spring-boot-demo.jar \
             https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
           ls -lrt
-          mkdir spring-startup-analyzer
-          cp -r . spring-startup-analyzer
 
       - uses: actions/upload-artifact@v3
         with:
