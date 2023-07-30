@@ -138,8 +138,9 @@ jobs:
             JAVA_HOME=/usr/lib/jvm/java-11-openjdk
             java -version
             which java
-            
+            pwd
             cd /home/runner
+            pwd
             ls -lrt
             mkdir -p ./spring-startup-analyzer/output
             tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
@@ -184,8 +185,9 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
-          
+          pwd
           cd /home/runner
+          pwd
           ls -lrt
           mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
@@ -233,8 +235,9 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
-          
+          pwd
           cd /home/runner
+          pwd
           ls -lrt
           mkdir -p ./spring-startup-analyzer/output
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
