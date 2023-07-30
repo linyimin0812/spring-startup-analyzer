@@ -62,10 +62,10 @@ jobs:
           ls -lrt
           mkdir -p spring-startup-analyzer
           tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
-          java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          nohup java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
-            -jar /Users/runner/spring-boot-demo.jar
+            -jar /Users/runner/spring-boot-demo.jar &
           
           sleep 3
           
