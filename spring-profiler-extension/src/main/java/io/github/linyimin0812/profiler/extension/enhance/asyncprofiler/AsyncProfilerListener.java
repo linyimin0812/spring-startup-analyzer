@@ -17,7 +17,6 @@ import java.security.CodeSource;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
  * @author linyimin
  **/
@@ -45,6 +44,7 @@ public class AsyncProfilerListener implements EventListener {
     @Override
     public void start() {
         logger.info("==============AsyncProfilerListener start========================");
+        logger.info("platform:{}, arch: {}", OSUtil.platform(), OSUtil.arch());
 
         long interval = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.async.profiler.interval.millis", "10")) * 1000_000;
 
@@ -97,12 +97,28 @@ public class AsyncProfilerListener implements EventListener {
 
     private String getProfilerSoPath() {
 
-        String profilerSoPath;
+        String profilerSoPath = null;
 
         if (OSUtil.isMac()) {
             profilerSoPath = "async-profiler/libasyncProfiler-mac.so";
         } else if (OSUtil.isLinux()) {
-            profilerSoPath = "async-profiler/libasyncProfiler-linux-x64.so";
+            if (OSUtil.isX86_64() && OSUtil.isMuslLibc()) {
+                profilerSoPath = "async-profiler/libasyncProfiler-linux-musl-x64.so";
+            } else if(OSUtil.isX86_64()){
+                profilerSoPath = "async-profiler/libasyncProfiler-linux-x64.so";
+            } else if (OSUtil.isArm64() && OSUtil.isMuslLibc()) {
+                profilerSoPath = "async-profiler/libasyncProfiler-linux-musl-arm64.so";
+            } else if (OSUtil.isArm64()) {
+                profilerSoPath = "async-profiler/libasyncProfiler-linux-arm64.so";
+            }
+
+            if (profilerSoPath == null) {
+                logger.warn("Current arch do not support AsyncProfiler, Only support X86_64/Arm64/MuslLibc.");
+                return null;
+            }
+
+            logger.info("getProfilerSoPath: {}", profilerSoPath);
+
         } else {
             logger.warn("Current OS do not support AsyncProfiler, Only support Linux/Mac.");
             return null;
