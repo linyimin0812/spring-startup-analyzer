@@ -114,6 +114,7 @@ jobs:
 
   test-generic-linux-arm64:
     runs-on: ubuntu-20.04
+    needs: [build]
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
@@ -154,7 +155,7 @@ jobs:
 
   test-alpine-linux-x64:
     runs-on: ubuntu-20.04
-
+    needs: [build]
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
@@ -198,6 +199,7 @@ jobs:
 
   test-alpine-linux-arm64:
     runs-on: ubuntu-20.04
+    needs: [build]
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
