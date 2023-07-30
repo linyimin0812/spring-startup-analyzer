@@ -76,3 +76,38 @@ jobs:
           fi
           exit 1
         working-directory: /Users/runner/
+  test-generic-linux-x64:
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    steps:
+      # 安装 Liberica JDK 11
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "liberica"
+          java-version: "11"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/
+
+      - name: Execute spring-boot-demo.jar
+        run: |
+          ls -lrt
+          mkdir -p ./spring-startup-analyzer/output
+          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=generic-linux-x64-demo \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar /home/runner/spring-boot-demo.jar &
+
+          sleep 30
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-x64-demo")
+          if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            exit 0
+          fi
+          exit 1
+        working-directory: /home/runner/
