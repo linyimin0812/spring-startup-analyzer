@@ -55,12 +55,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: ${{ github.workspace }}
-
+          path: /Users/runner/
 
       - name: Execute spring-boot-demo.jar
         run: |
-          echo "工作空间路径：${{ github.workspace }}"
           ls -lrt
           java -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=demo-mac \
@@ -80,4 +78,4 @@ jobs:
           done
           echo "File does not exist after 10 seconds."
           exit 1
-        working-directory: ${{ github.workspace }}
+        working-directory: /Users/runner/
