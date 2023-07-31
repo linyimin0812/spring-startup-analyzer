@@ -215,13 +215,13 @@ jobs:
           shell-name: alpine-aarch64.sh
           packages: >
             build-base linux-headers openjdk11
+          volumes: /home/runner/spring-startup-analyzer:/home/runner/spring-startup-analyzer
 
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
           path: /home/runner/spring-startup-analyzer
-          shell-name: alpine-aarch64.sh
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
