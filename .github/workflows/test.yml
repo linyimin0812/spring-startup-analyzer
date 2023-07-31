@@ -199,7 +199,7 @@ jobs:
       - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
         run: |
           ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | kill -9
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
         shell: alpine-x86_64.sh {0}
 
 
@@ -249,5 +249,5 @@ jobs:
       - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
         run: |
           ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | kill -9
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
         shell: alpine-aarch64.sh {0}
