@@ -227,6 +227,7 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
+          ls -lrt /home/runner/spring-startup-analyzer
           pwd
           ls -lrt
           cd /home/runner
