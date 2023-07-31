@@ -55,17 +55,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /Users/runner/
+          path: /Users/runner/spring-startup-analyzer
 
       - name: Execute spring-boot-demo.jar
         run: |
           ls -lrt
-          mkdir -p ./spring-startup-analyzer/output
-          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=mac-demo \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
-            -jar /Users/runner/spring-boot-demo.jar &
+            -jar /Users/runner/spring-startup-analyzer/spring-boot-demo.jar &
                     
           sleep 30
           
@@ -92,17 +90,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/
+          path: /home/runner/spring-startup-analyzer
 
       - name: Execute spring-boot-demo.jar
         run: |
           ls -lrt
-          mkdir -p ./spring-startup-analyzer/output
-          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=generic-linux-x64-demo \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
-            -jar /home/runner/spring-boot-demo.jar &
+            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
           sleep 30
 
@@ -114,7 +110,7 @@ jobs:
             exit 0
           fi
           exit 1
-        working-directory: /home/runner/
+        working-directory: /home/runner/spring-startup-analyzer
 
   test-generic-linux-arm64:
     runs-on: ubuntu-20.04
@@ -124,7 +120,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/
+          path: /home/runner/spring-startup-analyzer
       - name: Execute test inside CentOS 7 aarch64 docker container environment via QEMU
         uses: uraimo/run-on-arch-action@v2
         with:
@@ -142,12 +138,10 @@ jobs:
             cd /home/runner
             pwd
             ls -lrt
-            mkdir -p ./spring-startup-analyzer/output
-            tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
             nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=generic-linux-arm64-demo \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
-            -jar /home/runner/spring-boot-demo.jar &
+            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
   
             sleep 30
   
@@ -159,7 +153,7 @@ jobs:
             exit 0
             fi
             exit 1
-          working-directory: /home/runner/
+          working-directory: /home/runner/spring-startup-analyzer
 
   test-alpine-linux-x64:
     runs-on: ubuntu-20.04
@@ -178,7 +172,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/
+          path: /home/runner/spring-startup-analyzer
 
       - name: Run test inside Alpine Linux x86-64 environment
         run: |
@@ -189,12 +183,10 @@ jobs:
           cd /home/runner
           pwd
           ls -lrt
-          mkdir -p ./spring-startup-analyzer/output
-          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-x64-demo \
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
-          -jar /home/runner/spring-boot-demo.jar &
+          -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
           sleep 30
 
@@ -206,7 +198,7 @@ jobs:
           exit 0
           fi
           exit 1
-        working-directory: /home/runner/
+        working-directory: /home/runner/spring-startup-analyzer
         shell: alpine-x86_64.sh {0}
 
 
@@ -228,7 +220,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: ./
+          path: /home/runner/spring-startup-analyzer
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
@@ -240,12 +232,10 @@ jobs:
           cd /home/runner
           pwd
           ls -lrt
-          mkdir -p ./spring-startup-analyzer/output
-          tar -zxvf spring-startup-analyzer.tar.gz -C ./spring-startup-analyzer
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-arm64-demo \
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
-          -jar /home/runner/spring-boot-demo.jar &
+          -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
           sleep 30
 
@@ -257,5 +247,5 @@ jobs:
           exit 0
           fi
           exit 1
-        working-directory: ./
+        working-directory: /home/runner/spring-startup-analyzer
         shell: alpine-aarch64.sh {0}
