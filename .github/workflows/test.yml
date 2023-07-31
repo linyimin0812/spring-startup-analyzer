@@ -220,7 +220,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/rootfs/alpine-v3.15-aarch64/home/runner/
+          path: /home/runner/rootfs/alpine-v3.15-aarch64/home/runner/spring-startup-analyzer
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
