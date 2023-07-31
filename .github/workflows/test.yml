@@ -179,9 +179,6 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
-          pwd
-          cd /home/runner
-          pwd
           ls -lrt
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-x64-demo \
@@ -198,7 +195,6 @@ jobs:
           exit 0
           fi
           exit 1
-        working-directory: /home/runner/spring-startup-analyzer
         shell: alpine-x86_64.sh {0}
 
 
