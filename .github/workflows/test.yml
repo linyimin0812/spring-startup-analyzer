@@ -192,16 +192,13 @@ jobs:
           echo "mac-test success"
           echo "================startup log================"
           cat /home/runner/spring-startup-analyzer/logs/startup.log
+          ps
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
           exit 0
           fi
           exit 1
         shell: alpine-x86_64.sh {0}
-      - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
-        run: |
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs sudo kill -9
-        shell: alpine-x86_64.sh {0}
-
 
   test-alpine-linux-arm64:
     runs-on: ubuntu-20.04
@@ -241,13 +238,11 @@ jobs:
           echo "mac-test success"
           echo "================startup log================"
           cat /home/runner/spring-startup-analyzer/logs/startup.log
+          ps
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
+          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
           exit 0
           fi
           exit 1
         working-directory: /home/runner/
-        shell: alpine-aarch64.sh {0}
-      - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
-        run: |
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs sudo kill -9
         shell: alpine-aarch64.sh {0}
