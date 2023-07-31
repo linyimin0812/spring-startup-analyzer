@@ -2,9 +2,7 @@ name: Release
 
 on:
   push:
-    branches:
-      - fix/20230801_release_ci_error_1
-#    tags: [ v\d+\.\d+\.\d+ ]
+    tags: [ v\d+\.\d+\.\d+ ]
 
 jobs:
   create-release:
