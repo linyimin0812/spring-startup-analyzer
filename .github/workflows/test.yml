@@ -189,13 +189,11 @@ jobs:
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
           if [ "$file_count" -eq 2 ]; then
-          echo "mac-test success"
-          echo "================startup log================"
-          cat /home/runner/spring-startup-analyzer/logs/startup.log
-          ps
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
-          exit 0
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            ps | grep java | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
+            exit 0
           fi
           exit 1
         shell: alpine-x86_64.sh {0}
@@ -235,13 +233,11 @@ jobs:
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
-          echo "mac-test success"
-          echo "================startup log================"
-          cat /home/runner/spring-startup-analyzer/logs/startup.log
-          ps
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}'
-          ps | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
-          exit 0
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            ps | grep java | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
+            exit 0
           fi
           exit 1
         working-directory: /home/runner/
