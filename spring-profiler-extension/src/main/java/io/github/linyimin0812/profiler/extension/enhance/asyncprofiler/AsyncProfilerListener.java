@@ -44,6 +44,7 @@ public class AsyncProfilerListener implements EventListener {
     @Override
     public void start() {
         logger.info("==============AsyncProfilerListener start========================");
+        logger.info("platform:{}, arch: {}", OSUtil.platform(), OSUtil.arch());
 
         long interval = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.async.profiler.interval.millis", "10")) * 1000_000;
 
@@ -115,6 +116,8 @@ public class AsyncProfilerListener implements EventListener {
                 logger.warn("Current arch do not support AsyncProfiler, Only support X86_64/Arm64/MuslLibc.");
                 return null;
             }
+
+            logger.info("getProfilerSoPath: {}", profilerSoPath);
 
         } else {
             logger.warn("Current OS do not support AsyncProfiler, Only support Linux/Mac.");

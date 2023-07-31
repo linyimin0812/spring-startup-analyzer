@@ -1,0 +1,244 @@
+name: Test Push
+on: push
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'zulu' # Alternative distribution options are available.
+      - name: Import GPG secret key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          make all
+          curl -#Lkf \
+            -o /home/runner/spring-startup-analyzer/spring-boot-demo.jar \
+            https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.0/spring-boot-demo.jar
+          ls -lrt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/spring-startup-analyzer/
+          if-no-files-found: error
+
+  test-mac:
+    runs-on: macos-12
+    needs: [build]
+    steps:
+      # 安装 Liberica JDK 11
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "liberica"
+          java-version: "11"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /Users/runner/spring-startup-analyzer
+
+      - name: Execute spring-boot-demo.jar
+        run: |
+          ls -lrt
+          nohup java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=mac-demo \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar /Users/runner/spring-startup-analyzer/spring-boot-demo.jar &
+                    
+          sleep 30
+          
+          file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "mac-demo")
+          if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /Users/runner/spring-startup-analyzer/logs/startup.log
+            exit 0
+          fi
+          exit 1
+        working-directory: /Users/runner/
+  test-generic-linux-x64:
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    steps:
+      # 安装 Liberica JDK 11
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "liberica"
+          java-version: "11"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/spring-startup-analyzer
+
+      - name: Execute spring-boot-demo.jar
+        run: |
+          ls -lrt
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=generic-linux-x64-demo \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
+
+          sleep 30
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-x64-demo")
+          if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            exit 0
+          fi
+          exit 1
+        working-directory: /home/runner/spring-startup-analyzer
+
+  test-generic-linux-arm64:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/spring-startup-analyzer
+      - name: Execute test inside CentOS 7 aarch64 docker container environment via QEMU
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: none
+          distro: none
+          base_image: arm64v8/centos:7
+          dockerRunArgs: |
+            --volume "/home/runner/spring-startup-analyzer:/home/runner/spring-startup-analyzer"
+          run: |
+            cat /etc/system-release
+            uname -m
+            yum -y update && yum install -y java-11-openjdk-devel which
+            JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+            java -version
+            which java
+            echo $HOME
+            ls -lrt
+            nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            -Dproject.name=generic-linux-arm64-demo \
+            -Dspring-startup-analyzer.admin.http.server.port=8066 \
+            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
+  
+            sleep 120
+  
+            file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
+            if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            exit 0
+            fi
+            exit 1
+          working-directory: /home/runner/spring-startup-analyzer
+
+  test-alpine-linux-x64:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    steps:
+      - name: Setup Alpine Linux x86-64 environment
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: x86_64
+          branch: v3.15
+          shell-name: alpine-x86_64.sh
+          packages: >
+            build-base linux-headers openjdk11
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/rootfs/alpine-v3.15-x86_64/home/runner/spring-startup-analyzer
+
+      - name: Run test inside Alpine Linux x86-64 environment
+        run: |
+          JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+          java -version
+          which java
+          ls -lrt
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          -Dproject.name=alpine-linux-x64-demo \
+          -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
+
+          sleep 100
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
+          if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            ps | grep java | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
+            exit 0
+          fi
+          exit 1
+        shell: alpine-x86_64.sh {0}
+
+  test-alpine-linux-arm64:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    steps:
+
+      - name: Setup Alpine Linux aarch64 environment
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: aarch64
+          branch: v3.15
+          shell-name: alpine-aarch64.sh
+          packages: >
+            build-base linux-headers openjdk11
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: /home/runner/rootfs/alpine-v3.15-aarch64/home/runner/spring-startup-analyzer
+
+      - name: Run test inside Alpine Linux aarch64 environment
+        run: |
+          JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+          java -version
+          which java
+          ls -lrt
+          nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+          -Dproject.name=alpine-linux-arm64-demo \
+          -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
+
+          sleep 100
+
+          file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
+          if [ "$file_count" -eq 2 ]; then
+            echo "mac-test success"
+            echo "================startup log================"
+            cat /home/runner/spring-startup-analyzer/logs/startup.log
+            ps | grep java | grep spring-startup-analyzer | grep -v grep | awk '{print $1}' | xargs kill -9
+            exit 0
+          fi
+          exit 1
+        working-directory: /home/runner/
+        shell: alpine-aarch64.sh {0}
