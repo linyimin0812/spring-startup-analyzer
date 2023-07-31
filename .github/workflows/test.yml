@@ -221,6 +221,7 @@ jobs:
         with:
           name: spring-startup-analyzer
           path: /home/runner/spring-startup-analyzer
+          shell-name: alpine-aarch64.sh
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
