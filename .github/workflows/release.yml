@@ -57,6 +57,18 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v2
 
+      - name: Import GPG secret key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       - name: Build spring-startup-analyzer
         run: make all
 
