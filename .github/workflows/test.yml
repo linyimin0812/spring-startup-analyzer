@@ -127,6 +127,8 @@ jobs:
           arch: none
           distro: none
           base_image: arm64v8/centos:7
+          dockerRunArgs: |
+            --volume "/home/runner/spring-startup-analyzer:/home/runner/spring-startup-analyzer"
           run: |
             cat /etc/system-release
             uname -m
