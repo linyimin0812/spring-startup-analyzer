@@ -172,7 +172,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/spring-startup-analyzer
+          path: /home/runner/rootfs/alpine-v3.15-x86_64/home/runner/spring-startup-analyzer
 
       - name: Run test inside Alpine Linux x86-64 environment
         run: |
@@ -188,7 +188,7 @@ jobs:
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 30
+          sleep 100
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
           if [ "$file_count" -eq 2 ]; then
