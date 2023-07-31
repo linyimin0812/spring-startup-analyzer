@@ -135,6 +135,7 @@ jobs:
             java -version
             which java
             pwd
+            ls -lrt
             cd /home/runner
             pwd
             ls -lrt
