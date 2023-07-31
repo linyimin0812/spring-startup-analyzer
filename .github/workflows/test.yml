@@ -248,5 +248,5 @@ jobs:
           exit 0
           fi
           exit 1
-        working-directory: /home/runner/spring-startup-analyzer
+        working-directory: /home/runner/
         shell: alpine-aarch64.sh {0}
