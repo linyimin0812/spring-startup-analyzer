@@ -221,14 +221,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: spring-startup-analyzer
-          path: /home/runner/spring-startup-analyzer
+          path: /home/runner/rootfs/alpine-v3.15-aarch64/home/runner/
 
       - name: Run test inside Alpine Linux aarch64 environment
         run: |
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
-          ls -lrt /home/runner/spring-startup-analyzer
+          ls -lrt /home/runner/rootfs/alpine-v3.15-aarch64/home/runner/
           pwd
           ls -lrt
           cd /home/runner
