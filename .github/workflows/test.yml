@@ -198,7 +198,7 @@ jobs:
         shell: alpine-x86_64.sh {0}
       - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
         run: |
-          ps -aux
+          ps
           pkill -f /usr/bin/java
         shell: alpine-x86_64.sh {0}
 
@@ -248,6 +248,6 @@ jobs:
         shell: alpine-aarch64.sh {0}
       - name: Killed backgrounded java processes # prevent failures from setup-alpine Post Run
         run: |
-          ps -aux
+          ps
           pkill -f /usr/bin/java
         shell: alpine-aarch64.sh {0}
