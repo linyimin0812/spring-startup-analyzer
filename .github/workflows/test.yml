@@ -227,18 +227,13 @@ jobs:
           JAVA_HOME=/usr/lib/jvm/java-11-openjdk
           java -version
           which java
-          ls -lrt /home/runner/
-          pwd
-          ls -lrt
-          cd /home/runner
-          pwd
           ls -lrt
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-arm64-demo \
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 30
+          sleep 100
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
