@@ -132,20 +132,18 @@ jobs:
           run: |
             cat /etc/system-release
             uname -m
-            yum -y update && yum install -y java-11-openjdk-devel gcc-c++ make which file
+            yum -y update && yum install -y java-11-openjdk-devel which
             JAVA_HOME=/usr/lib/jvm/java-11-openjdk
             java -version
             which java
             echo $HOME
-            cd /home/runner
-            pwd
             ls -lrt
-            java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+            nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=generic-linux-arm64-demo \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
-            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar
+            -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
   
-            sleep 30
+            sleep 120
   
             file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
             if [ "$file_count" -eq 2 ]; then
