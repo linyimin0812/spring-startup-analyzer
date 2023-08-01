@@ -131,6 +131,8 @@
                                 </copy>
                                 <copy todir="${template.directory}">
                                     <fileset file="src/main/resources/startup-analysis.html" />
+                                    <fileset file="src/main/resources/hyperapp.js" />
+                                    <fileset file="src/main/resources/tailwind.js" />
                                 </copy>
                             </tasks>
                         </configuration>

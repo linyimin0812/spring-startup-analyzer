@@ -78,4 +78,8 @@ public class NameUtil {
     public static String getOutputPath() {
         return AgentHomeUtil.home() + File.separator + "output" + File.separator;
     }
+
+    public static String getTemplatePath() {
+        return AgentHomeUtil.home() + File.separator + "template" + File.separator;
+    }
 }
