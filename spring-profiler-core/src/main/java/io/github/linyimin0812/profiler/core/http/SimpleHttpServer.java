@@ -51,18 +51,23 @@ public class SimpleHttpServer {
 
             byte[] content;
 
-            if ("/stop".equals(url)) {
-                content = "Agent stop.".getBytes(StandardCharsets.UTF_8);
-                IocContainer.stop();
-            } else if (url.endsWith("flame-graph.html")) {
+            if (url.endsWith(".js")) {
                 Path path = Paths.get(NameUtil.getOutputPath(), url);
                 content = Files.readAllBytes(path);
+                exchange.getResponseHeaders().set("Content-Type", "text/javascript");
             } else {
-                Path path = Paths.get(NameUtil.getOutputPath(), NameUtil.getAnalysisHtmlName());
-                content = Files.readAllBytes(path);
+                if ("/stop".equals(url)) {
+                    content = "Agent stop.".getBytes(StandardCharsets.UTF_8);
+                    IocContainer.stop();
+                } else if (url.endsWith("flame-graph.html")) {
+                    Path path = Paths.get(NameUtil.getOutputPath(), url);
+                    content = Files.readAllBytes(path);
+                } else {
+                    Path path = Paths.get(NameUtil.getOutputPath(), NameUtil.getAnalysisHtmlName());
+                    content = Files.readAllBytes(path);
+                }
+                exchange.getResponseHeaders().set("Content-Type", "text/html");
             }
-
-            exchange.getResponseHeaders().set("Content-Type", "text/html");
 
             String acceptEncoding = exchange.getRequestHeaders().getFirst("Accept-Encoding");
 
