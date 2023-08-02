@@ -140,8 +140,13 @@ public class IocContainer {
     }
 
     public  static void copyFile(String sourceFilePath, String targetFilePath) throws IOException {
-        Path sourcePath = Paths.get(sourceFilePath);
+
         Path targetPath = Paths.get(targetFilePath);
+
+        // delete target file to avoid FileAlreadyExistsException
+        Files.deleteIfExists(targetPath);
+
+        Path sourcePath = Paths.get(sourceFilePath);
 
         Files.copy(sourcePath, targetPath);
     }
