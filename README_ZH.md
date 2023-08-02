@@ -68,7 +68,7 @@
 
 **1. 手动安装**
 
-1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.7/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
+1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.8/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
 2. 新建文件夹，并解压
 
 ```shell
