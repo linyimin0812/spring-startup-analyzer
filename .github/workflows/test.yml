@@ -115,6 +115,46 @@ jobs:
           exit 1
         working-directory: /home/runner/spring-startup-analyzer
 
+  test-generic-windows-x64:
+    runs-on: windows-latest
+    needs: [ build ]
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "liberica"
+          java-version: "11"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: spring-startup-analyzer
+          path: C:\runner\spring-startup-analyzer
+
+      - name: Execute spring-boot-demo.jar
+        run: |
+          dir
+          Start-Process java `
+            "-javaagent:C:\runner\spring-startup-analyzer\lib\spring-profiler-agent.jar", `
+            "-Dproject.name=generic-windows-x64-demo", `
+            "-Dspring-startup-analyzer.admin.http.server.port=8066", `
+            "-jar", `
+            "C:\runner\spring-startup-analyzer\spring-boot-demo.jar"
+          
+          Start-Sleep -Seconds 30
+          
+          $file_count = (Get-ChildItem -Path C:\runner\spring-startup-analyzer\output\*).Count
+          
+          if ($file_count -eq 3) {
+            Write-Host "windows-test success"
+            Write-Host "================startup log================"
+            Get-Content C:\runner\spring-startup-analyzer\logs\startup.log
+            exit 0
+          }
+          exit 1
+        shell: powershell
+        working-directory: C:\runner\spring-startup-analyzer
+
+
   test-generic-linux-arm64:
     runs-on: ubuntu-20.04
     needs: [build]
