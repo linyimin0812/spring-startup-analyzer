@@ -31,7 +31,7 @@ public class ApplicationRunMonitor implements EventListener {
             return false;
         }
 
-        return "java.lang.Class[]".equals(methodTypes[0]) && "java.lang.String[]".equals(methodTypes[1]);
+        return ("java.lang.Class[]".equals(methodTypes[0]) || "java.lang.Object[]".equals(methodTypes[0])) && "java.lang.String[]".equals(methodTypes[1]);
     }
 
     @Override
