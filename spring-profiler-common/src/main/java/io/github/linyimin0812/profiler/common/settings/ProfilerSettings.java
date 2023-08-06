@@ -49,7 +49,7 @@ public class ProfilerSettings {
     }
 
     public static boolean isNotBlank(String text) {
-        return text != null && text.length() > 0;
+        return text != null && !text.isEmpty();
     }
 
     public static void loadProperties(String path) {
