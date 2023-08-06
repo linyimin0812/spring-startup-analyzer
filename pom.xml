@@ -71,7 +71,7 @@
         <template.directory>${user.home}/spring-startup-analyzer/template</template.directory>
         <sonar.organization>linyimin-bupt</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <revision>2.0.8</revision>
+        <revision>2.0.9</revision>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${project.basedir}/report-aggregate/target/site/
             jacoco-aggregate/jacoco.xml
