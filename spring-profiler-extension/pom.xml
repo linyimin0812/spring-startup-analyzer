@@ -84,6 +84,9 @@
                                 <copy todir="${extension.output.directory}/async-profiler">
                                     <fileset dir="async-profiler" includes="**/*"/>
                                 </copy>
+                                <copy todir="${template.directory}">
+                                    <fileset file="src/main/resources/flame-graph.html" />
+                                </copy>
                             </tasks>
                         </configuration>
                         <goals>

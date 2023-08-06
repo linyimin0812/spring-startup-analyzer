@@ -144,7 +144,7 @@ jobs:
           
           $file_count = (Get-ChildItem -Path C:\runner\spring-startup-analyzer\output\*).Count
           
-          if ($file_count -eq 3) {
+          if ($file_count -eq 4) {
             Write-Host "windows-test success"
             Write-Host "================startup log================"
             Get-Content C:\runner\spring-startup-analyzer\logs\startup.log
