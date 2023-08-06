@@ -10,25 +10,24 @@
 [中文](README_ZH.md) |
 [ENGLISH](README.md)
 
-
 - [🤩核心能力](#核心能力)
   - [📈Spring应用启动数据采集报告](#spring应用启动数据采集报告)
   - [🚀应用启动时长优化](#应用启动时长优化)
-- [📈Spring应用启动数据采集报告](#spring应用启动数据采集报告-1)
-  - [安装jar包](#安装jar包)
-  - [配置项](#配置项)
-  - [应用启动](#应用启动)
-  - [自定义扩展](#自定义扩展)
-- [🚀应用启动时长优化](#应用启动时长优化-1)
-  - [支持异步化的Bean类型](#支持异步化的bean类型)
-  - [接入异步Bean优化](#接入异步bean优化)
-
+- [🧭如何使用](#如何使用)
+    - [📈Spring应用启动数据采集报告](#spring应用启动数据采集报告-1)
+        - [安装jar包](#安装jar包)
+        - [配置项](#配置项)
+        - [应用启动](#应用启动)
+        - [自定义采集能力扩展](#自定义采集能力扩展)
+    - [🚀应用启动时长优化](#应用启动时长优化-1)
+        - [支持异步化的Bean类型](#支持异步化的bean类型)
+        - [接入异步Bean优化](#接入异步bean优化)
 
 # Spring Startup Ananlyzer
 
-**Spring Startup Ananlyzer** 采集Spring应用启动过程数据，生成交互式分析报告([HTML](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html))，用于分析Spring应用启动卡点，支持Spring Bean异步初始化，减少优化Spring应用启动时间。
+**Spring Startup Ananlyzer** 采集Spring应用启动过程数据，生成交互式分析报告([HTML](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html))，用于分析Spring应用启动卡点，支持Spring Bean异步初始化，减少优化Spring应用启动时间。支持linux/mac/windows。UI参考[UI referenced spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)实现。
 
-[analyzer report demo](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
+[分析报告样例](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
 
 # 🤩核心能力
 
@@ -60,9 +59,11 @@
 
 提供一个Spring Bean异步初始化jar包，针对初始化耗时比较长的bean，异步执行init和@PostConstruct方法提高应用启动速度。
 
-# 📈Spring应用启动数据采集报告
+# 🧭如何使用
 
-## 安装jar包
+## 📈Spring应用启动数据采集报告
+
+### 安装jar包
 
 提供了**手动安装**和**一键脚本安装**两种安装方式
 
@@ -71,45 +72,77 @@
 1. 点击[realease](https://github.com/linyimin0812/spring-startup-analyzer/releases/download/v2.0.9/spring-startup-analyzer.tar.gz)下载最新版tar.gz包
 2. 新建文件夹，并解压
 
+**linux/mac**系统可以考虑使用以下命令：
+
 ```shell
 mkdir -p ${HOME}/spring-startup-analyzer
 cd 下载路径
-tar -zxvf spring-startup-analyzer.tar.gz -C ${HOME}/spring-startup-analyzer
+tar -zxvf spring-startup-analyzer.tar.gz -C 安装路径/spring-startup-analyzer
 ```
 
-**2. 脚本安装**
+**2. 脚本安装(linux/mac)**
 
 ```shell
 curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/main/bin/install.sh | sh
 ```
 
-## 配置项
+脚本默认安装路径：`$HOME/spring-startup-analyzer`
 
-在启动参数中进行配置，如配置超时时间为30分钟：`-Dspring-startup-analyzer.app.health.check.timeout=30`
+### 配置项
 
-请务必配置`spring-startup-analyzer.app.health.check.endpoints`选项，不然会一直采集直到应用启动检查超时时间(默认20分钟)才会停止，每隔1秒请求一次endpoint，请求响应头状态码为200则认为应用启动完成。默认健康检查URL：`http://127.0.0.1:7002/actuator/health`
+本项目提供了以下几个配置项，不是必需配置项，可以直接使用默认配置。
+
+两种方式进行配置：
+
+1. 直接在配置文件中配置: `安装路径/spring-startup-analyzer/config/spring-startup-analyzer.properties`
+2. 在启动参数中配置，如应用启动健康检查超时时间为30分钟：`-Dspring-startup-analyzer.app.health.check.timeout=30`
+
+需要注意的是，判断应用启动成功的逻辑是：
+
+1. 对`SpringApplication.run`方法进行字节码增强，方法退出时则认为应用启动完成(仅对springboot应用生效)
+2. 轮询请求健康检查的url，返回200则认为启动完成(适用于所有spring应用)
+3. 以上两种方式均未成功时，超出**应用启动健康检查超时时间**则认为应用启动完成
+
+如果是非springboot应用，需要通过`spring-startup-analyzer.app.health.check.endpoints`配置一下健康检查URL。
 
 
-| 配置项                                               | 说明                                    | 默认值                                   |
-| ---------------------------------------------------- |---------------------------------------|---------------------------------------|
-| spring-startup-analyzer.app.health.check.timeout               | 应用启动健康检查超时时间，单位为分钟                    | 20 |
-| **spring-startup-analyzer.app.health.check.endpoints**         | 应用启动成功检查url，可配置多个，以","分隔              | http://127.0.0.1:7002/actuator/health |
-| spring-startup-analyzer.admin.http.server.port                 | 管理端口                                  | 8065            |
-| spring-startup-analyzer.async.profiler.sample.thread.names     | async profiler采集的线程名称，支持配置多个，以","进行分隔 | main |
-| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler采集间隔时间(ms)              | 5       |
+| 配置项                                                        | 说明                                             | 默认值                                   |
+|------------------------------------------------------------|------------------------------------------------|---------------------------------------|
+| spring-startup-analyzer.app.health.check.timeout           | 应用启动健康检查超时时间，单位为分钟                             | 20                                    |
+| **spring-startup-analyzer.app.health.check.endpoints**     | 应用启动成功检查url，可配置多个，以","分隔                       | http://127.0.0.1:7002/actuator/health |
+| spring-startup-analyzer.admin.http.server.port             | 管理端口                                           | 8065                                  |
+| spring-startup-analyzer.async.profiler.sample.thread.names | async profiler采集的线程名称，支持配置多个，以","进行分隔          | main                                  |
+| **spring-startup-analyzer.async.profiler.interval.millis** | async profiler采集间隔时间(ms)                       | 5                                     |
+| spring-startup-analyzer.linux.and.mac.profiler | 指定linux/mac下火焰图采样器：async_profiler/jvm_profiler |     async_profiler   |
 
-## 应用启动
 
-此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar`即可。如果是以java命令行的方式启动应用，则在命令行中添加，如果是在IDEA中启动，则需要在VM options选项中添加。
+### 应用启动
 
-日志文件路径：`$HOME/spring-startup-analyzer/logs`
+此项目是以agent的方式启动的，所以在启动命令中添加参数`-javaagent:安装路径/spring-startup-analyzer/lib/spring-profiler-agent.jar`即可。
+
+
+- 以java命令行的方式启动应用，则在命令行中添加参数，例如：
+
+```shell
+java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+    -Dproject.name=mac-demo \
+    -Dspring-startup-analyzer.admin.http.server.port=8066 \
+    -jar /Users/runner/spring-startup-analyzer/spring-boot-demo.jar
+```
+
+
+- IDEA中启动，则需要在VM options选项中添加：
+
+![](./docs/startup-using-idea.png)
+
+日志文件路径：`安装路径/spring-startup-analyzer/logs`
 
 - startup.log: 启动过程中的日志
 - transform.log: 被re-transform的类/方法信息
 
-应用启动完成后会在console和startup.log文件中输出`======= spring-startup-analyzer finished, click http://localhost:8065 to visit details. ======`，可以通过此输出来判断采集是否完成。
+应用启动完成后会在console和startup.log文件中输出`======= spring-startup-analyzer finished, click http://localhost:xxxx to visit details. ======`，可以通过此输出来判断采集是否完成。
 
-## 自定义扩展
+### 自定义采集能力扩展
 
 如果需要自定义观测能力，需要引入`spring-profiler-starter`的pom作为扩展项目的父pom，然后就可以使用项目对外暴露的接口进行扩展。更多的细节可以参考[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)的实现
 
@@ -121,7 +154,7 @@ curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/
 </parent>
 ```
 
-### 扩展接口
+#### 扩展接口
 
 <details>
 <summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
@@ -232,7 +265,7 @@ public class FindResourceCounter implements EventListener {
 ```
 </details>
 
-### 打包运行
+#### 打包运行
 
 在`spring-profiler-starter`的pom中已经定义了打包plugin，默认会将生成的jar包拷贝到`$HOME/spring-startup-analyzer/extension`文件下。
 
@@ -242,7 +275,7 @@ mvn clean package
 
 只要按照步骤[安装jar包](#22-安装jar包)安装好此项目，再执行上述的打包命令，打包好后再[启动应用](#24-应用启动)即可加载扩展jar包。
 
-# 🚀应用启动时长优化
+## 🚀应用启动时长优化
 
 从[应用启动数据采集](#2-应用启动数据采集)中，可以获取初始化耗时长的Bean，因为Spring启动过程是单线程完成的，为了优化应用的启动时长，可以考虑将这些耗时长的Bean的初始化方法异步化，查看[实现原理](./HOW_IT_WORKS.md#spring-bean异步加载原理)。
 
@@ -253,7 +286,7 @@ mvn clean package
 - **对于不被依赖的Bean可以放心进行异步化**，可以通过[各个Bean加载耗时](#11-应用启动数据采集)中的`Root Bean`判断Bean是否被其他Bean依赖
 - **对于被依赖的Bean需要小心分析，在应用启动过程中不能其他Bean被调用，否则可能会存在问题**
 
-## 支持异步化的Bean类型
+### 支持异步化的Bean类型
 
 支持@Bean, @PostConstruct及@ImportResource 方式初始化bean，使用demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
 
@@ -280,7 +313,7 @@ public class TestComponent {
 ```
 
 
-## 接入异步Bean优化
+### 接入异步Bean优化
 
 1. 添加pom依赖
 
