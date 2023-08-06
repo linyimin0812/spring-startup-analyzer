@@ -13,14 +13,15 @@
 - [🤩Highlight](#highlight)
   - [📈Spring Startup Analysis Report](#spring-startup-analysis-report)
   - [🚀Optimization of Spring Startup](#optimization-of-spring-startup)
-- [📈Spring Startup Data Collection](#spring-startup-data-collection)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Application Startup](#application-startup)
-  - [Custom extension](#custom-extension)
-- [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
-  - [Types of Bean for Async](#types-of-bean-for-async)
-  - [Usage](#usage)
+- [🧭How to Use](#how-to-use)
+    - [📈Spring Startup Data Collection](#spring-startup-data-collection)
+        - [Installation](#installation)
+        - [Configuration](#configuration)
+        - [Application Startup](#application-startup)
+        - [Custom extension](#custom-extension)
+    - [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
+        - [Types of Bean for Async](#types-of-bean-for-async)
+        - [Usage](#usage)
 
 # Spring Startup Ananlyzer
 
@@ -32,7 +33,7 @@
 
 ## 📈Spring Startup Analysis Report
 
-**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks.
+**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks. Support for linux/mac/windows. UI referenced [UI referenced spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report).
 
 - **Spring Bean Initialization Details**
   ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
@@ -57,11 +58,12 @@
 
 Provide a Spring Bean asynchronous initialization jar package, which asynchronously executes the `init` and `@PostConstruct` methods for beans with longer initialization time to improve application startup speed.
 
+# 🧭How to Use
 
-# 📈Spring Startup Data Collection
+## 📈Spring Startup Data Collection
 
 
-## Installation
+### Installation
 
 Provides two installation methods: **manual installation** and **one-click script installation**.
 
@@ -71,23 +73,38 @@ Provides two installation methods: **manual installation** and **one-click scrip
 
 2. Create a new folder and extract the files
 
+For **Linux/Mac** systems, you may consider utilizing the following commands:
+
 ```shell
 mkdir -p ${HOME}/spring-startup-analyzer
 cd download_path
-tar -zxvf spring-startup-analyzer.tar.gz -C ${HOME}/spring-startup-analyzer
+tar -zxvf spring-startup-analyzer.tar.gz -C your_install_path/spring-startup-analyzer
 ```
 
-**2. Shell script installation**
+**2. Shell script installation(Only for Linux/Mac)**
 
 ```shell
 curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/main/bin/install.sh | sh
 ```
 
-## Configuration
+Default install directory: `$HOME/spring-startup-analyzer`
 
-Configure the startup parameters, for example, to set the timeout to 30 minutes: `-Dspring-startup-analyzer.app.health.check.timeout=30`
+### Configuration
 
-Please make sure to configure the `spring-startup-analyzer.app.health.check.endpoints option`. Otherwise, the data collection will continue until the application startup check times out (default is 20 minutes). It will make a request to the endpoint every 1 second, and if the response header status code is 200, it will consider the application startup as completed.
+This project provides several configuration options, which are not mandatory and can be used with default settings.
+
+Two ways to configure:
+
+1. Directly configure in the configuration file: `your_install_path/spring-startup-analyzer/config/spring-startup-analyzer.properties`
+2. Configure through startup parameters, for example, set the application startup health check timeout to 30 minutes: `-Dspring-startup-analyzer.app.health.check.timeout=30`
+
+The criteria for determining a successful application startup are as follows:
+
+1. Bytecode enhancement on the `SpringApplication.run` method, considering the application startup complete upon method exit (only applicable to Spring Boot applications).
+2. Polling the URL for health check requests, considering the startup complete upon receiving a 200 response (applicable to all Spring applications).
+3. If neither of the above two methods succeeds, considering the application startup complete after exceeding the **application startup health check timeout**.
+
+For non-Spring Boot applications, it is necessary to configure the health check URL using `spring-startup-analyzer.app.health.check.endpoints`.
 
 
 | configuration option | description                           | default value                         |
@@ -97,19 +114,34 @@ Please make sure to configure the `spring-startup-analyzer.app.health.check.endp
 | spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                                  |
 | spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
 | **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                                     |
+| spring-startup-analyzer.linux.and.mac.profiler | specify linux/mac flame graph profiler：async_profiler/jvm_profiler |     async_profiler   |
 
-## Application Startup
+### Application Startup
 
-This project is started as an agent, so you can add the parameter -javaagent:$HOME/spring-startup-analyzer/lib/spring-profiler-agent.jar to the startup command. If you are starting the application using the java command line, add it to the command line. If you are starting it in IntelliJ IDEA, you need to add it to the VM options in the settings.
+This project is started as an agent, so you can add the parameter `-javaagent:your_install_path/spring-startup-analyzer/lib/spring-profiler-agent.jar` to the startup command.
+
+
+- To start the application using the Java command line, you would add parameters in the command line, for example:
+
+```shell
+java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
+    -Dproject.name=mac-demo \
+    -Dspring-startup-analyzer.admin.http.server.port=8066 \
+    -jar /Users/runner/spring-startup-analyzer/spring-boot-demo.jar
+```
+
+- If you want to launch in IDEA, you need to add the following in the VM options:
+
+![](./docs/startup-using-idea.png)
 
 Path of logs：`$HOME/spring-startup-analyzer/logs`
 
 - startup.log: log of startup
 - transform.log: log of re-transform class
 
-After the application has finished starting, the message `======= spring-startup-analyzer finished, click http://localhost:8065 to visit details. ======` will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
+After the application has finished starting, the message `======= spring-startup-analyzer finished, click http://localhost:xxxx to visit details. ======` will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 
-## Custom extension
+### Custom extension
 
 Translation: If you want to customize the profiling capabilities, you need to include the `spring-profiler-starter` pom as the parent pom for your extension project. Then, you can use the interfaces exposed by the project for extension purposes. For more details, you can refer to the implementation of[spring-profiler-extension](https://github.com/linyimin-bupt/spring-startup-analyzer/tree/main/spring-profiler-extension)
 
@@ -121,7 +153,7 @@ Translation: If you want to customize the profiling capabilities, you need to in
 </parent>
 ```
 
-### Extension Interfaces
+#### Extension Interfaces
 
 <details>
 <summary style='cursor: pointer'>io.github.linyimin0812.profiler.api.EventListener</summary>
@@ -236,7 +268,7 @@ public class FindResourceCounter implements EventListener {
 It is important to note that **the implementation of the EventListener interface should be annotated with @MetaInfServices**. This is because the extension interface is loaded through the Service Provider Interface (SPI). When you use the `@MetaInfServices` annotation, the implementation class will be automatically written to the `META-INF/services/io.github.linyimin0812.profiler.api.EventListener` file during the code compilation process. If you don't use the `@MetaInfServices` annotation, you need to manually write the fully qualified name of the implementation class into the META-INF/services/io.github.linyimin0812.profiler.api.EventListener file`. Otherwise, the extension implementation will not be loaded.
 
 
-### Package & Run
+#### Package & Run
 
 The `spring-profiler-starter` pom already defines a packaging plugin that will by default copy the generated JAR file to the `$HOME/spring-startup-analyzer/extension` directory.
 
@@ -246,7 +278,7 @@ mvn clean package
 
 Once you have installed this project by following the steps in the [Installation](#22-Installation) section, you can execute the packaging command mentioned above. After the packaging is complete, you can start the application as described in the [Application Startup](#24-application-startup) section to load the extension JAR file.
 
-# 🚀Optimization of Spring Startup
+## 🚀Optimization of Spring Startup
 
 From the [Application startup data collection](#spring-startup-analysis-report)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
 
@@ -258,7 +290,7 @@ NOTE:
 - **For Beans that are not dependent on other Beans, you can confidently proceed with asynchronous initialization**，You can determine if a Bean is dependent on other Beans by examining the `Root Bean` in  [Loading time of Beans](#11-application-startup-data-collection) session
 - **Careful analysis is required for Beans that are dependent on other Beans. They should not be called by other Beans during the application startup process, as it may lead to issues**
 
-## Types of Bean for Async
+### Types of Bean for Async
 
 Supports initialization of beans through @Bean, @PostConstruct, and @ImportResource. demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
 
@@ -285,7 +317,7 @@ public class TestComponent {
 ```
 
 
-## Usage
+### Usage
 
 1. Import Dependency
 
