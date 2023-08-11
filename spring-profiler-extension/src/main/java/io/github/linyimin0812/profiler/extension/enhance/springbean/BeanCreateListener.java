@@ -43,8 +43,8 @@ public class BeanCreateListener implements EventListener {
             AtExitEvent atExitEvent = (AtExitEvent) event;
             Map<String, String> tags = new HashMap<>();
             tags.put("threadName", Thread.currentThread().getName());
-            tags.put("class", atExitEvent.returnObj.getClass().getName());
-            ClassLoader classLoader = atExitEvent.returnObj.getClass().getClassLoader();
+            tags.put("class", atExitEvent.returnObj == null ? null : atExitEvent.returnObj.getClass().getName());
+            ClassLoader classLoader = atExitEvent.returnObj == null ? null : atExitEvent.returnObj.getClass().getClassLoader();
             tags.put("classloader", classLoader == null ? "boostrap" : classLoader.getClass().getSimpleName());
 
             BeanInitResult beanInitResult = profilerResultThreadLocal.get().pop();
