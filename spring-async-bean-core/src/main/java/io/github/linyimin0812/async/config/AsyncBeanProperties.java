@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncBeanProperties {
 

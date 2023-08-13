@@ -1,7 +1,7 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public interface Profiler {
 

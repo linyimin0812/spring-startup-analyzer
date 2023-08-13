@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
 

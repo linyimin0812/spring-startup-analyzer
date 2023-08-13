@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncProfiler implements Profiler {
 

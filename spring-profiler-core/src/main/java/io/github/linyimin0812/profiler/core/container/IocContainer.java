@@ -150,4 +150,12 @@ public class IocContainer {
 
         Files.copy(sourcePath, targetPath);
     }
+
+    public static boolean isStarted() {
+        return started.get();
+    }
+
+    public static boolean isStopped() {
+        return started.get();
+    }
 }

@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 @MetaInfServices
 public class ApplicationRunMonitor implements EventListener {

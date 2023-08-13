@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryAware {
 

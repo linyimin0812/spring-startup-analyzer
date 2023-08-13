@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncTaskExecutor {
 

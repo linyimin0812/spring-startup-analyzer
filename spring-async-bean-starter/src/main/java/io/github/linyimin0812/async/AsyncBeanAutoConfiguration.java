@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 @Configuration
 @EnableConfigurationProperties(AsyncSpringBeanProperties.class)

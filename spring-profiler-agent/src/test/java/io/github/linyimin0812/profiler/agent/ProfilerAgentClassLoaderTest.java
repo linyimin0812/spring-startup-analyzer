@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import java.net.URL;
 
 /**
- * @author banzhe
+ * @author linyimin
  **/
 public class ProfilerAgentClassLoaderTest {
 

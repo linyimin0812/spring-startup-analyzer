@@ -54,12 +54,18 @@ public class ProfilerSettings {
 
     public static void loadProperties(String path) {
 
+        clear();
+
         try (FileInputStream fileInputStream = new FileInputStream(path)) {
             properties.load(fileInputStream);
             logger.info(ProfilerSettings.class, "loaded settings from {}", path);
         } catch (IOException e) {
             logger.error(ProfilerSettings.class, "load settings from {} error.", path, e);
         }
+    }
+
+    public static void clear() {
+        properties.clear();
     }
 
 }

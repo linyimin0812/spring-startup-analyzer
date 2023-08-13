@@ -89,7 +89,9 @@ public class InvokeDetailListener implements EventListener {
     @Override
     public void stop() {
         logger.info(InvokeDetailListener.class, "===============InvokeCountListener stop==================");
-
+      
+        methodQualifiers.clear();
+        
         INVOKE_DETAIL_MAP.clear();
     }
 

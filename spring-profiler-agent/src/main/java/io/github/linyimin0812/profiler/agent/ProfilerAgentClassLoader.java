@@ -4,7 +4,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class ProfilerAgentClassLoader extends URLClassLoader {
 
