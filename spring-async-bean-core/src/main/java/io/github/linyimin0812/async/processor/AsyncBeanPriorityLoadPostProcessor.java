@@ -2,7 +2,7 @@ package io.github.linyimin0812.async.processor;
 
 import io.github.linyimin0812.async.config.AsyncConfig;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import org.slf4j.Logger;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -31,11 +31,11 @@ public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPo
         for (String beanName : asyncBeans) {
 
             if (beanFactory instanceof DefaultListableBeanFactory && !((DefaultListableBeanFactory) beanFactory).containsBeanDefinition(beanName)) {
-                logger.warn("BeanDefinition of bean {} is not exist.", beanName);
+                logger.warn(AsyncBeanPriorityLoadPostProcessor.class, "BeanDefinition of bean {} is not exist.", beanName);
                 continue;
             }
 
-            logger.info("async init bean: {}", beanName);
+            logger.info(AsyncBeanPriorityLoadPostProcessor.class, "async init bean: {}", beanName);
             beanFactory.getBean(beanName);
         }
     }

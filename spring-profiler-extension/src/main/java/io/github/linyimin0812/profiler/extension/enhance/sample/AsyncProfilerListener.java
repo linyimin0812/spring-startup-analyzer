@@ -3,13 +3,13 @@ package io.github.linyimin0812.profiler.extension.enhance.sample;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler.AsyncProfiler;
 import io.github.linyimin0812.profiler.extension.enhance.sample.jvmprofiler.StacktraceProfiler;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 import java.util.*;
 
 /**
@@ -40,8 +40,8 @@ public class AsyncProfilerListener implements EventListener {
 
     @Override
     public void start() {
-        logger.info("==============AsyncProfilerListener start========================");
-        logger.info("platform:{}, arch: {}", OSUtil.platform(), OSUtil.arch());
+        logger.info(AsyncProfilerListener.class, "==============AsyncProfilerListener start========================");
+        logger.info(AsyncProfilerListener.class, "platform:{}, arch: {}", OSUtil.platform(), OSUtil.arch());
 
         if (OSUtil.isWindows()) {
             profiler = new StacktraceProfiler();
@@ -60,7 +60,7 @@ public class AsyncProfilerListener implements EventListener {
 
     @Override
     public void stop() {
-        logger.info("==============AsyncProfilerListener stop========================");
+        logger.info(AsyncProfilerListener.class, "==============AsyncProfilerListener stop========================");
 
         profiler.stop();
 

@@ -3,10 +3,10 @@ package io.github.linyimin0812.profiler.extension.enhance.jar;
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import io.github.linyimin0812.profiler.common.ui.Statistics;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
@@ -90,12 +90,12 @@ public class JarCollector implements Lifecycle {
 
     @Override
     public void start() {
-        logger.info("=======================JarCollector start=======================");
+        logger.info(JarCollector.class, "=======================JarCollector start=======================");
     }
 
     @Override
     public void stop() {
-        logger.info("=======================JarCollector stop=======================");
+        logger.info(JarCollector.class, "=======================JarCollector stop=======================");
 
         collect();
 

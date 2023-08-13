@@ -3,7 +3,7 @@ package io.github.linyimin0812.async.bean;
 import io.github.linyimin0812.async.config.AsyncConfig;
 import io.github.linyimin0812.async.utils.BeanDefinitionUtil;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import org.slf4j.Logger;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class AsyncInitBeanFinder {
     public static String getAsyncInitMethodName(String beanName, BeanDefinition beanDefinition) {
 
         if (beanDefinition == null) {
-            logger.warn("The beanName: {} of BeanDefinition is not exist!!!", beanName);
+            logger.warn(AsyncInitBeanFinder.class, "The beanName: {} of BeanDefinition is not exist!!!", beanName);
             return null;
         }
 
@@ -44,11 +44,11 @@ public class AsyncInitBeanFinder {
                 return null;
             }
 
-            return scanAsyncInitMethodOnClass(beanName, beanClassType);
+            return scanAsyncInitMethodOnClass(beanClassType);
         }
     }
 
-    private static String scanAsyncInitMethodOnClass(String beanName, Class<?> beanClassType) {
+    private static String scanAsyncInitMethodOnClass(Class<?> beanClassType) {
         List<Method> candidateMethods = new ArrayList<>();
 
         for (Method method : beanClassType.getDeclaredMethods()) {
@@ -65,7 +65,7 @@ public class AsyncInitBeanFinder {
             return candidateMethods.get(0).getName();
         }
 
-        logger.warn("There are {} @PostConstruct methods, async execution is not performed!!!", candidateMethods.size());
+        logger.warn(AsyncInitBeanFinder.class, "There are {} @PostConstruct methods, async execution is not performed!!!", candidateMethods.size());
 
         return null;
     }
@@ -83,7 +83,7 @@ public class AsyncInitBeanFinder {
             returnType = ClassUtils.forName(methodMetadata.getReturnTypeName(), null);
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (ClassNotFoundException e) {
-            logger.error("get returnType and declaringClass error. bean: {}", beanName, e);
+            logger.error(AsyncInitBeanFinder.class, "get returnType and declaringClass error. bean: {}", beanName, e);
             return null;
         }
 
@@ -117,7 +117,7 @@ public class AsyncInitBeanFinder {
         }
 
         if (candidateMethods.isEmpty()) {
-            logger.warn("The beanName: {} of bean is not exist!!!", beanName);
+            logger.warn(AsyncInitBeanFinder.class, "The beanName: {} of bean is not exist!!!", beanName);
 
             return null;
         }
@@ -129,7 +129,7 @@ public class AsyncInitBeanFinder {
 
         }
 
-        logger.error("Multi @Bean-method with same name try to publish in {}, async execution is not performed!!!", returnType.getCanonicalName());
+        logger.error(AsyncInitBeanFinder.class, "Multi @Bean-method with same name try to publish in {}, async execution is not performed!!!", returnType.getCanonicalName());
         return null;
     }
 
