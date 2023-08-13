@@ -35,7 +35,7 @@ endif
 .PHONY: deploy
 deploy: clean
 ifeq ($(strip $(VERSION)),)
-	${MVN} deploy
+	${MVN} deploy -pl !coverage-report-aggregate
 	cd ./spring-profiler-extension && ${MVN} deploy
 else
 	${MVN} deploy -Drevision=$(VERSION)
