@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>coverage-report-aggregate</artifactId>
-    <name>Coverage Report Aggregate</name>
+    <name>coverage-report-aggregate</name>
     <description>Aggregate Coverage Report</description>
 
     <dependencies>
