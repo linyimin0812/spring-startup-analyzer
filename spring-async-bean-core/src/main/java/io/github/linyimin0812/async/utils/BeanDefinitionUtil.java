@@ -10,7 +10,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class BeanDefinitionUtil {
 

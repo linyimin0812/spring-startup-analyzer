@@ -12,8 +12,8 @@ import com.alibaba.deps.org.objectweb.asm.tree.MethodNode;
 import io.github.linyimin0812.Bridge;
 import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
-import org.slf4j.Logger;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -92,9 +92,9 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
             for (InterceptorProcessor interceptor : interceptorProcessors) {
                 try {
                     interceptor.process(methodProcessor);
-                    logger.info("transform: {}", getCacheKey(loader, classNode, methodNode));
+                    logger.info(ProfilerClassFileTransformer.class, "transform: {}", getCacheKey(loader, classNode, methodNode));
                 } catch (Exception e) {
-                    logger.error("enhancer error, class: {}, method: {}, interceptor: {}, error:",
+                    logger.error(ProfilerClassFileTransformer.class, "enhancer error, class: {}, method: {}, interceptor: {}, error:",
                             classNode.name, methodNode.name, interceptor.getClass().getName(), e);
                 }
             }
@@ -115,9 +115,9 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
             if (Matcher.isMatchClass(loadedClass.getName())) {
                 try {
                     instrumentation.retransformClasses(loadedClass);
-                    logger.info("re-transform class: {}", loadedClass.getName());
+                    logger.info(ProfilerClassFileTransformer.class, "re-transform class: {}", loadedClass.getName());
                 } catch (UnmodifiableClassException e) {
-                    logger.error("re-transform class error.", e);
+                    logger.error(ProfilerClassFileTransformer.class, "re-transform class error.", e);
                 }
             }
         }

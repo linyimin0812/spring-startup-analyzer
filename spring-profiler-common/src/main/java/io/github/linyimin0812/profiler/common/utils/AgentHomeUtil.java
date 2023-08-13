@@ -3,7 +3,7 @@ package io.github.linyimin0812.profiler.common.utils;
 import java.io.File;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AgentHomeUtil {
 

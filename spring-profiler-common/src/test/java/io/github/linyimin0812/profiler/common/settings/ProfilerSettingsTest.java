@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.net.URL;
 
 /**
- * @author banzhe
+ * @author linyimin
  * @date 2023/07/27 16:15
  **/
 public class ProfilerSettingsTest {
@@ -45,6 +45,6 @@ public class ProfilerSettingsTest {
 
     @Test
     public void loadProperties() {
-        ProfilerSettings.loadProperties("");
+        init();
     }
 }

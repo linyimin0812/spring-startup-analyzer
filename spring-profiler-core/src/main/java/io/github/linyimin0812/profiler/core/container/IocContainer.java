@@ -1,6 +1,7 @@
 package io.github.linyimin0812.profiler.core.container;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import io.github.linyimin0812.profiler.common.ui.Statistics;
@@ -12,7 +13,6 @@ import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.core.monitor.check.AppStatusCheckService;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -79,7 +79,7 @@ public class IocContainer {
     public static void stop() {
 
         if (!stopped.compareAndSet(false, true)) {
-            startupLogger.warn("IocContainer has stopped.");
+            startupLogger.warn(IocContainer.class, "IocContainer has stopped.");
             return;
         }
 
@@ -95,7 +95,7 @@ public class IocContainer {
 
         String prompt = String.format("======= spring-startup-analyzer finished, click %s to visit details. ======", SimpleHttpServer.endpoint());
 
-        startupLogger.info(prompt);
+        startupLogger.info(IocContainer.class, prompt);
         System.out.println(prompt);
 
     }
@@ -149,5 +149,13 @@ public class IocContainer {
         Path sourcePath = Paths.get(sourceFilePath);
 
         Files.copy(sourcePath, targetPath);
+    }
+
+    public static boolean isStarted() {
+        return started.get();
+    }
+
+    public static boolean isStopped() {
+        return started.get();
     }
 }

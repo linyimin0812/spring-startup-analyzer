@@ -43,6 +43,14 @@ public class SimpleHttpServer {
         }
     }
 
+    public static void stop() {
+        if (server == null) {
+            return;
+        }
+
+        server.stop(1);
+    }
+
     private static class RootHandler implements HttpHandler {
 
         @Override
@@ -56,7 +64,10 @@ public class SimpleHttpServer {
                 content = Files.readAllBytes(path);
                 exchange.getResponseHeaders().set("Content-Type", "text/javascript");
             } else {
-                if ("/stop".equals(url)) {
+
+                if ("/hello".equals(url)) {
+                    content = "Hello".getBytes(StandardCharsets.UTF_8);
+                } else if ("/stop".equals(url)) {
                     content = "Agent stop.".getBytes(StandardCharsets.UTF_8);
                     IocContainer.stop();
                 } else if (url.endsWith("flame-graph.html")) {

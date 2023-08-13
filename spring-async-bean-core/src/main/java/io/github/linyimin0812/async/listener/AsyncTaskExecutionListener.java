@@ -10,7 +10,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncTaskExecutionListener implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware, PriorityOrdered {
 

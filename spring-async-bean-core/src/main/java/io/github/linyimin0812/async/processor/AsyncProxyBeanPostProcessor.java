@@ -5,9 +5,9 @@ import io.github.linyimin0812.async.config.AsyncBeanProperties;
 import io.github.linyimin0812.async.config.AsyncConfig;
 import io.github.linyimin0812.async.executor.AsyncTaskExecutor;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
 
@@ -107,12 +107,12 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
             String methodName = method.getName();
 
             if (this.asyncMethodName.equals(methodName)) {
-                logger.info("async-init-bean, beanName: {}, async init method: {}", beanName, asyncMethodName);
+                logger.info(AsyncProxyBeanPostProcessor.class, "async-init-bean, beanName: {}, async init method: {}", beanName, asyncMethodName);
                 AsyncTaskExecutor.submitTask(() -> {
                     try {
                         long start = System.currentTimeMillis();
                         invocation.getMethod().invoke(targetObject, invocation.getArguments());
-                        logger.info("async-init-bean, beanName: {}, async init method: {}, cost: {}", beanName, asyncMethodName, System.currentTimeMillis() - start);
+                        logger.info(AsyncProxyBeanPostProcessor.class, "async-init-bean, beanName: {}, async init method: {}, cost: {}", beanName, asyncMethodName, System.currentTimeMillis() - start);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         throw new RuntimeException(e);
                     }

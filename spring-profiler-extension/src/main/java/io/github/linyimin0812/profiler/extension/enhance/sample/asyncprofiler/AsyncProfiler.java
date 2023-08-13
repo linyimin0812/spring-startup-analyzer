@@ -1,13 +1,13 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.common.utils.NameUtil;
 import io.github.linyimin0812.profiler.common.utils.OSUtil;
 import io.github.linyimin0812.profiler.extension.enhance.sample.AsyncProfilerListener;
 import io.github.linyimin0812.profiler.extension.enhance.sample.Profiler;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncProfiler implements Profiler {
 
@@ -38,14 +38,14 @@ public class AsyncProfiler implements Profiler {
 
             io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler.one.AsyncProfiler instance = io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler.one.AsyncProfiler.getInstance(getProfilerSoPath());
             if (instance == null) {
-                logger.warn("AsyncProfiler instance is null, can't execute start command.");
+                logger.warn(AsyncProfiler.class, "AsyncProfiler instance is null, can't execute start command.");
                 return;
             }
 
             String result = instance.execute(command);
-            logger.info("AsyncProfiler execute command: {}, result is {}", command, result);
+            logger.info(AsyncProfiler.class, "AsyncProfiler execute command: {}, result is {}", command, result);
         } catch (IOException e) {
-            logger.error("AsyncProfiler execute command: {} error. error: ", command, e);
+            logger.error(AsyncProfiler.class, "AsyncProfiler execute command: {} error. error: ", command, e);
         }
     }
 
@@ -57,15 +57,15 @@ public class AsyncProfiler implements Profiler {
         try {
             io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler.one.AsyncProfiler instance = io.github.linyimin0812.profiler.extension.enhance.sample.asyncprofiler.one.AsyncProfiler.getInstance();
             if (instance == null) {
-                logger.warn("AsyncProfiler instance is null, can't execute stop command.");
+                logger.warn(AsyncProfiler.class, "AsyncProfiler instance is null, can't execute stop command.");
                 return;
             }
 
             String result = instance.execute(command);
-            logger.info("AsyncProfiler execute stop command: {}, result is {}", command, result);
+            logger.info(AsyncProfiler.class, "AsyncProfiler execute stop command: {}, result is {}", command, result);
 
         } catch (IOException e) {
-            logger.error("AsyncProfiler execute stop command error. command: {}, error:", command, e);
+            logger.error(AsyncProfiler.class, "AsyncProfiler execute stop command error. command: {}, error:", command, e);
         }
 
     }
@@ -88,14 +88,14 @@ public class AsyncProfiler implements Profiler {
             }
 
             if (profilerSoPath == null) {
-                logger.warn("Current arch do not support AsyncProfiler, Only support X86_64/Arm64/MuslLibc.");
+                logger.warn(AsyncProfiler.class, "Current arch do not support AsyncProfiler, Only support X86_64/Arm64/MuslLibc.");
                 return null;
             }
 
-            logger.info("getProfilerSoPath: {}", profilerSoPath);
+            logger.info(AsyncProfiler.class, "getProfilerSoPath: {}", profilerSoPath);
 
         } else {
-            logger.warn("Current OS do not support AsyncProfiler, Only support Linux/Mac.");
+            logger.warn(AsyncProfiler.class, "Current OS do not support AsyncProfiler, Only support Linux/Mac.");
             return null;
         }
 
@@ -113,7 +113,7 @@ public class AsyncProfiler implements Profiler {
                 throw new IllegalStateException("Can not find libasyncProfiler so, please check the spring-startup-analyzer directory.");
             }
         } catch (URISyntaxException e) {
-            logger.error("getProfilerSoPath error.", e);
+            logger.error(AsyncProfiler.class, "getProfilerSoPath error.", e);
             throw new RuntimeException(e);
         }
 
@@ -122,7 +122,7 @@ public class AsyncProfiler implements Profiler {
 
         File file = new File(NameUtil.getOutputPath());
         if (!file.exists() && !file.mkdirs()) {
-            logger.warn("create dir: {} failed.", NameUtil.getOutputPath());
+            logger.warn(AsyncProfiler.class, "create dir: {} failed.", NameUtil.getOutputPath());
         }
 
         return NameUtil.getOutputPath() + NameUtil.getFlameGraphHtmlName();

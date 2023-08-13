@@ -2,14 +2,14 @@ package io.github.linyimin0812.async.executor;
 
 import io.github.linyimin0812.async.config.AsyncConfig;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import org.slf4j.Logger;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class AsyncTaskExecutor {
 
@@ -64,7 +64,7 @@ public class AsyncTaskExecutor {
 
         int threadPollMaxSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolMaxSize();
 
-        logger.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.", threadPoolCoreSize, threadPoolCoreSize);
+        logger.info(AsyncTaskExecutor.class, "create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.", threadPoolCoreSize, threadPoolCoreSize);
 
         NamedThreadFactory threadFactory = new NamedThreadFactory("async-init-bean");
 

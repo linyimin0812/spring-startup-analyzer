@@ -6,10 +6,10 @@ import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -102,12 +102,12 @@ public class BeanCreateListener implements EventListener {
 
     @Override
     public void start() {
-        logger.info("============BeanCreateListener start=============");
+        logger.info(BeanCreateListener.class, "============BeanCreateListener start=============");
     }
 
     @Override
     public void stop() {
-        logger.info("============BeanCreateListener stop=============");
+        logger.info(BeanCreateListener.class, "============BeanCreateListener stop=============");
 
         List<BeanInitResult> remainInitResult = new ArrayList<>();
 
@@ -116,7 +116,7 @@ public class BeanCreateListener implements EventListener {
         }
 
         if (!remainInitResult.isEmpty()) {
-            logger.warn("profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(remainInitResult));
+            logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(remainInitResult));
         }
     }
 }

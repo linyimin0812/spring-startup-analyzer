@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 /**
- * @author yiminlin
+ * @author linyimin
  **/
 public class FlameGraphTest {
 

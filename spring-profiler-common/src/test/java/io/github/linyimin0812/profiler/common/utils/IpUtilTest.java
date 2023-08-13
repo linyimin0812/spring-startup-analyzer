@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * @author banzhe
+ * @author linyimin
  **/
 public class IpUtilTest {
 

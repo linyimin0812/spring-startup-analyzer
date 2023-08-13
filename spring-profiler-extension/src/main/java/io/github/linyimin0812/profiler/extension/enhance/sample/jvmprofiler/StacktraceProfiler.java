@@ -1,12 +1,12 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample.jvmprofiler;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.common.utils.NameUtil;
 import io.github.linyimin0812.profiler.extension.enhance.sample.Profiler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.ThreadUtils;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
@@ -63,7 +63,7 @@ public class StacktraceProfiler implements Profiler {
         try {
             fg.parse(NameUtil.getTemplatePath() + "flame-graph.html", NameUtil.getOutputPath() + NameUtil.getFlameGraphHtmlName(), TRACE_MAP);
         } catch (IOException e) {
-            logger.error("StacktraceProfiler stop error.", e);
+            logger.error(StacktraceProfiler.class, "StacktraceProfiler stop error.", e);
         }
 
     }
