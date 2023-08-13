@@ -1,8 +1,8 @@
 package io.github.linyimin0812.profiler.common.settings;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,16 +23,16 @@ public class ProfilerSettings {
 
     public static String getProperty(String key, String defaultValue) {
         if (isNotBlank(System.getProperty(key))) {
-            logger.info("Key: {} from command line, value is {}", key, System.getProperty(key));
+            logger.info(ProfilerSettings.class, "Key: {} from command line, value is {}", key, System.getProperty(key));
             return System.getProperty(key);
         }
 
         if(properties.containsKey(key)) {
-            logger.info("Key: {} from configuration file, value is {}", key, properties.getProperty(key));
+            logger.info(ProfilerSettings.class, "Key: {} from configuration file, value is {}", key, properties.getProperty(key));
             return properties.getProperty(key);
         }
 
-        logger.info("Key: {} from default value, value is {}", key, defaultValue);
+        logger.info(ProfilerSettings.class, "Key: {} from default value, value is {}", key, defaultValue);
 
         return defaultValue;
     }
@@ -56,9 +56,9 @@ public class ProfilerSettings {
 
         try (FileInputStream fileInputStream = new FileInputStream(path)) {
             properties.load(fileInputStream);
-            logger.info("loaded settings from {}", path);
+            logger.info(ProfilerSettings.class, "loaded settings from {}", path);
         } catch (IOException e) {
-            logger.error("load settings from {} error.", path, e);
+            logger.error(ProfilerSettings.class, "load settings from {} error.", path, e);
         }
     }
 

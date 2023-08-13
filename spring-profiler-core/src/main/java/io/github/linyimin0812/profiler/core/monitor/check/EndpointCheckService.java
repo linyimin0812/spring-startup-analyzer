@@ -1,12 +1,12 @@
 package io.github.linyimin0812.profiler.core.monitor.check;
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class EndpointCheckService implements AppStatusCheckService {
         client = new OkHttpClient().newBuilder().callTimeout(3, TimeUnit.SECONDS).build();
         String endpoints = ProfilerSettings.getProperty("spring-startup-analyzer.app.health.check.endpoints", "http://127.0.0.1:7002/health");
         healthEndpoints = Arrays.asList(endpoints.split(","));
-        logger.info("endpoints: {}", healthEndpoints);
+        logger.info(EndpointCheckService.class, "endpoints: {}", healthEndpoints);
     }
 
     @Override

@@ -2,9 +2,9 @@ package io.github.linyimin0812.profiler.core.monitor.check;
 
 
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -28,7 +28,7 @@ public class TimeoutCheckService implements AppStatusCheckService {
         long minutes = Long.parseLong(ProfilerSettings.getProperty("spring-startup-analyzer.app.health.check.timeout", "20"));
         duration = Duration.ofMinutes(minutes);
         startInstant = Instant.now();
-        logger.info("timeout duration: {} minutes", minutes);
+        logger.info(TimeoutCheckService.class, "timeout duration: {} minutes", minutes);
     }
 
     @Override

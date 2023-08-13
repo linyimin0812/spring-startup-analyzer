@@ -5,7 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import org.slf4j.Logger;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +96,7 @@ public class StartupVO {
             }
         } catch (Exception ex) {
             List<MethodInvokeDetail> copies = methodInvokeDetailList.stream().map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration())).collect(Collectors.toList());
-            logger.error("calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, SerializerFeature.IgnoreNonFieldGetter), ex);
+            logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, SerializerFeature.IgnoreNonFieldGetter), ex);
         }
 
         return metricsList;

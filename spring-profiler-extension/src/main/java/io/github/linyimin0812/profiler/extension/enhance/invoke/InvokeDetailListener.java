@@ -6,12 +6,12 @@ import io.github.linyimin0812.profiler.api.event.AtExitEvent;
 import io.github.linyimin0812.profiler.api.event.Event;
 import io.github.linyimin0812.profiler.api.event.InvokeEvent;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
+import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.common.ui.MethodInvokeDetail;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
-import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,7 +64,7 @@ public class InvokeDetailListener implements EventListener {
                 invokeDetail.setDuration(System.currentTimeMillis() - invokeDetail.getStartMillis());
                 StartupVO.addMethodInvokeDetail(invokeDetail);
             } else {
-                logger.warn("Key: {} does not exist in the Map, there may be an error.", key);
+                logger.warn(InvokeDetailListener.class, "Key: {} does not exist in the Map, there may be an error.", key);
             }
         }
     }
@@ -83,12 +83,12 @@ public class InvokeDetailListener implements EventListener {
                 ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", "").split("\\|")
         ).map(StringUtils::trim).collect(Collectors.toList());
 
-        logger.info("config spring-startup-analyzer.invoke.count.methods is {}", ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", ""));
+        logger.info(InvokeDetailListener.class, "config spring-startup-analyzer.invoke.count.methods is {}", ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", ""));
     }
 
     @Override
     public void stop() {
-        logger.info("===============InvokeCountListener stop==================");
+        logger.info(InvokeDetailListener.class, "===============InvokeCountListener stop==================");
 
         INVOKE_DETAIL_MAP.clear();
     }
