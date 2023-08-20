@@ -1,21 +1,45 @@
 package io.github.linyimin0812.async.bean;
 
-import org.springframework.beans.factory.support.RootBeanDefinition;
+import io.github.linyimin0812.async.config.AsyncBeanProperties;
+import io.github.linyimin0812.async.config.AsyncConfig;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
 /**
  * @author linyimin
  **/
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:bean-context.xml")
+@TestPropertySource(locations = {"classpath:application.properties"})
 public class AsyncInitBeanFinderTest {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Before
+    public void  init() {
+        AsyncBeanProperties properties = AsyncBeanProperties.parse(applicationContext.getEnvironment());
+        AsyncConfig.getInstance().setAsyncBeanProperties(properties);
+    }
 
     @org.junit.Test
     public void getAsyncInitMethodName() {
-//        String definition = "{\"autowireCandidate\":true,\"autowireMode\":0,\"constructorArgumentValues\":{\"genericArgumentValues\":[],\"indexedArgumentValues\":{}},\"dependencyCheck\":0,\"enforceDestroyMethod\":true,\"enforceInitMethod\":true,\"externallyManagedConfigMembers\":[],\"externallyManagedDestroyMethods\":[],\"externallyManagedInitMethods\":[],\"lenientConstructorResolution\":true,\"methodOverrides\":{\"overrides\":[]},\"nonPublicAccessAllowed\":true,\"primary\":false,\"propertyValues\":{\"converted\":false,\"propertyValueList\":[{\"converted\":false,\"name\":\"order\",\"optional\":false,\"value\":-2147483648},{\"converted\":false,\"name\":\"proxyTargetClass\",\"optional\":false,\"value\":true}]},\"role\":2,\"scope\":\"\",\"synthetic\":false}";
-        RootBeanDefinition beanDefinition = new RootBeanDefinition();
 
-        String beanName = "testBean";
+        String beanName = "testComponentBean";
 
-        assertNull(AsyncInitBeanFinder.getAsyncInitMethodName(beanName, beanDefinition));
+        BeanDefinition beanDefinition = ((GenericApplicationContext) applicationContext)
+                .getBeanFactory()
+                .getBeanDefinition(beanName);
+
+        assertEquals("initTestComponentBean", AsyncInitBeanFinder.getAsyncInitMethodName(beanName, beanDefinition));
     }
 }

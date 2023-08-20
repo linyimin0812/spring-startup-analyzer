@@ -71,4 +71,8 @@ public class AsyncTaskExecutor {
         return new ThreadPoolExecutor(threadPoolCoreSize, threadPollMaxSize, 30, TimeUnit.SECONDS, new SynchronousQueue<>(),  threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
 
     }
+
+    public static List<Future<?>> getFutureList() {
+        return futureList;
+    }
 }
