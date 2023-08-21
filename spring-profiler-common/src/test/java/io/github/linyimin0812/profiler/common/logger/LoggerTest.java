@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class LoggerTest {
+class LoggerTest {
 
     private static Logger logger;
 
     @BeforeAll
-    public static void init() throws URISyntaxException {
+    static void init() throws URISyntaxException {
         URL url = LogFactoryTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert url != null;
 
@@ -30,52 +30,52 @@ public class LoggerTest {
     }
 
     @Test
-    public void debug() {
+    void debug() {
         logger.debug(LoggerTest.class, "debug");
     }
 
     @Test
-    public void testDebug() {
+    void testDebug() {
         logger.debug(LoggerTest.class, "debug: {}", "params");
     }
 
     @Test
-    public void warn() {
+    void warn() {
         logger.warn(LoggerTest.class, "warn");
     }
 
     @Test
-    public void testWarn() {
+    void testWarn() {
         logger.warn(LoggerTest.class, "warn: {}", "params");
     }
 
     @Test
-    public void info() {
+    void info() {
         logger.info(LoggerTest.class, "info");
     }
 
     @Test
-    public void testInfo() {
+    void testInfo() {
         logger.info(LoggerTest.class, "info: {}", "params");
     }
 
     @Test
-    public void error() {
+    void error() {
         logger.error(LoggerTest.class, "error");
     }
 
     @Test
-    public void testError() {
+    void testError() {
         logger.error(LoggerTest.class, "error: {}", "params");
     }
 
     @Test
-    public void testError1() {
+    void testError1() {
         logger.error(LoggerTest.class, "error: {}, {}", "params", new RuntimeException(""));
     }
 
     @Test
-    public void close() {
+    void close() {
         logger.close();
     }
 }

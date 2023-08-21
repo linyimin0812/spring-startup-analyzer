@@ -11,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author linyimin
  **/
-public class AsyncTaskExecutorTest {
+class AsyncTaskExecutorTest {
 
     @Test
-    public void submitTask() throws IOException {
+    void submitTask() throws IOException {
         AsyncConfig.getInstance().setAsyncBeanProperties(AsyncBeanPropertiesTest.parsePropertiesFromFile());
         AsyncTaskExecutor.submitTask(() -> {});
         assertEquals(1, AsyncTaskExecutor.getFutureList().size());
     }
 
     @Test
-    public void ensureAsyncTasksFinish() {
+    void ensureAsyncTasksFinish() {
         if (!AsyncTaskExecutor.isFinished()) {
             AsyncTaskExecutor.ensureAsyncTasksFinish();
         }
@@ -30,7 +30,7 @@ public class AsyncTaskExecutorTest {
     }
 
     @Test
-    public void isFinished() {
+    void isFinished() {
         if (!AsyncTaskExecutor.isFinished()) {
             AsyncTaskExecutor.ensureAsyncTasksFinish();
         }
@@ -39,7 +39,7 @@ public class AsyncTaskExecutorTest {
     }
 
     @Test
-    public void getFutureList() {
+    void getFutureList() {
         assertNotNull(AsyncTaskExecutor.getFutureList());
     }
 }

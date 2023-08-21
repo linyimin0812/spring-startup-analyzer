@@ -7,10 +7,10 @@ import java.lang.reflect.Field;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NameUtilTest {
+class NameUtilTest {
 
     @AfterEach
-    public void clean() throws NoSuchFieldException, IllegalAccessException {
+    void clean() throws NoSuchFieldException, IllegalAccessException {
         Class<NameUtil> appNameUtilClass = NameUtil.class;
 
         Field appNameField = appNameUtilClass.getDeclaredField("appName");
@@ -20,7 +20,7 @@ public class NameUtilTest {
 
     @Test
     @Order(1)
-    public void testGetAppNameFromProjectName() {
+    void testGetAppNameFromProjectName() {
 
         // 设置系统属性
         System.setProperty("project.name", "test-project");
@@ -33,7 +33,7 @@ public class NameUtilTest {
 
     @Test
     @Order(2)
-    public void testGetAppNameFromSpringApplicationName() {
+    void testGetAppNameFromSpringApplicationName() {
 
         // 设置系统属性
         System.clearProperty("project.name");
@@ -46,7 +46,7 @@ public class NameUtilTest {
 
     @Test
     @Order(3)
-    public void testGetAppNameFromCommand() {
+    void testGetAppNameFromCommand() {
 
         // 设置系统属性
         System.clearProperty("project.name");

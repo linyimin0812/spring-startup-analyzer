@@ -8,25 +8,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class BeanCreateListenerTest {
+class BeanCreateListenerTest {
 
     private final BeanCreateListener beanCreateListener = new BeanCreateListener();
 
     @Test
-    public void filter() {
+    void filter() {
         assertTrue(beanCreateListener.filter("org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"));
 
         assertFalse(beanCreateListener.filter("AbstractAutowireCapableBeanFactory"));
     }
 
     @Test
-    public void onEvent() {
+    void onEvent() {
         // TODO:
         System.out.println("// TODO:");
     }
 
     @Test
-    public void testFilter() {
+    void testFilter() {
         String listenMethodName = "createBean";
         String[] listenMethodTypes = new String[] {
                 "java.lang.String",
@@ -40,19 +40,19 @@ public class BeanCreateListenerTest {
     }
 
     @Test
-    public void listen() {
+    void listen() {
         // TODO:
         System.out.println("// TODO:");
     }
 
     @Test
-    public void start() {
+    void start() {
         // TODO:
         System.out.println("// TODO:");
     }
 
     @Test
-    public void stop() {
+    void stop() {
         // TODO:
         System.out.println("// TODO:");
     }

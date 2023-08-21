@@ -8,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author linyimin
  **/
-public class BridgeTest {
+class BridgeTest {
 
     @Test
-    public void getBridge() {
+    void getBridge() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         assertEquals(Bridge.NOP_BRIDGE, Bridge.getBridge());
     }
 
     @Test
-    public void setBridge() {
+    void setBridge() {
         BridgeImplTest bridgeImplTest = new BridgeImplTest();
         Bridge.setBridge(bridgeImplTest);
 
@@ -25,7 +25,7 @@ public class BridgeTest {
     }
 
     @Test
-    public void atEnter() {
+    void atEnter() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atEnter(null, null, null, null, null);
         Bridge.setBridge(new BridgeImplTest());
@@ -33,7 +33,7 @@ public class BridgeTest {
     }
 
     @Test
-    public void atExit() {
+    void atExit() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atExit(null, null, null, null, null, null);
         Bridge.setBridge(new BridgeImplTest());
@@ -41,7 +41,7 @@ public class BridgeTest {
     }
 
     @Test
-    public void atExceptionExit() {
+    void atExceptionExit() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atExceptionExit(null, null, null, null, null, null);
         Bridge.setBridge(new BridgeImplTest());

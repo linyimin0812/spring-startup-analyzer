@@ -9,38 +9,38 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class AsyncProfilerListenerTest {
+class AsyncProfilerListenerTest {
 
     private final AsyncProfilerListener asyncProfilerListener = new AsyncProfilerListener();
     @Test
-    public void filter() {
+    void filter() {
         assertFalse(asyncProfilerListener.filter(""));
     }
 
     @Test
-    public void testFilter() { assertTrue(asyncProfilerListener.filter("", new String[] {}));
+    void testFilter() { assertTrue(asyncProfilerListener.filter("", new String[] {}));
     }
 
     @Test
-    public void onEvent() {
+    void onEvent() {
         // TODO:
         System.out.println("// TODO:");
 
     }
 
     @Test
-    public void listen() {
+    void listen() {
         assertTrue(asyncProfilerListener.listen().isEmpty());
     }
 
     @Test
-    public void start() {
+    void start() {
         // TODO:
         System.out.println("// TODO:");
     }
 
     @Test
-    public void stop() {
+    void stop() {
         // TODO:
         System.out.println("// TODO:");
     }

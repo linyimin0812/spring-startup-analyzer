@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author linyimin
  **/
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class IocContainerTest {
+class IocContainerTest {
 
     @Test
-    public void copyFile() throws IOException, URISyntaxException {
+    void copyFile() throws IOException, URISyntaxException {
         URL srcURL = IocContainerTest.class.getClassLoader().getResource("src/empty.txt");
 
         assertNotNull(srcURL);
@@ -45,7 +45,7 @@ public class IocContainerTest {
 
     @Test
     @Order(1)
-    public void start() {
+    void start() {
         IocContainer.start();
         assertNotNull(IocContainer.getComponent(LifecycleTest.class));
         assertTrue(SimpleHttpServerTest.isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
@@ -54,21 +54,21 @@ public class IocContainerTest {
 
     @Test
     @Order(2)
-    public void getComponent() {
+    void getComponent() {
         assertNotNull(IocContainer.getComponent(LifecycleTest.class));
         assertNotNull(IocContainer.getComponent(EventListenerTest.class));
     }
 
     @Test
     @Order(2)
-    public void getComponents() {
+    void getComponents() {
         assertEquals(2, IocContainer.getComponents(Lifecycle.class).size());
         assertEquals(2, IocContainer.getComponents(EventListener.class).size());
     }
 
     @Test
     @Order(3)
-    public void stop() {
+    void stop() {
         assertNotNull(IocContainer.getComponent(LifecycleTest.class));
         try {
             IocContainer.stop();

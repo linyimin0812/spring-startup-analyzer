@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class AgentHomeUtilTest {
+class AgentHomeUtilTest {
 
     @Test
-    public void home() {
+    void home() {
         assertTrue(AgentHomeUtil.home().contains("spring-startup-analyzer"));
         System.out.println(AgentHomeUtil.home());
     }

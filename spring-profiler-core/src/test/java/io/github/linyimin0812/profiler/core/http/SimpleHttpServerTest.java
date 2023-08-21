@@ -17,7 +17,7 @@ public class SimpleHttpServerTest {
 
     @Test
     @Order(0)
-    public void start() {
+    void start() {
         SimpleHttpServer.stop();
         assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
         SimpleHttpServer.start();
@@ -26,7 +26,7 @@ public class SimpleHttpServerTest {
 
     @Test
     @Order(3)
-    public void getPort() {
+    void getPort() {
 
         assertEquals(8065, SimpleHttpServer.getPort());
 
@@ -40,7 +40,7 @@ public class SimpleHttpServerTest {
 
     @Test
     @Order(3)
-    public void endpoint() {
+    void endpoint() {
 
         ProfilerSettings.clear();
 
@@ -55,7 +55,7 @@ public class SimpleHttpServerTest {
 
     @Test
     @Order(2)
-    public void stop() {
+    void stop() {
         assertTrue(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
         SimpleHttpServer.stop();
         assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));

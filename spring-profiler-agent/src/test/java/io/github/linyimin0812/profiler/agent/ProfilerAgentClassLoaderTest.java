@@ -10,18 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author linyimin
  **/
-public class ProfilerAgentClassLoaderTest {
+class ProfilerAgentClassLoaderTest {
 
     private static ProfilerAgentClassLoader classLoader;
 
     @BeforeAll
-    public static void init() {
+    static void init() {
         URL testJarUrl = ProfilerAgentClassLoaderTest.class.getClassLoader().getResource("spring-profiler-api.jar");
         classLoader = new ProfilerAgentClassLoader(new URL[] {testJarUrl});
     }
 
     @Test
-    public void loadClass() throws ClassNotFoundException {
+    void loadClass() throws ClassNotFoundException {
         assertNotNull(classLoader);
 
         Class<?> clazz = classLoader.loadClass("io.github.linyimin0812.profiler.api.event.AtEnterEvent", true);

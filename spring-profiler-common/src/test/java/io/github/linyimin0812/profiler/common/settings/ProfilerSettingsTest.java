@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
  **/
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProfilerSettingsTest {
+class ProfilerSettingsTest {
 
     @Test
     @Order(0)
-    public void loadProperties() {
+    void loadProperties() {
         URL configurationURL = ProfilerSettingsTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
@@ -24,7 +24,7 @@ public class ProfilerSettingsTest {
 
     @Test
     @Order(1)
-    public void testGetProperty() {
+    void testGetProperty() {
         assertNull(ProfilerSettings.getProperty("key"));
         assertEquals("default", ProfilerSettings.getProperty("key", "default"));
         assertEquals("testValue3", ProfilerSettings.getProperty("testKey3"));
@@ -36,14 +36,14 @@ public class ProfilerSettingsTest {
 
     @Test
     @Order(2)
-    public void contains() {
+    void contains() {
         assertTrue(ProfilerSettings.contains("testKey2"));
         assertFalse(ProfilerSettings.contains("key"));
     }
 
     @Test
     @Order(3)
-    public void isNotBlank() {
+    void isNotBlank() {
         assertTrue(ProfilerSettings.isNotBlank("test"));
         assertFalse(ProfilerSettings.isNotBlank(""));
     }

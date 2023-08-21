@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author linyimin
  **/
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StartupVOTest {
+class StartupVOTest {
 
     @Test
     @Order(1)
-    public void addBeanInitResult() {
+    void addBeanInitResult() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         beanInitResult.duration();
@@ -35,7 +35,7 @@ public class StartupVOTest {
 
     @Test
     @Order(1)
-    public void addStatistics() {
+    void addStatistics() {
         Statistics statistics = new Statistics(0, "Startup Time(s)", String.format("%.2f", 180.28));
         StartupVO.addStatistics(statistics);
         assertEquals(1, StartupVO.getStatisticsList().size());
@@ -43,7 +43,7 @@ public class StartupVOTest {
 
     @Test
     @Order(1)
-    public void addUnusedJar() throws IOException {
+    void addUnusedJar() throws IOException {
         try (URLClassLoader classLoader = new URLClassLoader(new URL[]{})) {
             Map<ClassLoader, Set<String>> unusedJarMap = new HashMap<>();
             Set<String> jars = new HashSet<>();
@@ -57,7 +57,7 @@ public class StartupVOTest {
 
     @Test
     @Order(1)
-    public void addMethodInvokeDetail() {
+    void addMethodInvokeDetail() {
 
         MethodInvokeDetail invokeDetail = new MethodInvokeDetail("io.github.linyimin0812.profiler.common.ui.StartupVOTest.addMethodInvokeDetail", System.currentTimeMillis(), 10);
         StartupVO.addMethodInvokeDetail(invokeDetail);
@@ -66,19 +66,19 @@ public class StartupVOTest {
 
     @Test
     @Order(2)
-    public void getBeanInitResultList() {
+    void getBeanInitResultList() {
         assertEquals(1, StartupVO.getBeanInitResultList().size());
     }
 
     @Test
     @Order(2)
-    public void getStatisticsList() {
+    void getStatisticsList() {
         assertEquals(1, StartupVO.getStatisticsList().size());
     }
 
     @Test
     @Order(2)
-    public void getMethodInvokeDetailList() {
+    void getMethodInvokeDetailList() {
         String text = StartupVO.toJSONString();
 
         Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {});
@@ -88,7 +88,7 @@ public class StartupVOTest {
 
     @Test
     @Order(2)
-    public void toJSONString() {
+    void toJSONString() {
 
         String text = StartupVO.toJSONString();
 

@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 /**
  * @author linyimin
  **/
-public class BeanDefinitionUtilTest {
+class BeanDefinitionUtilTest {
 
     @Test
-    public void isFromConfigurationSource() {
+    void isFromConfigurationSource() {
         boolean isFrom = BeanDefinitionUtil.isFromConfigurationSource(SpringFactory.getBeanFactory().getBeanDefinition("testComponentBean"));
         assertFalse(isFrom);
     }
 
     @Test
-    public void resolveBeanClassType() {
+    void resolveBeanClassType() {
         Class<?> clazz = BeanDefinitionUtil.resolveBeanClassType(SpringFactory.getBeanFactory().getBeanDefinition("testXmlBean"));
         assertEquals(TestXmlBean.class, clazz);
 

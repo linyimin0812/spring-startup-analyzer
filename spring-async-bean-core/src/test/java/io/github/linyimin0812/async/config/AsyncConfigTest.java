@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author linyimin
  **/
-public class AsyncConfigTest {
+class AsyncConfigTest {
 
     @Test
-    public void getInstance() {
+    void getInstance() {
         assertNotNull(AsyncConfig.getInstance());
     }
 
     @Test
-    public void getAsyncBeanProperties() throws IOException {
+    void getAsyncBeanProperties() throws IOException {
         AsyncBeanProperties asyncBeanProperties = AsyncBeanPropertiesTest.parsePropertiesFromFile();
 
         AsyncConfig.getInstance().setAsyncBeanProperties(asyncBeanProperties);
@@ -28,7 +28,7 @@ public class AsyncConfigTest {
     }
 
     @Test
-    public void setAsyncBeanProperties() throws IOException {
+    void setAsyncBeanProperties() throws IOException {
 
         AsyncBeanProperties asyncBeanProperties = AsyncBeanPropertiesTest.parsePropertiesFromFile();
 
@@ -39,7 +39,7 @@ public class AsyncConfigTest {
     }
 
     @Test
-    public void isAsyncBean() throws IOException {
+    void isAsyncBean() throws IOException {
 
         AsyncConfig.getInstance().setAsyncBeanProperties(AsyncBeanPropertiesTest.parsePropertiesFromFile());
 

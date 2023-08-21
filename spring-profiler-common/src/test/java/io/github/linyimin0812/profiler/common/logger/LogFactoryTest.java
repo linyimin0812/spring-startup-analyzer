@@ -14,27 +14,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * @author linyimin
  **/
-public class LogFactoryTest {
+class LogFactoryTest {
 
     @Test
-    public void getStartupLogger() {
+    void getStartupLogger() {
         Logger logger = LogFactory.getStartupLogger();
         assertNotNull(logger);
     }
 
     @Test
-    public void getTransFormLogger() {
+    void getTransFormLogger() {
         Logger logger = LogFactory.getTransFormLogger();
         assertNotNull(logger);
     }
 
     @Test
-    public void close() {
+    void close() {
         LogFactory.close();
     }
 
     @Test
-    public void createLogger() throws URISyntaxException {
+    void createLogger() throws URISyntaxException {
         Logger logger = LogFactory.getStartupLogger();
         URL url = LogFactoryTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert url != null;

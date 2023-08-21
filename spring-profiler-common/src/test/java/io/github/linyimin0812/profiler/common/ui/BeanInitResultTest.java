@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class BeanInitResultTest {
+class BeanInitResultTest {
 
     @Test
-    public void getId() {
+    void getId() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
         assertTrue(beanInitResult.getId() >= 1000);
     }
 
     @Test
-    public void getParentId() {
+    void getParentId() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
         beanInitResult.addChild(childBeanInitResult);
@@ -29,20 +29,20 @@ public class BeanInitResultTest {
     }
 
     @Test
-    public void getName() {
+    void getName() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
         assertEquals("test", beanInitResult.getName());
     }
 
     @Test
-    public void getDuration() {
+    void getDuration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
         beanInitResult.duration();
         assertTrue(beanInitResult.getDuration() >= 0);
     }
 
     @Test
-    public void getActualDuration() {
+    void getActualDuration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
@@ -58,7 +58,7 @@ public class BeanInitResultTest {
     }
 
     @Test
-    public void duration() {
+    void duration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
@@ -73,7 +73,7 @@ public class BeanInitResultTest {
     }
 
     @Test
-    public void getTags() {
+    void getTags() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
         Map<String, String> tags = new HashMap<>();
         tags.put("class", "Test");
@@ -83,7 +83,7 @@ public class BeanInitResultTest {
     }
 
     @Test
-    public void getChildren() {
+    void getChildren() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         assertTrue(beanInitResult.getChildren().isEmpty());
@@ -96,12 +96,12 @@ public class BeanInitResultTest {
     }
 
     @Test
-    public void addChild() {
+    void addChild() {
         getChildren();
     }
 
     @Test
-    public void setTags() {
+    void setTags() {
         getTags();
     }
 }

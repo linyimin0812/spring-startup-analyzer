@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class IpUtilTest {
+class IpUtilTest {
 
     @Test
-    public void testGetIp() {
+    void testGetIp() {
 
         String ip = IpUtil.getIp();
 

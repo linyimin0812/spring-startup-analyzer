@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author linyimin
  **/
-public class InvokeDetailListenerTest {
+class InvokeDetailListenerTest {
 
     private static final InvokeDetailListener invokeDetailListener = new InvokeDetailListener();
 
     @BeforeEach
-    public void init() {
+    void init() {
         URL configurationURL = InvokeDetailListenerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
@@ -29,30 +29,30 @@ public class InvokeDetailListenerTest {
     }
 
     @Test
-    public void filter() {
+    void filter() {
         assertTrue(invokeDetailListener.filter("java.net.URLClassLoader"));
         assertFalse(invokeDetailListener.filter("java.lang.String"));
     }
 
     @Test
-    public void testFilter() {
+    void testFilter() {
         assertTrue(invokeDetailListener.filter("findResource", new String[] {"java.lang.String"}));
         assertFalse(invokeDetailListener.filter("findResource", new String[] {}));
     }
 
     @Test
-    public void onEvent() {
+    void onEvent() {
         // TODO:
         System.out.println("// TODO:");
     }
 
     @Test
-    public void listen() {
+    void listen() {
         assertEquals(2, invokeDetailListener.listen().size());
     }
 
     @Test
-    public void start() throws NoSuchFieldException, IllegalAccessException {
+    void start() throws NoSuchFieldException, IllegalAccessException {
         Field field = invokeDetailListener.getClass().getDeclaredField("methodQualifiers");
         field.setAccessible(true);
 
@@ -64,7 +64,7 @@ public class InvokeDetailListenerTest {
     }
 
     @Test
-    public void stop() throws NoSuchFieldException, IllegalAccessException {
+    void stop() throws NoSuchFieldException, IllegalAccessException {
         invokeDetailListener.stop();
         Field field = invokeDetailListener.getClass().getDeclaredField("methodQualifiers");
         field.setAccessible(true);

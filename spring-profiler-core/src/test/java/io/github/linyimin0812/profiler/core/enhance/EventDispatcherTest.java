@@ -5,22 +5,22 @@ import org.junit.jupiter.api.Test;
 /**
  * @author linyimin
  **/
-public class EventDispatcherTest {
+class EventDispatcherTest {
 
     @Test
-    public void atEnter() {
+    void atEnter() {
         // TODO:
         System.out.println("TODO://");
     }
 
     @Test
-    public void atExit() {
+    void atExit() {
         // TODO:
         System.out.println("TODO://");
     }
 
     @Test
-    public void atExceptionExit() {
+    void atExceptionExit() {
         // TODO:
         System.out.println("TODO://");
     }

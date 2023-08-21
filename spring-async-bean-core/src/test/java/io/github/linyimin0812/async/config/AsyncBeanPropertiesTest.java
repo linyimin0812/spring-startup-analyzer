@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AsyncBeanPropertiesTest {
 
     @Test
-    public void isBeanPriorityLoadEnable() throws IOException {
+    void isBeanPriorityLoadEnable() throws IOException {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertFalse(properties.isBeanPriorityLoadEnable());
         properties = parsePropertiesFromFile();
@@ -28,7 +28,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void setBeanPriorityLoadEnable() {
+    void setBeanPriorityLoadEnable() {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertFalse(properties.isBeanPriorityLoadEnable());
         properties.setBeanPriorityLoadEnable(true);
@@ -36,7 +36,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void getBeanNames() throws IOException {
+    void getBeanNames() throws IOException {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertTrue(properties.getBeanNames().isEmpty());
 
@@ -48,7 +48,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void setBeanNames() {
+    void setBeanNames() {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertTrue(properties.getBeanNames().isEmpty());
         properties.setBeanNames(Collections.singletonList("testBean"));
@@ -59,7 +59,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void getInitBeanThreadPoolCoreSize() throws IOException {
+    void getInitBeanThreadPoolCoreSize() throws IOException {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertEquals(Runtime.getRuntime().availableProcessors() + 1, properties.getInitBeanThreadPoolCoreSize());
 
@@ -69,7 +69,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void setInitBeanThreadPoolCoreSize() {
+    void setInitBeanThreadPoolCoreSize() {
 
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertEquals(Runtime.getRuntime().availableProcessors() + 1, properties.getInitBeanThreadPoolCoreSize());
@@ -79,7 +79,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void getInitBeanThreadPoolMaxSize() throws IOException {
+    void getInitBeanThreadPoolMaxSize() throws IOException {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertEquals(Runtime.getRuntime().availableProcessors() + 1, properties.getInitBeanThreadPoolMaxSize());
 
@@ -89,7 +89,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void setInitBeanThreadPoolMaxSize() {
+    void setInitBeanThreadPoolMaxSize() {
         AsyncBeanProperties properties = new AsyncBeanProperties();
         assertEquals(Runtime.getRuntime().availableProcessors() + 1, properties.getInitBeanThreadPoolMaxSize());
 
@@ -98,7 +98,7 @@ public class AsyncBeanPropertiesTest {
     }
 
     @Test
-    public void parse() throws IOException {
+    void parse() throws IOException {
         AsyncBeanProperties properties = new AsyncBeanProperties();
 
         assertFalse(properties.isBeanPriorityLoadEnable());

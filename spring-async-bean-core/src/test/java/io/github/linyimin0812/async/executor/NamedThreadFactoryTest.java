@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class NamedThreadFactoryTest {
+class NamedThreadFactoryTest {
 
     @Test
-    public void newThread() {
+    void newThread() {
         NamedThreadFactory factory = new NamedThreadFactory("test");
         Thread thread = factory.newThread(() -> {});
 

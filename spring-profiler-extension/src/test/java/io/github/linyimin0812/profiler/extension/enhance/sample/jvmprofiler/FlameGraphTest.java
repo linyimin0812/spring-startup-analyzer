@@ -20,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author linyimin
  **/
-public class FlameGraphTest {
+class FlameGraphTest {
 
     private static final Map<String, Integer> TRACE_MAP = new HashMap<>();
 
     @BeforeAll
-    public static void init() throws IOException {
+    static void init() throws IOException {
         URL profilerURL = FlameGraphTest.class.getClassLoader().getResource("profiler.txt");
         assert profilerURL != null;
 
@@ -46,7 +46,7 @@ public class FlameGraphTest {
     }
 
     @Test
-    public void parse() throws IOException, URISyntaxException {
+    void parse() throws IOException, URISyntaxException {
         FlameGraph fg = new FlameGraph();
 
         URL templateURL = FlameGraphTest.class.getClassLoader().getResource("flame-graph.html");
