@@ -3,6 +3,7 @@ package io.github.linyimin0812.async.bean;
 import io.github.linyimin0812.async.config.AsyncBeanProperties;
 import io.github.linyimin0812.async.config.AsyncConfig;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -31,7 +32,7 @@ public class AsyncInitBeanFinderTest {
         AsyncConfig.getInstance().setAsyncBeanProperties(properties);
     }
 
-    @org.junit.Test
+    @Test
     public void getAsyncInitMethodName() {
 
         String beanName = "testComponentBean";

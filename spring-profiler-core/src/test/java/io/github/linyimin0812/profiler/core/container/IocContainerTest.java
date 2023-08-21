@@ -4,9 +4,7 @@ import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.core.http.SimpleHttpServer;
 import io.github.linyimin0812.profiler.core.http.SimpleHttpServerTest;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,78 +13,70 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * @author linyimin
  **/
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class IocContainerTest {
-
-    @BeforeClass
-    public static void init() {
-        IocContainer.start();
-    }
 
     @Test
     public void copyFile() throws IOException, URISyntaxException {
         URL srcURL = IocContainerTest.class.getClassLoader().getResource("src/empty.txt");
 
-        Assert.assertNotNull(srcURL);
+        assertNotNull(srcURL);
 
         Path destPath = Paths.get(srcURL.toURI()).getParent().getParent();
 
-        Assert.assertNotNull(destPath);
+        assertNotNull(destPath);
 
         Path destFilePath = Paths.get(destPath.toString(), "empty.txt");
 
         Files.deleteIfExists(destFilePath);
 
-        Assert.assertFalse(Files.exists(destFilePath));
+        assertFalse(Files.exists(destFilePath));
 
         IocContainer.copyFile(srcURL.getPath(), destPath + "/empty.txt");
 
-        Assert.assertTrue(Files.exists(destFilePath));
+        assertTrue(Files.exists(destFilePath));
 
     }
 
     @Test
+    @Order(1)
     public void start() {
-        Assert.assertNotNull(IocContainer.getComponent(LifecycleTest.class));
-        Assert.assertTrue(SimpleHttpServerTest.isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void stop() {
-        if (!IocContainer.isStopped()) {
-            Assert.assertNotNull(IocContainer.getComponent(LifecycleTest.class));
-            IocContainer.stop();
-        } else {
-            throw new RuntimeException();
-        }
-
+        IocContainer.start();
+        assertNotNull(IocContainer.getComponent(LifecycleTest.class));
+        assertTrue(SimpleHttpServerTest.isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
+        assertTrue(IocContainer.isStarted());
     }
 
     @Test
+    @Order(2)
     public void getComponent() {
-        if (!IocContainer.isStarted()) {
-            Assert.assertNull(IocContainer.getComponent(LifecycleTest.class));
-            Assert.assertNull(IocContainer.getComponent(EventListenerTest.class));
-        }
-
-        if (IocContainer.isStarted() && !IocContainer.isStopped()) {
-            Assert.assertNotNull(IocContainer.getComponent(LifecycleTest.class));
-            Assert.assertNotNull(IocContainer.getComponent(EventListenerTest.class));
-        }
+        assertNotNull(IocContainer.getComponent(LifecycleTest.class));
+        assertNotNull(IocContainer.getComponent(EventListenerTest.class));
     }
 
     @Test
+    @Order(2)
     public void getComponents() {
-        if (!IocContainer.isStarted()) {
-            Assert.assertEquals(0, IocContainer.getComponents(Lifecycle.class).size());
-            Assert.assertEquals(0, IocContainer.getComponents(EventListener.class).size());
+        assertEquals(2, IocContainer.getComponents(Lifecycle.class).size());
+        assertEquals(2, IocContainer.getComponents(EventListener.class).size());
+    }
+
+    @Test
+    @Order(3)
+    public void stop() {
+        assertNotNull(IocContainer.getComponent(LifecycleTest.class));
+        try {
+            IocContainer.stop();
+        } catch (Exception ignored) {
+
         }
 
-        if (IocContainer.isStarted() && !IocContainer.isStopped()) {
-            Assert.assertEquals(2, IocContainer.getComponents(Lifecycle.class).size());
-            Assert.assertEquals(2, IocContainer.getComponents(EventListener.class).size());
-        }
+        assertTrue(IocContainer.isStopped());
+
     }
 }

@@ -1,15 +1,15 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NameUtilTest {
 
-    @After
+    @AfterEach
     public void clean() throws NoSuchFieldException, IllegalAccessException {
         Class<NameUtil> appNameUtilClass = NameUtil.class;
 
@@ -19,6 +19,7 @@ public class NameUtilTest {
     }
 
     @Test
+    @Order(1)
     public void testGetAppNameFromProjectName() {
 
         // 设置系统属性
@@ -31,6 +32,7 @@ public class NameUtilTest {
     }
 
     @Test
+    @Order(2)
     public void testGetAppNameFromSpringApplicationName() {
 
         // 设置系统属性
@@ -43,6 +45,7 @@ public class NameUtilTest {
     }
 
     @Test
+    @Order(3)
     public void testGetAppNameFromCommand() {
 
         // 设置系统属性

@@ -2,9 +2,7 @@ package io.github.linyimin0812.profiler.common.ui;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,25 +12,38 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * @author linyimin
  **/
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StartupVOTest {
 
-    @BeforeClass
-    public static void init() throws InterruptedException, IOException {
-
+    @Test
+    @Order(1)
+    public void addBeanInitResult() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
-        Thread.sleep(10);
+
         beanInitResult.duration();
 
         StartupVO.addBeanInitResult(beanInitResult);
 
+    }
+
+    @Test
+    @Order(1)
+    public void addStatistics() {
         Statistics statistics = new Statistics(0, "Startup Time(s)", String.format("%.2f", 180.28));
         StartupVO.addStatistics(statistics);
+        assertEquals(1, StartupVO.getStatisticsList().size());
+    }
 
+    @Test
+    @Order(1)
+    public void addUnusedJar() throws IOException {
         try (URLClassLoader classLoader = new URLClassLoader(new URL[]{})) {
             Map<ClassLoader, Set<String>> unusedJarMap = new HashMap<>();
             Set<String> jars = new HashSet<>();
@@ -42,55 +53,50 @@ public class StartupVOTest {
                 StartupVO.addUnusedJar(entry);
             }
         }
+    }
+
+    @Test
+    @Order(1)
+    public void addMethodInvokeDetail() {
 
         MethodInvokeDetail invokeDetail = new MethodInvokeDetail("io.github.linyimin0812.profiler.common.ui.StartupVOTest.addMethodInvokeDetail", System.currentTimeMillis(), 10);
         StartupVO.addMethodInvokeDetail(invokeDetail);
-    }
-
-    @Test
-    public void addBeanInitResult() {
-        assertEquals(1, StartupVO.getBeanInitResultList().size());
-    }
-
-    @Test
-    public void addStatistics() {
-        Assert.assertEquals(1, StartupVO.getStatisticsList().size());
-    }
-
-    @Test
-    public void addUnusedJar() {
 
     }
 
     @Test
-    public void addMethodInvokeDetail() {
-
-    }
-
-    @Test
+    @Order(2)
     public void getBeanInitResultList() {
         assertEquals(1, StartupVO.getBeanInitResultList().size());
     }
 
     @Test
+    @Order(2)
     public void getStatisticsList() {
-        Assert.assertEquals(1, StartupVO.getStatisticsList().size());
+        assertEquals(1, StartupVO.getStatisticsList().size());
     }
 
     @Test
+    @Order(2)
     public void getMethodInvokeDetailList() {
+        String text = StartupVO.toJSONString();
+
+        Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {});
+
+        assertTrue(map.containsKey("methodInvokeDetailList"));
     }
 
     @Test
+    @Order(2)
     public void toJSONString() {
 
         String text = StartupVO.toJSONString();
 
         Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {});
 
-        Assert.assertTrue(map.containsKey("beanInitResultList"));
-        Assert.assertTrue(map.containsKey("statisticsList"));
-        Assert.assertTrue(map.containsKey("unusedJarMap"));
-        Assert.assertTrue(map.containsKey("methodInvokeDetailList"));
+        assertTrue(map.containsKey("beanInitResultList"));
+        assertTrue(map.containsKey("statisticsList"));
+        assertTrue(map.containsKey("unusedJarMap"));
+        assertTrue(map.containsKey("methodInvokeDetailList"));
     }
 }

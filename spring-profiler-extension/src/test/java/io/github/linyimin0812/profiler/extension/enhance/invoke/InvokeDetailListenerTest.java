@@ -2,16 +2,15 @@ package io.github.linyimin0812.profiler.extension.enhance.invoke;
 
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import io.github.linyimin0812.profiler.common.ui.MethodInvokeDetail;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author linyimin
@@ -20,7 +19,7 @@ public class InvokeDetailListenerTest {
 
     private static final InvokeDetailListener invokeDetailListener = new InvokeDetailListener();
 
-    @Before
+    @BeforeEach
     public void init() {
         URL configurationURL = InvokeDetailListenerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
@@ -31,21 +30,20 @@ public class InvokeDetailListenerTest {
 
     @Test
     public void filter() {
-        Assert.assertTrue(invokeDetailListener.filter("java.net.URLClassLoader"));
-        Assert.assertFalse(invokeDetailListener.filter("java.lang.String"));
+        assertTrue(invokeDetailListener.filter("java.net.URLClassLoader"));
+        assertFalse(invokeDetailListener.filter("java.lang.String"));
     }
 
     @Test
     public void testFilter() {
-        Assert.assertTrue(invokeDetailListener.filter("findResource", new String[] {"java.lang.String"}));
-        Assert.assertFalse(invokeDetailListener.filter("findResource", new String[] {}));
+        assertTrue(invokeDetailListener.filter("findResource", new String[] {"java.lang.String"}));
+        assertFalse(invokeDetailListener.filter("findResource", new String[] {}));
     }
 
     @Test
     public void onEvent() {
-
-//        AtEnterEvent atEnterEvent = new AtEnterEvent(1, 1, URLClassLoader.class, new URLClassLoader(new URL[] {}), "findResource", "findResource", );
-
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test

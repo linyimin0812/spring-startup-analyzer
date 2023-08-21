@@ -1,8 +1,7 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample.jvmprofiler;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +14,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * @author linyimin
@@ -23,7 +24,7 @@ public class FlameGraphTest {
 
     private static final Map<String, Integer> TRACE_MAP = new HashMap<>();
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         URL profilerURL = FlameGraphTest.class.getClassLoader().getResource("profiler.txt");
         assert profilerURL != null;
@@ -57,7 +58,7 @@ public class FlameGraphTest {
 
         Path resultPath = Paths.get(destPath);
 
-        Assert.assertTrue(Files.exists(resultPath));
+        assertTrue(Files.exists(resultPath));
 
         Files.deleteIfExists(resultPath);
 

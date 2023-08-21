@@ -1,13 +1,14 @@
 package io.github.linyimin0812.profiler.common.logger;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
@@ -16,7 +17,7 @@ public class LoggerTest {
 
     private static Logger logger;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws URISyntaxException {
         URL url = LogFactoryTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert url != null;
@@ -24,7 +25,7 @@ public class LoggerTest {
         String path = Paths.get(url.toURI()).getParent().toUri().getPath();
         logger = new Logger(LoggerName.startup, path);
 
-        Assert.assertTrue(Files.exists(Paths.get(path, LoggerName.startup + ".log")));
+        assertTrue(Files.exists(Paths.get(path, LoggerName.startup + ".log")));
 
     }
 

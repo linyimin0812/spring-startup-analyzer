@@ -1,12 +1,14 @@
 package io.github.linyimin0812.profiler.common.logger;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -17,13 +19,13 @@ public class LogFactoryTest {
     @Test
     public void getStartupLogger() {
         Logger logger = LogFactory.getStartupLogger();
-        Assert.assertNotNull(logger);
+        assertNotNull(logger);
     }
 
     @Test
     public void getTransFormLogger() {
         Logger logger = LogFactory.getTransFormLogger();
-        Assert.assertNotNull(logger);
+        assertNotNull(logger);
     }
 
     @Test
@@ -40,7 +42,7 @@ public class LogFactoryTest {
         Path path = Paths.get(url.toURI());
         LogFactory.createLogger(LoggerName.startup, path.getParent().toUri().getPath());
 
-        Assert.assertNotEquals(logger, LogFactory.getStartupLogger());
+        assertNotEquals(logger, LogFactory.getStartupLogger());
 
     }
 }

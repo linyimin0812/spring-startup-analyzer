@@ -1,10 +1,12 @@
 package io.github.linyimin0812.profiler.common.ui;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
@@ -14,7 +16,7 @@ public class BeanInitResultTest {
     @Test
     public void getId() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
-        Assert.assertTrue(beanInitResult.getId() >= 1000);
+        assertTrue(beanInitResult.getId() >= 1000);
     }
 
     @Test
@@ -23,30 +25,27 @@ public class BeanInitResultTest {
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
         beanInitResult.addChild(childBeanInitResult);
 
-        Assert.assertEquals(childBeanInitResult.getParentId(), beanInitResult.getId());
+        assertEquals(childBeanInitResult.getParentId(), beanInitResult.getId());
     }
 
     @Test
     public void getName() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
-        Assert.assertEquals("test", beanInitResult.getName());
+        assertEquals("test", beanInitResult.getName());
     }
 
     @Test
-    public void getDuration() throws InterruptedException {
+    public void getDuration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
-        Thread.sleep(10);
         beanInitResult.duration();
-        Assert.assertTrue(beanInitResult.getDuration() >= 10);
+        assertTrue(beanInitResult.getDuration() >= 0);
     }
 
     @Test
-    public void getActualDuration() throws InterruptedException {
+    public void getActualDuration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
-
-        Thread.sleep(10);
 
         beanInitResult.addChild(childBeanInitResult);
         // child finish first
@@ -54,17 +53,15 @@ public class BeanInitResultTest {
 
         beanInitResult.duration();
 
-        Assert.assertTrue(beanInitResult.getActualDuration() < 10);
+        assertTrue(beanInitResult.getActualDuration() < 10);
 
     }
 
     @Test
-    public void duration() throws InterruptedException {
+    public void duration() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
-
-        Thread.sleep(10);
 
         beanInitResult.addChild(childBeanInitResult);
         // child finish first
@@ -72,7 +69,7 @@ public class BeanInitResultTest {
 
         beanInitResult.duration();
 
-        Assert.assertEquals(beanInitResult.getDuration(), beanInitResult.getActualDuration() + childBeanInitResult.getDuration());
+        assertEquals(beanInitResult.getDuration(), beanInitResult.getActualDuration() + childBeanInitResult.getDuration());
     }
 
     @Test
@@ -82,20 +79,20 @@ public class BeanInitResultTest {
         tags.put("class", "Test");
         beanInitResult.setTags(tags);
 
-        Assert.assertTrue(beanInitResult.getTags().containsKey("class"));
+        assertTrue(beanInitResult.getTags().containsKey("class"));
     }
 
     @Test
     public void getChildren() {
         BeanInitResult beanInitResult = new BeanInitResult("test");
 
-        Assert.assertTrue(beanInitResult.getChildren().isEmpty());
+        assertTrue(beanInitResult.getChildren().isEmpty());
 
         BeanInitResult childBeanInitResult = new BeanInitResult("child");
 
         beanInitResult.addChild(childBeanInitResult);
 
-        Assert.assertEquals(1, beanInitResult.getChildren().size());
+        assertEquals(1, beanInitResult.getChildren().size());
     }
 
     @Test

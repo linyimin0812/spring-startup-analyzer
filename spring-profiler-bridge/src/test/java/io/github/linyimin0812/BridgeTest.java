@@ -1,28 +1,30 @@
 package io.github.linyimin0812;
 
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author linyimin
  **/
 public class BridgeTest {
 
-    @org.junit.Test
+    @Test
     public void getBridge() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
-        Assert.assertEquals(Bridge.NOP_BRIDGE, Bridge.getBridge());
+        assertEquals(Bridge.NOP_BRIDGE, Bridge.getBridge());
     }
 
-    @org.junit.Test
+    @Test
     public void setBridge() {
         BridgeImplTest bridgeImplTest = new BridgeImplTest();
         Bridge.setBridge(bridgeImplTest);
 
-        Assert.assertEquals(bridgeImplTest, Bridge.getBridge());
+        assertEquals(bridgeImplTest, Bridge.getBridge());
     }
 
-    @org.junit.Test
+    @Test
     public void atEnter() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atEnter(null, null, null, null, null);
@@ -30,7 +32,7 @@ public class BridgeTest {
         Bridge.atEnter(null, null, null, null, null);
     }
 
-    @org.junit.Test
+    @Test
     public void atExit() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atExit(null, null, null, null, null, null);
@@ -38,7 +40,7 @@ public class BridgeTest {
         Bridge.atExit(null, null, null, null, null, null);
     }
 
-    @org.junit.Test
+    @Test
     public void atExceptionExit() {
         Bridge.setBridge(Bridge.NOP_BRIDGE);
         Bridge.atExceptionExit(null, null, null, null, null, null);

@@ -29,7 +29,7 @@ public class AsyncBeanAutoConfigurationTest {
 
     }
 
-    @org.junit.Test
+    @Test
     public void asyncBeanPriorityLoadPostProcessor() {
     }
 }

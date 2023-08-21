@@ -1,7 +1,9 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
@@ -12,13 +14,15 @@ public class BeanCreateListenerTest {
 
     @Test
     public void filter() {
-        Assert.assertTrue(beanCreateListener.filter("org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"));
+        assertTrue(beanCreateListener.filter("org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"));
 
-        Assert.assertFalse(beanCreateListener.filter("AbstractAutowireCapableBeanFactory"));
+        assertFalse(beanCreateListener.filter("AbstractAutowireCapableBeanFactory"));
     }
 
     @Test
     public void onEvent() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
@@ -30,20 +34,26 @@ public class BeanCreateListenerTest {
                 "java.lang.Object[]"
         };
 
-        Assert.assertTrue(beanCreateListener.filter(listenMethodName, listenMethodTypes));
-        Assert.assertFalse(beanCreateListener.filter(listenMethodName, new String[] {}));
+        assertTrue(beanCreateListener.filter(listenMethodName, listenMethodTypes));
+        assertFalse(beanCreateListener.filter(listenMethodName, new String[] {}));
 
     }
 
     @Test
     public void listen() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
     public void start() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
     public void stop() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 }

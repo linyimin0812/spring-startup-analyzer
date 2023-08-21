@@ -59,10 +59,9 @@
             <artifactId>okio</artifactId>
             <version>3.4.0</version>
         </dependency>
-
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -71,6 +70,12 @@
             <artifactId>metainf-services</artifactId>
             <version>1.9</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

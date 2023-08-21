@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author linyimin

@@ -1,8 +1,8 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin

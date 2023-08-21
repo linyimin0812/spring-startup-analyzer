@@ -3,9 +3,10 @@ package io.github.linyimin0812.async.utils;
 import io.github.linyimin0812.async.springbeans.SpringFactory;
 import io.github.linyimin0812.async.springbeans.TestComponentBean;
 import io.github.linyimin0812.async.springbeans.TestXmlBean;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * @author linyimin

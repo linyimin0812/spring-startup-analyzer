@@ -8,7 +8,9 @@ import org.springframework.core.Ordered;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  * @author linyimin
@@ -24,10 +26,6 @@ public class AsyncTaskExecutionListenerTest {
     public void setApplicationContext() {
         AsyncTaskExecutionListener listener = applicationContext.getBean(AsyncTaskExecutionListener.class);
         assertNotNull(listener.getApplicationContext());
-    }
-
-    @Test
-    public void onApplicationEvent() {
     }
 
     @Test
