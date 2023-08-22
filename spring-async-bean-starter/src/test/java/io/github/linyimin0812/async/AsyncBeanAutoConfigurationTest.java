@@ -1,6 +1,9 @@
 package io.github.linyimin0812.async;
 
 
+import io.github.linyimin0812.async.listener.AsyncTaskExecutionListener;
+import io.github.linyimin0812.async.processor.AsyncBeanPriorityLoadPostProcessor;
+import io.github.linyimin0812.async.processor.AsyncProxyBeanPostProcessor;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -17,19 +20,21 @@ public class AsyncBeanAutoConfigurationTest {
 
     @Test
     public void testAutoConfigurationProperties() {
-        System.out.println();
-        this.contextRunner
-                .run(context -> {
-                    assertNotNull(context.getBean(AsyncSpringBeanProperties.class));
-                });
+        this.contextRunner.run(context -> assertNotNull(context.getBean(AsyncSpringBeanProperties.class)));
     }
 
     @Test
-    public void testAsyncTaskExecutionListenerBean() {
-
+    public void testAsyncTaskExecutionListener() {
+        this.contextRunner.run(context -> assertNotNull(context.getBean(AsyncTaskExecutionListener.class)));
     }
 
     @Test
     public void asyncBeanPriorityLoadPostProcessor() {
+        this.contextRunner.run(context -> assertNotNull(context.getBean(AsyncBeanPriorityLoadPostProcessor.class)));
+    }
+
+    @Test
+    public void asyncProxyBeanPostProcessor() {
+        this.contextRunner.run(context -> assertNotNull(context.getBean(AsyncProxyBeanPostProcessor.class)));
     }
 }
