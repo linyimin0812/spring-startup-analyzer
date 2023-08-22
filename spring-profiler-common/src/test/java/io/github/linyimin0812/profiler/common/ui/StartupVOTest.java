@@ -12,8 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -30,6 +29,8 @@ class StartupVOTest {
         beanInitResult.duration();
 
         StartupVO.addBeanInitResult(beanInitResult);
+
+        assertTrue(beanInitResult.getDuration() >= 0);
 
     }
 
@@ -52,6 +53,7 @@ class StartupVOTest {
             for (Map.Entry<ClassLoader, Set<String>> entry : unusedJarMap.entrySet()) {
                 StartupVO.addUnusedJar(entry);
             }
+            assertFalse(unusedJarMap.isEmpty());
         }
     }
 
@@ -61,6 +63,8 @@ class StartupVOTest {
 
         MethodInvokeDetail invokeDetail = new MethodInvokeDetail("io.github.linyimin0812.profiler.common.ui.StartupVOTest.addMethodInvokeDetail", System.currentTimeMillis(), 10);
         StartupVO.addMethodInvokeDetail(invokeDetail);
+
+        assertEquals(10, invokeDetail.getDuration());
 
     }
 

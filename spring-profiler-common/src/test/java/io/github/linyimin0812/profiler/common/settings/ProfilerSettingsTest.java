@@ -18,7 +18,7 @@ class ProfilerSettingsTest {
     @Order(0)
     void loadProperties() {
         URL configurationURL = ProfilerSettingsTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
-        assert configurationURL != null;
+        assertNotNull(configurationURL);
         ProfilerSettings.loadProperties(configurationURL.getPath());
     }
 

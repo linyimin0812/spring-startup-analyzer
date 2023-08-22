@@ -19,7 +19,7 @@ public class AsyncTaskExecutor {
 
     private static boolean finished = false;
 
-    private static final List<Future<?>> futureList = new ArrayList<>();
+    private static final List<Future<Object>> futureList = new ArrayList<>();
 
 
     public static void submitTask(Runnable runnable) {
@@ -27,7 +27,7 @@ public class AsyncTaskExecutor {
             threadPool = createThreadPoolExecutor();
         }
 
-        futureList.add(threadPool.submit(runnable));
+        futureList.add(threadPool.submit(runnable, null));
     }
 
     public static void ensureAsyncTasksFinish() {
@@ -72,7 +72,7 @@ public class AsyncTaskExecutor {
 
     }
 
-    public static List<Future<?>> getFutureList() {
+    public static List<Future<Object>> getFutureList() {
         return futureList;
     }
 }
