@@ -1,16 +1,16 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NameUtilTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class NameUtilTest {
 
-    @After
-    public void clean() throws NoSuchFieldException, IllegalAccessException {
+    @AfterEach
+    void clean() throws NoSuchFieldException, IllegalAccessException {
         Class<NameUtil> appNameUtilClass = NameUtil.class;
 
         Field appNameField = appNameUtilClass.getDeclaredField("appName");
@@ -19,7 +19,8 @@ public class NameUtilTest {
     }
 
     @Test
-    public void testGetAppNameFromProjectName() {
+    @Order(1)
+    void testGetAppNameFromProjectName() {
 
         // 设置系统属性
         System.setProperty("project.name", "test-project");
@@ -31,7 +32,8 @@ public class NameUtilTest {
     }
 
     @Test
-    public void testGetAppNameFromSpringApplicationName() {
+    @Order(2)
+    void testGetAppNameFromSpringApplicationName() {
 
         // 设置系统属性
         System.clearProperty("project.name");
@@ -43,7 +45,8 @@ public class NameUtilTest {
     }
 
     @Test
-    public void testGetAppNameFromCommand() {
+    @Order(3)
+    void testGetAppNameFromCommand() {
 
         // 设置系统属性
         System.clearProperty("project.name");

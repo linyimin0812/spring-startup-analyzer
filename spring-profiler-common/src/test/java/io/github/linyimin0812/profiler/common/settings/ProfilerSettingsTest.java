@@ -1,50 +1,50 @@
 package io.github.linyimin0812.profiler.common.settings;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.net.URL;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author linyimin
  * @date 2023/07/27 16:15
  **/
-public class ProfilerSettingsTest {
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class ProfilerSettingsTest {
 
-    @BeforeClass
-    public static void init() {
+    @Test
+    @Order(0)
+    void loadProperties() {
         URL configurationURL = ProfilerSettingsTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
-        assert configurationURL != null;
+        assertNotNull(configurationURL);
         ProfilerSettings.loadProperties(configurationURL.getPath());
     }
 
     @Test
-    public void testGetProperty() {
-        Assert.assertNull(ProfilerSettings.getProperty("key"));
-        Assert.assertEquals("default", ProfilerSettings.getProperty("key", "default"));
-        Assert.assertEquals("testValue3", ProfilerSettings.getProperty("testKey3"));
+    @Order(1)
+    void testGetProperty() {
+        assertNull(ProfilerSettings.getProperty("key"));
+        assertEquals("default", ProfilerSettings.getProperty("key", "default"));
+        assertEquals("testValue3", ProfilerSettings.getProperty("testKey3"));
 
-        Assert.assertNotEquals("/xxxxxx/", ProfilerSettings.getProperty("user.home"));
-        Assert.assertNotEquals("/xxxxxx/", ProfilerSettings.getProperty("user.home", "/xxxxxx/"));
+        assertNotEquals("/xxxxxx/", ProfilerSettings.getProperty("user.home"));
+        assertNotEquals("/xxxxxx/", ProfilerSettings.getProperty("user.home", "/xxxxxx/"));
 
     }
 
     @Test
-    public void contains() {
-        Assert.assertTrue(ProfilerSettings.contains("testKey2"));
-        Assert.assertFalse(ProfilerSettings.contains("key"));
+    @Order(2)
+    void contains() {
+        assertTrue(ProfilerSettings.contains("testKey2"));
+        assertFalse(ProfilerSettings.contains("key"));
     }
 
     @Test
-    public void isNotBlank() {
-        Assert.assertTrue(ProfilerSettings.isNotBlank("test"));
-        Assert.assertFalse(ProfilerSettings.isNotBlank(""));
-    }
-
-    @Test
-    public void loadProperties() {
-        init();
+    @Order(3)
+    void isNotBlank() {
+        assertTrue(ProfilerSettings.isNotBlank("test"));
+        assertFalse(ProfilerSettings.isNotBlank(""));
     }
 }

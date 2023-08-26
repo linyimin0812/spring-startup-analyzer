@@ -32,4 +32,9 @@ public class AsyncTaskExecutionListener implements ApplicationListener<ContextRe
     public int getOrder() {
         return Ordered.HIGHEST_PRECEDENCE;
     }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
 }

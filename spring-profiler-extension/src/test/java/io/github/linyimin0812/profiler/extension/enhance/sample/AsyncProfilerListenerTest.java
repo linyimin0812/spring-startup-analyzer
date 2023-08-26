@@ -1,38 +1,47 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample;
 
-import org.junit.Assert;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
  **/
-public class AsyncProfilerListenerTest {
+class AsyncProfilerListenerTest {
 
     private final AsyncProfilerListener asyncProfilerListener = new AsyncProfilerListener();
-    @org.junit.Test
-    public void filter() {
-        Assert.assertFalse(asyncProfilerListener.filter(""));
+    @Test
+    void filter() {
+        assertFalse(asyncProfilerListener.filter(""));
     }
 
-    @org.junit.Test
-    public void testFilter() {
-        Assert.assertTrue(asyncProfilerListener.filter("", new String[] {}));
+    @Test
+    void testFilter() { assertTrue(asyncProfilerListener.filter("", new String[] {}));
     }
 
-    @org.junit.Test
-    public void onEvent() {
+    @Test
+    void onEvent() {
+        // TODO:
+        System.out.println("// TODO:");
 
     }
 
-    @org.junit.Test
-    public void listen() {
-        Assert.assertTrue(asyncProfilerListener.listen().isEmpty());
+    @Test
+    void listen() {
+        assertTrue(asyncProfilerListener.listen().isEmpty());
     }
 
-    @org.junit.Test
-    public void start() {
+    @Test
+    void start() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
-    @org.junit.Test
-    public void stop() {
+    @Test
+    void stop() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 }

@@ -1,65 +1,64 @@
 package io.github.linyimin0812.profiler.core.http;
 
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author linyimin
  **/
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SimpleHttpServerTest {
 
-    @BeforeClass
-    public static void init() {
+    @Test
+    @Order(0)
+    void start() {
         SimpleHttpServer.stop();
-        Assert.assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
+        assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
         SimpleHttpServer.start();
-        Assert.assertTrue(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
+        assertTrue(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
     }
 
     @Test
-    public void start() {
+    @Order(3)
+    void getPort() {
 
-    }
-
-    @Test
-    public void getPort() {
-
-        Assert.assertEquals(8065, SimpleHttpServer.getPort());
+        assertEquals(8065, SimpleHttpServer.getPort());
 
         URL configurationURL = SimpleHttpServerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
-        Assert.assertEquals(8066, SimpleHttpServer.getPort());
+        assertEquals(8066, SimpleHttpServer.getPort());
 
     }
 
     @Test
-    public void endpoint() {
+    @Order(3)
+    void endpoint() {
 
         ProfilerSettings.clear();
 
-        Assert.assertEquals("http://localhost:8065", SimpleHttpServer.endpoint());
+        assertEquals("http://localhost:8065", SimpleHttpServer.endpoint());
 
         URL configurationURL = SimpleHttpServerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
-        Assert.assertEquals("http://localhost:8066", SimpleHttpServer.endpoint());
+        assertEquals("http://localhost:8066", SimpleHttpServer.endpoint());
     }
 
     @Test
-    public void stop() throws InterruptedException {
-        // wait for start() test finish
+    @Order(2)
+    void stop() {
+        assertTrue(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
         SimpleHttpServer.stop();
-        Assert.assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
+        assertFalse(isURLAvailable(SimpleHttpServer.endpoint() + "/hello"));
     }
 
     public static boolean isURLAvailable(String endpoint) {

@@ -55,7 +55,7 @@ public class BeanInitResult {
     public void duration() {
         this.endMillis = System.currentTimeMillis();
         this.duration = this.endMillis - this.startMillis;
-        long childrenDuration = this.children.stream().mapToLong(BeanInitResult::getActualDuration).sum();
+        long childrenDuration = this.children.stream().mapToLong(BeanInitResult::getDuration).sum();
         this.actualDuration = duration - childrenDuration;
     }
 

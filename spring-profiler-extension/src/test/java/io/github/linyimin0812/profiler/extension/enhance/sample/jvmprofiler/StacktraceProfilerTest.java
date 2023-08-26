@@ -1,20 +1,21 @@
 package io.github.linyimin0812.profiler.extension.enhance.sample.jvmprofiler;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author linyimin
  **/
-public class StacktraceProfilerTest {
+class StacktraceProfilerTest {
 
     @Test
-    public void start() {
-
+    void start() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
-    public void stop() {
+    void stop() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 }

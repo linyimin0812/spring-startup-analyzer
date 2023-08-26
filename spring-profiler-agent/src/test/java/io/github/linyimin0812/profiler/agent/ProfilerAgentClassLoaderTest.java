@@ -1,33 +1,35 @@
 package io.github.linyimin0812.profiler.agent;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author linyimin
  **/
-public class ProfilerAgentClassLoaderTest {
+class ProfilerAgentClassLoaderTest {
 
     private static ProfilerAgentClassLoader classLoader;
 
-    @BeforeClass
-    public static void init() {
+    @BeforeAll
+    static void init() {
         URL testJarUrl = ProfilerAgentClassLoaderTest.class.getClassLoader().getResource("spring-profiler-api.jar");
         classLoader = new ProfilerAgentClassLoader(new URL[] {testJarUrl});
     }
 
-    @org.junit.Test
-    public void loadClass() throws ClassNotFoundException {
-        Assert.assertNotNull(classLoader);
+    @Test
+    void loadClass() throws ClassNotFoundException {
+        assertNotNull(classLoader);
 
         Class<?> clazz = classLoader.loadClass("io.github.linyimin0812.profiler.api.event.AtEnterEvent", true);
 
-        Assert.assertEquals("io.github.linyimin0812.profiler.agent.ProfilerAgentClassLoader", clazz.getClassLoader().getClass().getName());
+        assertEquals("io.github.linyimin0812.profiler.agent.ProfilerAgentClassLoader", clazz.getClassLoader().getClass().getName());
 
         clazz = classLoader.loadClass("java.lang.String", true);
 
-        Assert.assertNull(clazz.getClassLoader());
+        assertNull(clazz.getClassLoader());
     }
 }

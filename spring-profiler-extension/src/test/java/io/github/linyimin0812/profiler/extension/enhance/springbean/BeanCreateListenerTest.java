@@ -1,28 +1,32 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
  **/
-public class BeanCreateListenerTest {
+class BeanCreateListenerTest {
 
     private final BeanCreateListener beanCreateListener = new BeanCreateListener();
 
     @Test
-    public void filter() {
-        Assert.assertTrue(beanCreateListener.filter("org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"));
+    void filter() {
+        assertTrue(beanCreateListener.filter("org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"));
 
-        Assert.assertFalse(beanCreateListener.filter("AbstractAutowireCapableBeanFactory"));
+        assertFalse(beanCreateListener.filter("AbstractAutowireCapableBeanFactory"));
     }
 
     @Test
-    public void onEvent() {
+    void onEvent() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
-    public void testFilter() {
+    void testFilter() {
         String listenMethodName = "createBean";
         String[] listenMethodTypes = new String[] {
                 "java.lang.String",
@@ -30,20 +34,26 @@ public class BeanCreateListenerTest {
                 "java.lang.Object[]"
         };
 
-        Assert.assertTrue(beanCreateListener.filter(listenMethodName, listenMethodTypes));
-        Assert.assertFalse(beanCreateListener.filter(listenMethodName, new String[] {}));
+        assertTrue(beanCreateListener.filter(listenMethodName, listenMethodTypes));
+        assertFalse(beanCreateListener.filter(listenMethodName, new String[] {}));
 
     }
 
     @Test
-    public void listen() {
+    void listen() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
-    public void start() {
+    void start() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 
     @Test
-    public void stop() {
+    void stop() {
+        // TODO:
+        System.out.println("// TODO:");
     }
 }

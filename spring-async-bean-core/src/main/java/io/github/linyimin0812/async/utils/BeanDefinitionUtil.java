@@ -2,6 +2,7 @@ package io.github.linyimin0812.async.utils;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
@@ -23,9 +24,11 @@ public class BeanDefinitionUtil {
     public static Class<?> resolveBeanClassType(BeanDefinition beanDefinition) {
 
         Class<?> clazz = null;
+        String className = null;
 
-        if (beanDefinition instanceof AnnotatedBeanDefinition) {
-            String className;
+        if (beanDefinition instanceof GenericBeanDefinition) {
+            className = beanDefinition.getBeanClassName();
+        } else if (beanDefinition instanceof AnnotatedBeanDefinition) {
             if (isFromConfigurationSource(beanDefinition)) {
                 MethodMetadata methodMetadata = ((AnnotatedBeanDefinition) beanDefinition).getFactoryMethodMetadata();
                 assert methodMetadata != null;
@@ -34,11 +37,11 @@ public class BeanDefinitionUtil {
                 AnnotationMetadata annotationMetadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
                 className = annotationMetadata.getClassName();
             }
+        }
 
-            try {
-                clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className, null);
-            } catch (ClassNotFoundException ignore) {
-            }
+        try {
+            clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className, null);
+        } catch (ClassNotFoundException ignore) {
         }
 
         if (clazz == null) {

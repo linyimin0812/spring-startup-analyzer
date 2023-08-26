@@ -46,10 +46,6 @@ public class StartupVO {
         return statisticsList;
     }
 
-    public static List<MethodInvokeDetail> getMethodInvokeDetailList() {
-        return methodInvokeDetailList;
-    }
-
     public static String toJSONString() {
         Map<String, String> map = new HashMap<>();
         map.put("statisticsList", JSON.toJSONString(statisticsList));
@@ -60,22 +56,6 @@ public class StartupVO {
 
         // fix Use JSONObject#toJSONString to serialize a Map. The Map contains a large string and OOM appears
         return JSONObject.toJSONString(map, JSONWriter.Feature.LargeObject);
-    }
-
-    public static void clearBeanInitResultList() {
-        beanInitResultList.clear();
-    }
-
-    public static void clearStatisticsList() {
-        statisticsList.clear();
-    }
-
-    public static void clearUnusedJarMap() {
-        unusedJarMap.clear();
-    }
-
-    public static void clearMethodInvokeDetailList() {
-        methodInvokeDetailList.clear();
     }
 
     private static List<MethodInvokeMetrics> calculateInvokeMetrics() {

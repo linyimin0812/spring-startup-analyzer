@@ -1,16 +1,18 @@
 package io.github.linyimin0812.profiler.common.utils;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author linyimin
  **/
 
-public class OSUtilTest {
+class OSUtilTest {
 
     @Test
-    public void testIsWindows() {
+    void testIsWindows() {
         if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
             assertTrue(OSUtil.isWindows());
         } else {
@@ -19,7 +21,7 @@ public class OSUtilTest {
     }
 
     @Test
-    public void testIsLinux() {
+    void testIsLinux() {
         if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
             assertTrue(OSUtil.isLinux());
         } else {
@@ -28,7 +30,7 @@ public class OSUtilTest {
     }
 
     @Test
-    public void testIsMac() {
+    void testIsMac() {
         if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
             assertTrue(OSUtil.isMac());
         } else {
