@@ -6,6 +6,8 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![GitHub all releases download](https://img.shields.io/github/downloads/linyimin0812/spring-startup-analyzer/total?logo=github)](https://github.com/linyimin0812/spring-startup-analyzer/releases)
+
 
 [ENGLISH](README.md) |
 [中文](README_ZH.md)
@@ -22,10 +24,11 @@
     - [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
         - [Types of Bean for Async](#types-of-bean-for-async)
         - [Usage](#usage)
+- [🔗Reference](#Reference)
 
 # Spring Startup Ananlyzer
 
-**Spring Startup Analyzer** generates an interactive Spring application startup report that lets you understand what contributes to the application startup time and helps to optimize it.
+**Spring Startup Analyzer** generates an interactive Spring application startup report that lets you understand what contributes to the application startup time and helps to optimize it. UI referenced [spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report).
 
 [analyzer report demo](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
 
@@ -33,7 +36,7 @@
 
 ## 📈Spring Startup Analysis Report
 
-**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks. Support for linux/mac/windows. UI referenced [UI referenced spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report).
+**Spring Bean Initialization Details** support for initialization time/beanName search, **Spring Bean Initialization Timeline**, **Method Invocation Count and Time Statistics**(support for custom methods), **Unused Jars**(to help optimize fat jars), and **Application Startup Thread Wall Clock Profile**, helping developers quickly analyze and locate application startup bottlenecks. Support for linux/mac/windows.
 
 - **Spring Bean Initialization Details**
   ![Spring Bean Initialization](./docs/spring-bean-initialization.png)
@@ -349,3 +352,11 @@ View the log in the $HOME/spring-startup-analyzer/logs/startup.log file. For asy
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
+
+# 🔗Reference
+- [arthas](https://github.com/alibaba/arthas)
+- [jvm-sandbox](https://github.com/alibaba/jvm-sandbox)
+- [async-profiler](https://github.com/async-profiler/async-profiler)
+- [启动加速-异步初始化方法](https://help.aliyun.com/document_detail/133162.html)
+- [spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)
+- [一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)

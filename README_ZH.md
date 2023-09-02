@@ -6,6 +6,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
+[![GitHub all releases download](https://img.shields.io/github/downloads/linyimin0812/spring-startup-analyzer/total?logo=github)](https://github.com/linyimin0812/spring-startup-analyzer/releases)
 
 [中文](README_ZH.md) |
 [ENGLISH](README.md)
@@ -22,10 +23,11 @@
     - [🚀应用启动时长优化](#应用启动时长优化-1)
         - [支持异步化的Bean类型](#支持异步化的bean类型)
         - [接入异步Bean优化](#接入异步bean优化)
+- [🔗参考](#参考)
 
 # Spring Startup Ananlyzer
 
-**Spring Startup Ananlyzer** 采集Spring应用启动过程数据，生成交互式分析报告([HTML](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html))，用于分析Spring应用启动卡点，支持Spring Bean异步初始化，减少优化Spring应用启动时间。支持linux/mac/windows。UI参考[UI referenced spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)实现。
+**Spring Startup Ananlyzer** 采集Spring应用启动过程数据，生成交互式分析报告([HTML](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html))，用于分析Spring应用启动卡点，支持Spring Bean异步初始化，减少优化Spring应用启动时间。支持linux/mac/windows。UI参考[spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)实现。
 
 [分析报告样例](https://linyimin-blog.oss-cn-beijing.aliyuncs.com/spring-satrtup-analyzer/hokage-20230618000928-192.168.0.101-analyzer.html)
 
@@ -346,3 +348,10 @@ spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
 
+# 🔗参考
+- [arthas](https://github.com/alibaba/arthas)
+- [jvm-sandbox](https://github.com/alibaba/jvm-sandbox)
+- [async-profiler](https://github.com/async-profiler/async-profiler)
+- [启动加速-异步初始化方法](https://help.aliyun.com/document_detail/133162.html)
+- [spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)
+- [一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)
