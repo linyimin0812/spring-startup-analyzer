@@ -14,7 +14,12 @@ import io.github.linyimin0812.profiler.common.instruction.InstrumentationHolder;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.core.container.IocContainer;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -32,10 +37,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ProfilerClassFileTransformer implements ClassFileTransformer {
 
     private final Logger logger = LogFactory.getTransFormLogger();
+    private final Logger startupLogger = LogFactory.getStartupLogger();
 
     private final Object DUMMY = new Object();
     private final Map<String, Object> enhancedObject = new ConcurrentHashMap<>();
 
+    private final String DCEVM_VENDOR = "dcevm";
+
+    public ProfilerClassFileTransformer() {}
 
     public ProfilerClassFileTransformer(Instrumentation instrumentation) {
 
@@ -54,7 +63,7 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
         }
 
         // 排除系统类及spring中的动态代理类
-        if (classBeingRedefined == null && (className.contains("sun/") || className.contains("java/") || className.contains("javax/") || className.contains("CGLIB"))) {
+        if (classBeingRedefined == null && (className.startsWith("sun/") || className.startsWith("java/") || className.startsWith("javax/") || className.contains("CGLIB"))) {
             return null;
         }
 
@@ -111,7 +120,19 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
     public void retransformLoadedClass() {
         Instrumentation instrumentation = InstrumentationHolder.getInstrumentation();
 
+        String javaVersion = acquireJavaVersion();
+
         for (Class<?> loadedClass : instrumentation.getAllLoadedClasses()) {
+
+            String className = loadedClass.getName();
+
+            if (StringUtils.containsIgnoreCase(javaVersion, DCEVM_VENDOR)) {
+                // 排除系统类及spring中的动态代理类
+                if ((className.startsWith("sun.") || className.startsWith("java.") || className.startsWith("javax.") || className.contains("CGLIB"))) {
+                    continue;
+                }
+            }
+
             if (Matcher.isMatchClass(loadedClass.getName())) {
                 try {
                     instrumentation.retransformClasses(loadedClass);
@@ -145,6 +166,42 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
         }
 
         return loaderName + "#" + className + "#" + methodName + "#" + argTypes;
+    }
+
+    public String acquireJavaVersion() {
+
+        StringBuilder output = new StringBuilder();
+
+        try {
+
+            String javaHome = System.getProperty("java.home");
+            if (StringUtils.isEmpty(javaHome)) {
+                return DCEVM_VENDOR;
+            }
+
+            String command = javaHome + File.separator + "bin" + File.separator + "java";
+
+            ProcessBuilder processBuilder = new ProcessBuilder(command, "-version");
+            processBuilder.redirectErrorStream(true);
+
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            output.append("Exit Code: ").append(process.waitFor()).append("\n");
+
+        } catch (IOException | InterruptedException e) {
+            startupLogger.error(ProfilerClassFileTransformer.class, "acquireJavaVersion error: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+            return DCEVM_VENDOR;
+        }
+
+        return output.toString();
     }
 
 }

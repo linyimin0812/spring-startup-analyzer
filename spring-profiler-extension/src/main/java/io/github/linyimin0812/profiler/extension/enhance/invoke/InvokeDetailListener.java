@@ -13,7 +13,10 @@ import io.github.linyimin0812.profiler.common.ui.StartupVO;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -77,13 +80,15 @@ public class InvokeDetailListener implements EventListener {
     @Override
     public void start() {
 
+        logger.info(InvokeDetailListener.class, "===============InvokeCountListener start==================");
+
         INVOKE_DETAIL_MAP.clear();
 
-        methodQualifiers = Arrays.stream(
-                ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", "").split("\\|")
-        ).map(StringUtils::trim).collect(Collectors.toList());
+        String invokeCountMethods = ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", "");
 
-        logger.info(InvokeDetailListener.class, "config spring-startup-analyzer.invoke.count.methods is {}", ProfilerSettings.getProperty("spring-startup-analyzer.invoke.count.methods", ""));
+        methodQualifiers = Arrays.stream(invokeCountMethods.split("\\|")).map(StringUtils::trim).collect(Collectors.toList());
+
+        logger.info(InvokeDetailListener.class, "config spring-startup-analyzer.invoke.count.methods is {}", invokeCountMethods);
     }
 
     @Override
