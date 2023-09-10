@@ -35,7 +35,7 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
-        if (!beanFactory.containsBeanDefinition(beanName)) {
+        if (!AsyncConfig.getInstance().getAsyncBeanProperties().isBeanPriorityLoadEnable() || !beanFactory.containsBeanDefinition(beanName)) {
             return bean;
         }
 
