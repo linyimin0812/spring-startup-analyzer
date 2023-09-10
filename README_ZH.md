@@ -115,7 +115,7 @@ curl -sS https://raw.githubusercontent.com/linyimin0812/spring-startup-analyzer/
 | spring-startup-analyzer.admin.http.server.port             | 管理端口                                           | 8065                                  |
 | spring-startup-analyzer.async.profiler.sample.thread.names | async profiler采集的线程名称，支持配置多个，以","进行分隔          | main                                  |
 | **spring-startup-analyzer.async.profiler.interval.millis** | async profiler采集间隔时间(ms)                       | 5                                     |
-| spring-startup-analyzer.linux.and.mac.profiler | 指定linux/mac下火焰图采样器：async_profiler/jvm_profiler |     async_profiler   |
+| spring-startup-analyzer.linux.and.mac.profiler | 指定linux/mac下火焰图采样器：async_profiler/jvm_profiler | jvm_profiler                          |
 
 
 ### 应用启动
