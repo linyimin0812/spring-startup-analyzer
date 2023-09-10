@@ -352,19 +352,19 @@ var createVNode = (tag, { key, ...props }, children, type, node) => ({
     node,
 })
 
-export var memo = (tag, memo) => ({ tag, memo })
+var memo = (tag, memo) => ({ tag, memo })
 
-export var text = (value, node) =>
+var text = (value, node) =>
     createVNode(value, EMPTY_OBJ, EMPTY_ARR, TEXT_NODE, node)
 
-export var h = (tag, { class: c, ...props }, children = EMPTY_ARR) =>
+var h = (tag, { class: c, ...props }, children = EMPTY_ARR) =>
     createVNode(
         tag,
         { ...props, ...(c ? { class: createClass(c) } : EMPTY_OBJ) },
         isArray(children) ? children : [children]
     )
 
-export var app = ({
+var app = ({
                       node,
                       view,
                       subscriptions,
