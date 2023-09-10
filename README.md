@@ -117,7 +117,7 @@ For non-Spring Boot applications, it is necessary to configure the health check 
 | spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                                  |
 | spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
 | **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                                     |
-| spring-startup-analyzer.linux.and.mac.profiler | specify linux/mac flame graph profiler：async_profiler/jvm_profiler |     async_profiler   |
+| spring-startup-analyzer.linux.and.mac.profiler | specify linux/mac flame graph profiler：async_profiler/jvm_profiler |     jvm_profiler   |
 
 ### Application Startup
 
