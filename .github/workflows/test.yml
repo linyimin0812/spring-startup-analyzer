@@ -186,7 +186,7 @@ jobs:
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
   
-            sleep 120
+            sleep 600
   
             file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
             if [ "$file_count" -eq 2 ]; then
@@ -272,7 +272,7 @@ jobs:
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 100
+          sleep 600
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then

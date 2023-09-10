@@ -85,7 +85,13 @@ public class StacktraceProfiler implements Profiler {
                     if (traces == null || traces.length == 0) {
                         continue;
                     }
+
                     List<StackTraceElement> elements = Arrays.asList(traces);
+
+                    if (elements.stream().anyMatch(element -> element.getClassName().startsWith("io.github.linyimin0812.profiler"))) {
+                        continue;
+                    }
+
                     Collections.reverse(elements);
                     String trace = elements.stream().map(element -> element.getClassName() + "." + element.getMethodName()).collect(Collectors.joining(";"));
                     TRACE_MAP.put(trace, TRACE_MAP.getOrDefault(trace, 0) + 1);
