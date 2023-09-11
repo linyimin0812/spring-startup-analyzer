@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  **/
 public class AsyncTaskExecutor {
 
-    private static final Logger logger = LogFactory.getStartupLogger();
+    private static final Logger logger = LogFactory.getAsyncBeanLogger();
 
     private static ThreadPoolExecutor threadPool;
 

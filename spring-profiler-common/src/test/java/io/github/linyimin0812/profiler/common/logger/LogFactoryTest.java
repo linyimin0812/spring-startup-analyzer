@@ -28,6 +28,12 @@ class LogFactoryTest {
     }
 
     @Test
+    void getAsyncInitBeanLogger() {
+        Logger logger = LogFactory.getAsyncBeanLogger();
+        assertNotNull(logger);
+    }
+
+    @Test
     void close() {
         LogFactory.close();
         assertTrue(true);
@@ -40,7 +46,7 @@ class LogFactoryTest {
         assert url != null;
 
         Path path = Paths.get(url.toURI());
-        LogFactory.createLogger(LoggerName.startup, path.getParent().toUri().getPath());
+        LogFactory.createLogger(LoggerName.STARTUP, path.getParent().toUri().getPath());
 
         assertNotEquals(logger, LogFactory.getStartupLogger());
 

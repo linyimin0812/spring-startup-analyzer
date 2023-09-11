@@ -17,7 +17,7 @@ import java.util.List;
  **/
 public class AsyncBeanPriorityLoadPostProcessor extends InstantiationAwareBeanPostProcessorAdapter implements BeanFactoryAware {
 
-    private final Logger logger = LogFactory.getStartupLogger();
+    private final Logger logger = LogFactory.getAsyncBeanLogger();
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
