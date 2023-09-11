@@ -17,7 +17,8 @@ public class Logger {
     private final PrintWriter LOGGER_WRITER;
 
     public Logger(LoggerName loggerName, String path) {
-        String file = path + File.separator + loggerName.name() + ".log";
+        
+        String file = path + File.separator + loggerName.getValue() + ".log";
         try {
             Path filePath = Paths.get(file);
             if (!Files.exists(filePath)) {

@@ -24,9 +24,9 @@ class LoggerTest {
         assert url != null;
 
         String path = Paths.get(url.toURI()).getParent().toUri().getPath();
-        logger = new Logger(LoggerName.startup, path);
+        logger = new Logger(LoggerName.STARTUP, path);
 
-        assertTrue(Files.exists(Paths.get(path, LoggerName.startup + ".log")));
+        assertTrue(Files.exists(Paths.get(path, LoggerName.STARTUP.getValue() + ".log")));
 
     }
 
@@ -99,7 +99,7 @@ class LoggerTest {
         try {
             String path = Paths.get(url.toURI()).getParent().toUri().getPath();
 
-            byte[] bytes = Files.readAllBytes(Paths.get(path, LoggerName.startup + ".log"));
+            byte[] bytes = Files.readAllBytes(Paths.get(path, LoggerName.STARTUP.getValue() + ".log"));
 
             return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception ignored) {

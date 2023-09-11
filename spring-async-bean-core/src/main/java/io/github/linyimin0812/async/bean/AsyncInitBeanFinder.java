@@ -21,7 +21,7 @@ import java.util.*;
  **/
 public class AsyncInitBeanFinder {
 
-    private static final Logger logger = LogFactory.getStartupLogger();
+    private static final Logger logger = LogFactory.getAsyncBeanLogger();
 
     public static String getAsyncInitMethodName(String beanName, BeanDefinition beanDefinition) {
 

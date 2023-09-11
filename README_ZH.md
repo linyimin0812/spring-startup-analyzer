@@ -342,7 +342,7 @@ spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 
 3. 检查Bean是否异步初始化
 
-查看日志`$HOME/spring-startup-analyzer/logs/startup.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
+查看日志`$HOME/spring-startup-analyzer/logs/async-init-bean.log`文件，对于异步执行初始化的方法，会按照以下格式写一条日志:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}

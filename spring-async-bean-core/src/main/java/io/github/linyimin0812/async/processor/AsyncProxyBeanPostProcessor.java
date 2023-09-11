@@ -28,7 +28,7 @@ import java.util.concurrent.CountDownLatch;
  **/
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
 
-    private final Logger logger = LogFactory.getStartupLogger();
+    private final Logger logger = LogFactory.getAsyncBeanLogger();
 
     private ConfigurableListableBeanFactory beanFactory;
 

@@ -347,7 +347,7 @@ spring-startup-analyzer.boost.spring.async.init-bean-thread-pool-max-size=8
 
 3. Check if the bean is initialized asynchronously
 
-View the log in the $HOME/spring-startup-analyzer/logs/startup.log file. For asynchronously initialized methods, a log entry will be written in the following format:
+View the log in the `$HOME/spring-startup-analyzer/logs/async-init-bean.log` file. For asynchronously initialized methods, a log entry will be written in the following format:
 
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
