@@ -1,11 +1,8 @@
 package io.github.linyimin0812.profiler.core.monitor.check;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -21,12 +18,7 @@ import java.util.List;
 class EndpointCheckServiceTest {
 
     private static HttpServer server;
-    private static EndpointCheckService endpointCheckService;
-
-    @BeforeAll
-    static void initEnv() {
-        endpointCheckService = new EndpointCheckService();
-    }
+    private final EndpointCheckService endpointCheckService = new EndpointCheckService();
 
     @Test
     @Order(0)
@@ -49,6 +41,7 @@ class EndpointCheckServiceTest {
     @Test
     @Order(1)
     void check() {
+        endpointCheckService.init();
         Assertions.assertEquals(AppStatus.initializing, endpointCheckService.check());
 
         start();
@@ -66,15 +59,12 @@ class EndpointCheckServiceTest {
 
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
-            server.createContext("/", new HttpHandler() {
-                @Override
-                public void handle(HttpExchange httpExchange) throws IOException {
-                    try {
-                        httpExchange.sendResponseHeaders(200, 0);
-                        httpExchange.getResponseBody().close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+            server.createContext("/", httpExchange -> {
+                try {
+                    httpExchange.sendResponseHeaders(200, 0);
+                    httpExchange.getResponseBody().close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             });
             server.setExecutor(null);

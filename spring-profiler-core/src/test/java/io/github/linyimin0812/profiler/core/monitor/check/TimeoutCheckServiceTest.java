@@ -2,7 +2,6 @@ package io.github.linyimin0812.profiler.core.monitor.check;
 
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -18,7 +17,7 @@ class TimeoutCheckServiceTest {
 
     @Test
     void init() throws NoSuchFieldException, IllegalAccessException {
-        URL configUrl = EndpointCheckServiceTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
+        URL configUrl = TimeoutCheckServiceTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configUrl != null;
         ProfilerSettings.loadProperties(configUrl.getPath());
 
