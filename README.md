@@ -360,3 +360,4 @@ async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 - [启动加速-异步初始化方法](https://help.aliyun.com/document_detail/133162.html)
 - [spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report)
 - [一些可以显著提高 Java 启动速度方法](https://heapdump.cn/article/4136322)
+- [jaeger-ui](https://github.com/jaegertracing/jaeger-ui)
