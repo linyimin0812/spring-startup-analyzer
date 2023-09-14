@@ -53,7 +53,7 @@ class ApplicationRunMonitorTest {
     void listen() {
 
         List<Event.Type> events = applicationRunMonitor.listen();
-        Assertions.assertEquals(events.size(), 1);
+        Assertions.assertEquals(1, events.size());
         Assertions.assertEquals(Event.Type.AT_EXIT, events.get(0));
     }
 
