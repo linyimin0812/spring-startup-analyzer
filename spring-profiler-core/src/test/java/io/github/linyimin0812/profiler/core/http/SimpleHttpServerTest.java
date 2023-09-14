@@ -28,6 +28,8 @@ public class SimpleHttpServerTest {
     @Order(3)
     void getPort() {
 
+        ProfilerSettings.clear();
+
         assertEquals(8065, SimpleHttpServer.getPort());
 
         URL configurationURL = SimpleHttpServerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
