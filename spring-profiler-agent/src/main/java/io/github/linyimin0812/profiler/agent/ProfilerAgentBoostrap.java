@@ -14,12 +14,16 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+
 /**
  * @author linyimin
  **/
 public class ProfilerAgentBoostrap {
 
     private static final String BRIDGE_JAR = "spring-profiler-bridge.jar";
+    private static final String AGENT_JAR = "spring-profiler-agent.jar";
 
     private static final Logger logger = Logger.getLogger(ProfilerAgentBoostrap.class.getSimpleName());
     private static final String LIB_HOME = getLibHome();
@@ -28,6 +32,8 @@ public class ProfilerAgentBoostrap {
     public static void premain(String args, Instrumentation instrumentation) {
 
         logger.info("command args: " + args);
+
+        System.out.println("premain LibHome: " + LIB_HOME);
 
         // bridge.jar
         File spyJarFile = new File(LIB_HOME + BRIDGE_JAR);
@@ -85,7 +91,7 @@ public class ProfilerAgentBoostrap {
             throw new IllegalStateException(path + " is not exit.");
         }
 
-        File[] files = folder.listFiles(file -> !file.getName().contains(BRIDGE_JAR) && file.isFile() && file.getName().endsWith("jar"));
+        File[] files = folder.listFiles(file ->  file.isFile() && file.getName().endsWith("jar") && !file.getName().contains(BRIDGE_JAR) && !file.getName().contains(AGENT_JAR));
 
         if (files == null) {
             throw new IllegalStateException(path + " does not contain any jar files.");
@@ -101,18 +107,24 @@ public class ProfilerAgentBoostrap {
 
     private static String getLibHome() {
 
-        String currentFilePath = ProfilerAgentBoostrap.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath();
+        RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+        List<String> jvmArgs = bean.getInputArguments();
 
-        File file = new File(currentFilePath);
+        for (String jvmArg : jvmArgs) {
 
-        if (!file.exists()) {
-            return System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator;
+            int index= jvmArg.indexOf(":");
+            if (index + 1 >= jvmArg.length()) {
+                continue;
+            }
+            
+            String value = jvmArg.substring(index + 1);
+            
+            if (value.endsWith(AGENT_JAR)) {
+                return value.substring(0, value.lastIndexOf(File.separator) + 1);
+            }
         }
 
-        return file.getParent() + File.separator;
+        return System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator + "lib" + File.separator;
 
     }
 

@@ -106,4 +106,5 @@ public class InvokeDetailListener implements EventListener {
 
         return className + "." + event.methodName;
     }
+
 }
