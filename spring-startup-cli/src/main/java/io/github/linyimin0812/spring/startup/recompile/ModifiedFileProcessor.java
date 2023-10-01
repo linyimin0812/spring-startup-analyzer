@@ -1,5 +1,7 @@
 package io.github.linyimin0812.spring.startup.recompile;
 
+import io.github.linyimin0812.spring.startup.cli.CliMain;
+import io.github.linyimin0812.spring.startup.constant.Constants;
 import io.github.linyimin0812.spring.startup.jdwp.JDWPClient;
 import io.github.linyimin0812.spring.startup.jdwp.command.AllClassesCommand;
 import io.github.linyimin0812.spring.startup.jdwp.command.AllClassesReplyPackage;
@@ -21,17 +23,22 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 /**
  * @author linyimin
  **/
-public class RecompileFileProcessor {
+public class ModifiedFileProcessor {
 
     private final Map<String, WatchEvent.Kind<Path>> FILE_WATCH_EVENTS = new ConcurrentHashMap<>();
     private final Map<String /* class qualifier */, Path> RECOMIPLED_FILE_MAP = new ConcurrentHashMap<>();
+
+    public ModifiedFileProcessor() {
+        // TODO: 初始化时从git获取所有修改文件
+    }
 
     public void onEvent(Path dir, WatchEvent.Kind<Path> eventKind) {
 
         String path = dir.toString();
 
         if (!FILE_WATCH_EVENTS.containsKey(path)) {
-            System.out.printf("[INFO] - [%s] %s", eventKind.name().replace("ENTRY_", Constants.EMPTY_STRING), path);
+            System.out.printf("\n[INFO] - [%s] %s\n", eventKind.name().replace("ENTRY_", Constants.EMPTY_STRING), path);
+            System.out.printf(CliMain.prompt());
         }
 
         FILE_WATCH_EVENTS.put(path, eventKind);
@@ -84,10 +91,11 @@ public class RecompileFileProcessor {
             return;
         }
 
-        System.out.printf("Hotswap success, recompiled classes: %s. The details are as follows:\n", classes);
+        System.out.printf("[INFO] hotswap success, reloaded classes: %s\n", classes);
 
         for (Map.Entry<String, Path> entry : RECOMIPLED_FILE_MAP.entrySet()) {
-            System.out.printf("%s - %s\n", entry.getKey(), entry.getValue());
+            System.out.printf("  class - %s\n", entry.getKey());
+            System.out.printf("  |_ file - %s\n", entry.getValue());
         }
     }
 
@@ -151,7 +159,7 @@ public class RecompileFileProcessor {
             String fileDir = changeFile.getParent().toString();
             String filePackage = getPackage(fileDir);
 
-            String compilePath = fileDir.replace(Constants.SOURCE_DIR, Constants.COMPILE_DIR);
+            String compilePath = fileDir.replace(Constants.SOURCE_DIR, Constants.MAVEN_COMPILE_DIR);
 
             String fileNameWithoutPrefix = changeFile.getFileName().toString().replace(Constants.SOURCE_PREFIX, Constants.EMPTY_STRING);
 

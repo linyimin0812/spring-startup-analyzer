@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,6 +102,9 @@ public class ProfilerAgentBoostrap {
 
     private static String getLibHome() {
 
+        // -javaagent:C:\runner\spring-startup-analyzer\lib\spring-profiler-agent.jar
+
+
         String currentFilePath = ProfilerAgentBoostrap.class.getProtectionDomain()
                 .getCodeSource()
                 .getLocation()
@@ -114,6 +118,14 @@ public class ProfilerAgentBoostrap {
 
         return file.getParent() + File.separator;
 
+    }
+
+    public static void main(String[] args) throws IOException {
+        String text = "-javaagent:C:\\runner\\spring-startup-analyzer\\lib\\spring-profiler-agent.jar";
+
+        int index= text.indexOf(":");
+        System.out.println(text.substring(0, index));
+        System.out.println(text.substring(index + 1));
     }
 
 }
