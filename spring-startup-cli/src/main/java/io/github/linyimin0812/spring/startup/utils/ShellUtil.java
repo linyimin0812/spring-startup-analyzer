@@ -63,11 +63,4 @@ public class ShellUtil {
                     '}';
         }
     }
-
-    public static void main(String[] args) {
-
-        Result result = execute(new String[] {"git", "te"}, false);
-
-        OUT.println(result);
-    }
 }

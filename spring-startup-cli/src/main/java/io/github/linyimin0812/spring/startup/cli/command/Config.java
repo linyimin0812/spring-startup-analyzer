@@ -1,6 +1,5 @@
 package io.github.linyimin0812.spring.startup.cli.command;
 
-import io.github.linyimin0812.spring.startup.constant.Constants;
 import io.github.linyimin0812.spring.startup.utils.GitUtil;
 import io.github.linyimin0812.spring.startup.utils.StringUtil;
 import org.jline.reader.MaskingCallback;
