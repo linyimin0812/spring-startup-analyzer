@@ -1,5 +1,7 @@
 package io.github.linyimin0812.spring.startup.constant;
 
+import java.io.PrintStream;
+
 /**
  * @author linyimin
  **/
@@ -31,8 +33,6 @@ public class Constants {
 
     public static final String CLI_NAME = "spring-startup-cli";
 
-    public static final String MODIFY = "M";
-    public static final String DELETE = "D";
-    public static final String ADD = "A";
+    public static final PrintStream OUT = System.out;
 
 }

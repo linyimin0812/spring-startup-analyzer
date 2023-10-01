@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 public class JDWPClient {
 
     private final Socket socket;
@@ -46,7 +48,7 @@ public class JDWPClient {
         boolean isConnected = bytesRead == handshakeResponseBytes.length && handshakeCommand.equals(new String(handshakeResponseBytes, StandardCharsets.UTF_8));
 
         if (isConnected) {
-            System.out.printf("[INFO] Connected to the target VM, address: '%s:%s', transport: 'socket'\n", host, port);
+            OUT.printf("[INFO] Connected to the target VM, address: '%s:%s', transport: 'socket'\n", host, port);
         }
 
         return isConnected;
@@ -96,7 +98,7 @@ public class JDWPClient {
         JDWPClient client = new JDWPClient("127.0.0.1", 5005);
 
         if (!client.start()) {
-            System.out.println("start error.");
+            OUT.println("start error.");
             return;
         }
 
@@ -106,7 +108,7 @@ public class JDWPClient {
 
         AllClassesReplyPackage replyPackage = new AllClassesReplyPackage(buffer);
 
-        System.out.println(JSON.toJSONString(replyPackage, true));
+        OUT.println(JSON.toJSONString(replyPackage, true));
 
         AllClassesReplyPackage.Data data = replyPackage.getData().stream().filter(data1 -> data1.getSignature().contains("MainController$Test;")).findFirst().get();
 

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 /**
  * @author linyimin
  **/
@@ -30,21 +32,24 @@ public class Reload implements Runnable {
     @Override
     public void run() {
 
-        System.out.printf("[INFO] branch: %s, remote jvm host: %s, remote jvm port: %s\n", parent.getBranch(), parent.getHost(), parent.getPort());
+        OUT.printf("[INFO] branch: %s, remote jvm host: %s, remote jvm port: %s\n", parent.getBranch(), parent.getHost(), parent.getPort());
 
         String originBranch = GitUtil.currentBranch();
 
         try {
 
             if (!merge(originBranch)) {
-                System.out.println("[ERROR] merge branch error. try to resolve the problem and execute reload command again");
+                OUT.println("[ERROR] merge branch error. try to resolve the problem and execute reload command again");
                 return;
             }
+
             if(!compile()) {
-                System.out.println("[ERROR] compile branch error. try to resolve the problem and execute reload command again");
+                OUT.println("[ERROR] compile branch error. try to resolve the problem and execute reload command again");
                 return;
             }
+
             reload();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -54,20 +59,21 @@ public class Reload implements Runnable {
 
     private boolean merge(String originBranch) {
 
-        System.out.println("[INFO] start merge branch ...");
+        OUT.println("[INFO] start merge branch ...");
 
         if (!GitUtil.isGit()) {
-            System.out.println("[WARN] project is not managed by git, skip the merge process, use the code directly");
+            OUT.println("[WARN] project is not managed by git, skip the merge process, use the code directly");
             return true;
         }
 
         String deployedBranch = this.parent.getBranch();
         if (StringUtil.isEmpty(deployedBranch)) {
-            System.out.println("[WARN] branch is empty, skip the merge process, use the code directly");
+            OUT.println("[WARN] branch is empty, skip the merge process, use the code directly");
             return true;
         }
 
         if (deployedBranch.equals(originBranch)) {
+            OUT.println("[INFO] configured branch is the same as the current branch, directly use the current branch.");
             return true;
         }
 
@@ -81,7 +87,7 @@ public class Reload implements Runnable {
 
         // merge branch
         ShellUtil.Result result = ShellUtil.execute(new String[] { "git", "merge", originBranch });
-        System.out.println(result.content);
+        OUT.println(result.content);
 
         this.isMerge = result.code == 0;
 
@@ -89,11 +95,14 @@ public class Reload implements Runnable {
     }
 
     private boolean compile() {
+        OUT.println("[INFO] start compile ...");
         Path home = Paths.get(System.getProperty(Constants.USER_DIR));
         return ModuleUtil.compile(home);
     }
 
     private void rollback(String originBranch) {
+
+        OUT.println("[INFO] start rollback branch ...");
 
         ShellUtil.execute(new String[] { "git", "checkout", originBranch });
 
@@ -105,6 +114,7 @@ public class Reload implements Runnable {
     }
 
     private void reload() throws IOException {
+        OUT.println("[INFO] start reload ...");
         JDWPClient client = null;
         try {
             String host = this.parent.getHost();

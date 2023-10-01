@@ -1,9 +1,12 @@
 package io.github.linyimin0812.spring.startup.cli.command;
 
+import io.github.linyimin0812.spring.startup.constant.Constants;
 import io.github.linyimin0812.spring.startup.utils.GitUtil;
 import io.github.linyimin0812.spring.startup.utils.StringUtil;
 import org.jline.reader.MaskingCallback;
 import picocli.CommandLine;
+
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
 
 /**
  * @author linyimin
@@ -30,8 +33,8 @@ public class Config implements Runnable {
         setHost();
         setPort();
 
-        System.out.print("[INFO] configuration setting success. configuration - ");
-        System.out.printf("branch: %s, host: %s, port: %s\n", parent.getBranch(), parent.getHost(), parent.getPort());
+        OUT.print("[INFO] configuration setting success. configuration - ");
+        OUT.printf("branch: %s, host: %s, port: %s\n", parent.getBranch(), parent.getHost(), parent.getPort());
 
     }
 
@@ -41,12 +44,12 @@ public class Config implements Runnable {
             mixinStandardHelpOptions = true
     )
     public void view() {
-        System.out.printf("[INFO] configuration - branch: %s, host: %s, port: %s", parent.getBranch(), parent.getHost(), parent.getPort());
+        OUT.printf("[INFO] configuration - branch: %s, host: %s, port: %s", parent.getBranch(), parent.getHost(), parent.getPort());
     }
 
     @Override
     public void run() {
-        System.out.println("configuration setting, use 'config -h' for more information");
+        OUT.println("configuration setting, use 'config -h' for more information");
     }
 
     private void setBranch() {

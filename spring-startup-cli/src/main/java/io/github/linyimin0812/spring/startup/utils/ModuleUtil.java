@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 /**
  * @author linyimin
  **/
@@ -35,7 +37,7 @@ public class ModuleUtil {
                 }
             });
         } catch (IOException e) {
-            System.out.printf("Acquire module home from %s failed, error message: %s\n", home, e.getMessage());
+            OUT.printf("Acquire module home from %s failed, error message: %s\n", home, e.getMessage());
             return moduleHomes;
         }
         return moduleHomes;
@@ -47,7 +49,7 @@ public class ModuleUtil {
         } else if (isGradle(home)) {
             return buildWithGradle(home);
         } else {
-            System.out.println("[ERROR] compile error. only support for maven and gradle");
+            OUT.println("[ERROR] compile error. only support for maven and gradle");
         }
 
         return false;
@@ -101,7 +103,7 @@ public class ModuleUtil {
             commands = new String[] { "mvn", "compile" };
         }
 
-        ShellUtil.Result result = ShellUtil.execute(commands);
+        ShellUtil.Result result = ShellUtil.execute(commands, true);
 
         return result.code == 0;
 
@@ -122,7 +124,7 @@ public class ModuleUtil {
             commands = new String[] { "gradle", "build", "-x", "test" };
         }
 
-        ShellUtil.Result result = ShellUtil.execute(commands);
+        ShellUtil.Result result = ShellUtil.execute(commands, true);
 
         return result.code == 0;
     }

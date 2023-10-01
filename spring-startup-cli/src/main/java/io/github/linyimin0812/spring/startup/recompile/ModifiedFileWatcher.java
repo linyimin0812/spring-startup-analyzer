@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -68,7 +69,7 @@ public class ModifiedFileWatcher {
         int longest = moduleHomes.stream().map(Path::toString).map(String::length).max(Integer::compareTo).orElse(0) + 32;
 
         for (Path moduleHome : moduleHomes) {
-            System.out.format("[INFO] %s WATCHING\n", rightPad(moduleHome.toString() + Constants.SPACE, longest, "."));
+            OUT.format("[INFO] %s WATCHING\n", rightPad(moduleHome.toString() + Constants.SPACE, longest, "."));
             registerAll(moduleHome.resolve(Constants.SOURCE_DIR));
         }
 
@@ -87,7 +88,7 @@ public class ModifiedFileWatcher {
             try {
                 key = watcher.take();
             } catch (InterruptedException | ClosedWatchServiceException ignored) {
-                System.out.println("[INFO] File-Watcher closed");
+                OUT.println("[INFO] File-Watcher closed");
                 return;
             }
 

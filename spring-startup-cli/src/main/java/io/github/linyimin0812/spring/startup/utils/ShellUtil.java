@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 /**
  * @author linyimin
  **/
@@ -28,13 +30,12 @@ public class ShellUtil {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line).append('\n');
+                    if (print) {
+                        OUT.println(line);
+                    }
                 }
 
                 String content = !sb.isEmpty() ? sb.substring(0, sb.length() - 1) : Constants.EMPTY_STRING;
-
-                if (print) {
-                    System.out.println(content);
-                }
 
                 return new Result(code, content);
             }
@@ -67,6 +68,6 @@ public class ShellUtil {
 
         Result result = execute(new String[] {"git", "te"}, false);
 
-        System.out.println(result);
+        OUT.println(result);
     }
 }

@@ -24,6 +24,8 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashSet;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 public class CliMain {
 
     private static CliCommands commands;
@@ -47,7 +49,7 @@ public class CliMain {
             executeCommand();
 
         } catch (Throwable t) {
-            System.out.println(t.getMessage());
+            OUT.println(t.getMessage());
         } finally {
             AnsiConsole.systemUninstall();
         }

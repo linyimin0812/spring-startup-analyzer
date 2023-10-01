@@ -7,6 +7,7 @@ import java.util.Locale;
  **/
 public class OSUtil {
     public static boolean isUnix() {
+
         String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 
         return os.startsWith("linux") || os.startsWith("mac") || os.startsWith("darwin");
