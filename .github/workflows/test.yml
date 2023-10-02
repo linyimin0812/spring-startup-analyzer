@@ -133,6 +133,7 @@ jobs:
       - name: Execute spring-boot-demo.jar
         run: |
           dir
+          
           Start-Process java `
             "-javaagent:C:\runner\spring-startup-analyzer\lib\spring-profiler-agent.jar", `
             "-Dproject.name=generic-windows-x64-demo", `
@@ -272,7 +273,7 @@ jobs:
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 600
+          sleep 800
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
