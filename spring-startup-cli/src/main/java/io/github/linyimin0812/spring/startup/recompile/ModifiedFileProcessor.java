@@ -1,10 +1,13 @@
 package io.github.linyimin0812.spring.startup.recompile;
 
+import io.github.linyimin0812.spring.startup.cli.CliMain;
+import io.github.linyimin0812.spring.startup.constant.Constants;
 import io.github.linyimin0812.spring.startup.jdwp.JDWPClient;
 import io.github.linyimin0812.spring.startup.jdwp.command.AllClassesCommand;
 import io.github.linyimin0812.spring.startup.jdwp.command.AllClassesReplyPackage;
 import io.github.linyimin0812.spring.startup.jdwp.command.RedefineClassesCommand;
 import io.github.linyimin0812.spring.startup.jdwp.command.RedefineClassesReplyPackage;
+import io.github.linyimin0812.spring.startup.utils.ModuleUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,22 +19,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 /**
  * @author linyimin
  **/
-public class RecompileFileProcessor {
+public class ModifiedFileProcessor {
 
     private final Map<String, WatchEvent.Kind<Path>> FILE_WATCH_EVENTS = new ConcurrentHashMap<>();
     private final Map<String /* class qualifier */, Path> RECOMIPLED_FILE_MAP = new ConcurrentHashMap<>();
+
+    public ModifiedFileProcessor() {
+        // TODO: 初始化时从git获取所有修改文件
+    }
 
     public void onEvent(Path dir, WatchEvent.Kind<Path> eventKind) {
 
         String path = dir.toString();
 
         if (!FILE_WATCH_EVENTS.containsKey(path)) {
-            System.out.printf("[INFO] - [%s] %s", eventKind.name().replace("ENTRY_", Constants.EMPTY_STRING), path);
+            OUT.printf("\n[INFO] - [%s] %s\n", eventKind.name().replace("ENTRY_", Constants.EMPTY_STRING), path);
+            OUT.printf(CliMain.prompt());
         }
 
         FILE_WATCH_EVENTS.put(path, eventKind);
@@ -63,14 +72,14 @@ public class RecompileFileProcessor {
     private boolean check() {
 
         if (FILE_WATCH_EVENTS.isEmpty()) {
-            System.out.println("There are no file changes, don't need to hotswap.");
+            OUT.println("There are no file changes, don't need to hotswap.");
             return false;
         }
 
         boolean anyAdded = FILE_WATCH_EVENTS.values().stream().anyMatch(kind -> kind == ENTRY_CREATE);
 
         if (anyAdded) {
-            System.out.println("Hotswap does not support adding new files, please restart the application");
+            OUT.println("Hotswap does not support adding new files, please restart the application");
             return false;
         }
 
@@ -80,14 +89,15 @@ public class RecompileFileProcessor {
     private void printHostSwapInfo(int classes, RedefineClassesReplyPackage replyPackage) {
 
         if (!replyPackage.isSuccess()) {
-            System.out.printf("Hotswap failed, error code: %s\n", replyPackage.getErrorCode());
+            OUT.printf("Hotswap failed, error code: %s\n", replyPackage.getErrorCode());
             return;
         }
 
-        System.out.printf("Hotswap success, recompiled classes: %s. The details are as follows:\n", classes);
+        OUT.printf("[INFO] hotswap success, reloaded classes: %s\n", classes);
 
         for (Map.Entry<String, Path> entry : RECOMIPLED_FILE_MAP.entrySet()) {
-            System.out.printf("%s - %s\n", entry.getKey(), entry.getValue());
+            OUT.printf("  class - %s\n", entry.getKey());
+            OUT.printf("  |_ file - %s\n", entry.getValue());
         }
     }
 
@@ -125,7 +135,7 @@ public class RecompileFileProcessor {
             long referenceTypeId = loadedClass.getOrDefault(entry.getKey(), 0L);
 
             if (referenceTypeId == 0L) {
-                System.out.println("[WARN] class not found: " + entry.getKey() + ", and will not be hotswap");
+                OUT.println("[WARN] class not found: " + entry.getKey() + ", and will not be hotswap");
                 continue;
             }
 
@@ -151,7 +161,18 @@ public class RecompileFileProcessor {
             String fileDir = changeFile.getParent().toString();
             String filePackage = getPackage(fileDir);
 
-            String compilePath = fileDir.replace(Constants.SOURCE_DIR, Constants.COMPILE_DIR);
+            Path home = Paths.get(System.getProperty(Constants.USER_DIR));
+
+            String compilePath;
+
+            if (ModuleUtil.isMaven(home)) {
+                compilePath = fileDir.replace(Constants.SOURCE_DIR, Constants.MAVEN_COMPILE_DIR);
+            } else if (ModuleUtil.isGradle(home)) {
+                compilePath = fileDir.replace(Constants.SOURCE_DIR, Constants.GRADLE_COMPILE_DIR);
+            } else {
+                OUT.printf("[WARN] file %s is not managed by maven or gradle, skip directly.\n", key);
+                continue;
+            }
 
             String fileNameWithoutPrefix = changeFile.getFileName().toString().replace(Constants.SOURCE_PREFIX, Constants.EMPTY_STRING);
 

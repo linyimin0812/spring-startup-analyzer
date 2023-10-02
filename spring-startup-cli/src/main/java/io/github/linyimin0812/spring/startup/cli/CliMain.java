@@ -2,7 +2,9 @@ package io.github.linyimin0812.spring.startup.cli;
 
 
 import io.github.linyimin0812.spring.startup.cli.command.CliCommands;
-import io.github.linyimin0812.spring.startup.recompile.Constants;
+import io.github.linyimin0812.spring.startup.constant.Constants;
+import io.github.linyimin0812.spring.startup.utils.GitUtil;
+import io.github.linyimin0812.spring.startup.utils.StringUtil;
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.builtins.ConfigurationPath;
 import org.jline.console.SystemRegistry;
@@ -21,6 +23,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashSet;
+
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
 
 public class CliMain {
 
@@ -45,7 +49,7 @@ public class CliMain {
             executeCommand();
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            OUT.println(t.getMessage());
         } finally {
             AnsiConsole.systemUninstall();
         }
@@ -81,7 +85,6 @@ public class CliMain {
 
         builtins.setLineReader(reader);
         commands.setReader(reader);
-        commands.setTerminal(terminal);
         factory.setTerminal(terminal);
     }
 
@@ -90,7 +93,7 @@ public class CliMain {
         while (true) {
             try {
                 systemRegistry.cleanUp();
-                String line = reader.readLine(Constants.PROMPT, null, (MaskingCallback) null, null);
+                String line = reader.readLine(prompt(), null, (MaskingCallback) null, null);
 
                 systemRegistry.execute(line);
             } catch (UserInterruptException | EndOfFileException e) {
@@ -100,5 +103,16 @@ public class CliMain {
                 systemRegistry.trace(e);
             }
         }
+    }
+
+    public static String prompt() {
+
+        String currentBranch = GitUtil.currentBranch();
+
+        if (StringUtil.isEmpty(currentBranch)) {
+            return Constants.CLI_NAME + " > ";
+        }
+
+        return Constants.CLI_NAME + " (" + currentBranch + ") > ";
     }
 }

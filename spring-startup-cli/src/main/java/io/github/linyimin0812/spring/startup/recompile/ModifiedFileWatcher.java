@@ -1,5 +1,9 @@
 package io.github.linyimin0812.spring.startup.recompile;
 
+import io.github.linyimin0812.spring.startup.constant.Constants;
+import io.github.linyimin0812.spring.startup.utils.ModuleUtil;
+import io.github.linyimin0812.spring.startup.utils.StringUtil;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -7,19 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
- * The original comes from <a href="https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/essential/io/examples/WatchDir.java">WatchDir</a>
  * @author linyimin
  **/
-public class RecompileFileWatcher {
+public class ModifiedFileWatcher {
 
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys;
 
-    private final RecompileFileProcessor processor;
+    private final ModifiedFileProcessor processor;
 
     private boolean running = true;
 
@@ -46,14 +50,14 @@ public class RecompileFileWatcher {
         });
     }
 
-    public RecompileFileWatcher(RecompileFileProcessor processor) throws IOException {
+    public ModifiedFileWatcher(ModifiedFileProcessor processor) throws IOException {
         this(System.getProperty(Constants.USER_DIR), processor);
     }
 
     /**
      * Creates a WatchService and registers the given directory
      */
-    public RecompileFileWatcher(String dir, RecompileFileProcessor processor) throws IOException {
+    public ModifiedFileWatcher(String dir, ModifiedFileProcessor processor) throws IOException {
 
         Path path = Paths.get(dir);
 
@@ -61,11 +65,12 @@ public class RecompileFileWatcher {
         this.processor = processor;
         this.watcher = FileSystems.getDefault().newWatchService();
 
+        List<Path> moduleHomes = ModuleUtil.getModulePaths(path);
 
-        List<Path> moduleHomes = ModulePath.get(path);
+        int longest = moduleHomes.stream().map(Path::toString).map(String::length).max(Integer::compareTo).orElse(0) + 32;
 
         for (Path moduleHome : moduleHomes) {
-            System.out.format("Watching module %s ...\n", moduleHome);
+            OUT.format("[INFO] %s WATCHING\n", StringUtil.rightPad(moduleHome.toString() + Constants.SPACE, longest, "."));
             registerAll(moduleHome.resolve(Constants.SOURCE_DIR));
         }
 
@@ -84,7 +89,7 @@ public class RecompileFileWatcher {
             try {
                 key = watcher.take();
             } catch (InterruptedException | ClosedWatchServiceException ignored) {
-                System.out.println("[INFO] File-Watcher closed");
+                OUT.println("[INFO] File-Watcher closed");
                 return;
             }
 

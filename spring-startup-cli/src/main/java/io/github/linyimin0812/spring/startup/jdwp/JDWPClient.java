@@ -17,13 +17,19 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
+import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
+
 public class JDWPClient {
 
     private final Socket socket;
+    private final String host;
+    private final Integer port;
 
     public final static int LENGTH_SIZE = 4;
 
     public JDWPClient(String host, int port) throws IOException {
+        this.host = host;
+        this.port = port;
         this.socket = new Socket(host, port);
     }
 
@@ -38,11 +44,14 @@ public class JDWPClient {
         out.write(handshakeCommand.getBytes(StandardCharsets.UTF_8));
         byte[] handshakeResponseBytes = new byte[14];
         int bytesRead = in.read(handshakeResponseBytes);
-        if (bytesRead != handshakeCommand.length()) {
-            return false;
+
+        boolean isConnected = bytesRead == handshakeResponseBytes.length && handshakeCommand.equals(new String(handshakeResponseBytes, StandardCharsets.UTF_8));
+
+        if (isConnected) {
+            OUT.printf("[INFO] Connected to the target VM, address: '%s:%s', transport: 'socket'\n", host, port);
         }
 
-        return handshakeCommand.equals(new String(handshakeResponseBytes, StandardCharsets.UTF_8));
+        return isConnected;
     }
 
     public void close() throws IOException {
@@ -89,7 +98,7 @@ public class JDWPClient {
         JDWPClient client = new JDWPClient("127.0.0.1", 5005);
 
         if (!client.start()) {
-            System.out.println("start error.");
+            OUT.println("start error.");
             return;
         }
 
@@ -99,7 +108,7 @@ public class JDWPClient {
 
         AllClassesReplyPackage replyPackage = new AllClassesReplyPackage(buffer);
 
-        System.out.println(JSON.toJSONString(replyPackage, true));
+        OUT.println(JSON.toJSONString(replyPackage, true));
 
         AllClassesReplyPackage.Data data = replyPackage.getData().stream().filter(data1 -> data1.getSignature().contains("MainController$Test;")).findFirst().get();
 
