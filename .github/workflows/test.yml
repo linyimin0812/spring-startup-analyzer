@@ -277,7 +277,7 @@ jobs:
           -Dspring-startup-analyzer.linux.and.mac.profiler=async_profiler \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 60
+          sleep 120
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
