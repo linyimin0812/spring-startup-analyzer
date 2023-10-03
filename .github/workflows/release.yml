@@ -140,8 +140,7 @@ jobs:
           mvn clean package
           mvn -Pnative -Dagent exec:exec@java-agent
           mvn -DskipTests=true -Pnative -Dagent package
-          cp ./target/spring-startup-cli${{ matrix.binaryExt }} spring-startup-cli-${{ matrix.os }}${{ matrix.binaryExt }}
-          ls
+          cp ./target/spring-startup-cli${{ matrix.binaryExt }} ./target/spring-startup-cli-${{ matrix.os }}${{ matrix.binaryExt }}
 
       - name: Upload native image binary
         id: upload-release-asset
@@ -150,15 +149,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.release_upload_url }}
-          asset_path: target/spring-startup-cli
-          asset_name: spring-startup-analyzer.tar.gz
-          asset_content_type: application/tar+gzip
+          asset_path: target/spring-startup-cli-${{ matrix.os }}${{ matrix.binaryExt }}
+          asset_name: spring-startup-cli-${{ matrix.os }}${{ matrix.binaryExt }}
+          asset_content_type: application/octet-stream
 
   publish-release:
     permissions:
       contents: write
     runs-on: ubuntu-20.04
-    needs: [create-release, build]
+    needs: [create-release, build, build-graalvm-native-image]
 
     steps:
       - name: publish release
