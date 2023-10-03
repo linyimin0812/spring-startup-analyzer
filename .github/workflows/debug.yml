@@ -1,0 +1,38 @@
+name: DEBUG
+on: push
+
+jobs:
+  build-graalvm-native-image:
+    name: build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: 'linux-x64'
+            binaryExt: ''
+          - os: macos-latest
+            platform: 'macos-x64'
+            binaryExt: ''
+          - os: windows-latest
+            platform: 'windows-x64'
+            binaryExt: '.exe'
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+
+      - name: Build native image
+        run: |
+          cd ./spring-startup-cli
+          mvn clean package
+          mvn -Pnative -Dagent exec:exec@java-agent
+          mvn -DskipTests=true -Pnative -Dagent package
+
+          ls -lrt
