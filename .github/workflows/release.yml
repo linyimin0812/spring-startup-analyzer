@@ -72,9 +72,29 @@ jobs:
       - name: Build spring-startup-analyzer
         run: make all
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Build and push with latest tag
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-startup-analyzer:latest
+      - name: Docker Build and push with actual tag
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-startup-analyzer:${{ steps.get_version.outputs.version }}
+
       - name: Package plugin and create userscript
         run: |
-          mkdir release
+          mkdir -p release
           mv $HOME/spring-startup-analyzer/spring-startup-analyzer.tar.gz release/spring-startup-analyzer.tar.gz
 
       - name: Upload extensions to release
@@ -88,11 +108,59 @@ jobs:
           asset_name: spring-startup-analyzer.tar.gz
           asset_content_type: application/tar+gzip
 
+  build-graalvm-native-image:
+    name: build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: 'linux-x64'
+            name: 'linux'
+            binaryExt: ''
+          - os: macos-latest
+            name: 'macos'
+            platform: 'macos-x64'
+            binaryExt: ''
+          - os: windows-latest
+            name: 'windows'
+            platform: 'windows-x64'
+            binaryExt: '.exe'
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+
+      - name: Build native image
+        run: |
+          cd ./spring-startup-cli
+          mvn clean package
+          mvn -Pnative -Dagent exec:exec@java-agent
+          mvn -DskipTests=true -Pnative -Dagent package
+          cp ./target/spring-startup-cli${{ matrix.binaryExt }} ./target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
+
+      - name: Upload native image binary
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.release_upload_url }}
+          asset_path: target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
+          asset_name: spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
+          asset_content_type: application/octet-stream
+
   publish-release:
     permissions:
       contents: write
     runs-on: ubuntu-20.04
-    needs: [create-release, build]
+    needs: [create-release, build, build-graalvm-native-image]
 
     steps:
       - name: publish release

@@ -21,6 +21,8 @@ else
 	${MVN} package -Drevision=$(VERSION)
 	cd ./spring-profiler-extension && ${MVN} package -Drevision=$(VERSION)
 endif
+	mkdir -p ./build && rm -rf ./build/* && cp -r ~/${PROJECT_NAME}/* ./build/ && rm -rf ./build/${PROJECT_NAME}.tar.gz
+
 
 .PHONY: install
 install: clean
@@ -44,7 +46,6 @@ endif
 
 .PHONY: docker-build
 docker-build: package
-	mkdir -p ./build && rm -rf ./build/* && cp -r ~/${PROJECT_NAME}/* ./build/ && rm -rf ./build/${PROJECT_NAME}.tar.gz
 ifeq ($(strip $(VERSION)),)
 	docker build --tag ${PROJECT_NAME}:latest .
 else
