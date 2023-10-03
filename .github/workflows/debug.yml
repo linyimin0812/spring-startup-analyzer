@@ -35,4 +35,4 @@ jobs:
           mvn -Pnative -Dagent exec:exec@java-agent
           mvn -DskipTests=true -Pnative -Dagent package
 
-          ls -lrt
+          ls -lrt target/
