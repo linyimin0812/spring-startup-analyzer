@@ -140,8 +140,8 @@ jobs:
           mvn clean package
           mvn -Pnative -Dagent exec:exec@java-agent
           mvn -DskipTests=true -Pnative -Dagent package
-          
-          ls -lrt
+          cp ./target/spring-startup-cli${{ matrix.binaryExt }} spring-startup-cli-${{ matrix.os }}${{ matrix.binaryExt }}
+          ls
 
       - name: Upload native image binary
         id: upload-release-asset
