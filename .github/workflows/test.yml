@@ -1,8 +1,9 @@
 name: Test Push
-on:
-  push:
-    paths:
-      - '**.java'
+#on:
+#  push:
+#    paths:
+#      - '**.java'
+on: push
 jobs:
   build:
     name: build
@@ -184,10 +185,11 @@ jobs:
             ls -lrt
             nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
             -Dproject.name=generic-linux-arm64-demo \
+            -Dspring-startup-analyzer.linux.and.mac.profiler=async_profiler \
             -Dspring-startup-analyzer.admin.http.server.port=8066 \
             -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
   
-            sleep 600
+            sleep 30
   
             file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
             if [ "$file_count" -eq 2 ]; then
@@ -227,9 +229,10 @@ jobs:
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-x64-demo \
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -Dspring-startup-analyzer.linux.and.mac.profiler=async_profiler \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 100
+          sleep 30
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
           if [ "$file_count" -eq 2 ]; then
@@ -271,9 +274,10 @@ jobs:
           nohup java -javaagent:/home/runner/spring-startup-analyzer/lib/spring-profiler-agent.jar \
           -Dproject.name=alpine-linux-arm64-demo \
           -Dspring-startup-analyzer.admin.http.server.port=8066 \
+          -Dspring-startup-analyzer.linux.and.mac.profiler=async_profiler \
           -jar /home/runner/spring-startup-analyzer/spring-boot-demo.jar &
 
-          sleep 800
+          sleep 60
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
           if [ "$file_count" -eq 2 ]; then
