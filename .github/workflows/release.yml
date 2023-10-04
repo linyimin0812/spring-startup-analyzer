@@ -89,14 +89,18 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Docker Build and push with latest tag
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-startup-analyzer:latest
+
       - name: Docker Build and push with actual tag
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           platform: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-startup-analyzer:${{ steps.get_version.outputs.version }}
@@ -157,7 +161,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.release_upload_url }}
-          asset_path: target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
+          asset_path: spring-startup-cli/target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
           asset_name: spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
           asset_content_type: application/octet-stream
 
