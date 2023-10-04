@@ -72,6 +72,14 @@ jobs:
       - name: Build spring-startup-analyzer
         run: make all
 
+      - name: Package plugin and create userscript
+        run: |
+          mkdir -p release
+          mv $HOME/spring-startup-analyzer/spring-startup-analyzer.tar.gz release/spring-startup-analyzer.tar.gz
+          
+          mkdir -p build
+          cp -r $HOME/spring-startup-analyzer/* ./build/
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -90,12 +98,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          platform: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-startup-analyzer:${{ steps.get_version.outputs.version }}
-
-      - name: Package plugin and create userscript
-        run: |
-          mkdir -p release
-          mv $HOME/spring-startup-analyzer/spring-startup-analyzer.tar.gz release/spring-startup-analyzer.tar.gz
 
       - name: Upload extensions to release
         id: upload-release-asset
@@ -109,6 +113,7 @@ jobs:
           asset_content_type: application/tar+gzip
 
   build-graalvm-native-image:
+    needs: create-release
     name: build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
