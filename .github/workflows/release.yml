@@ -1,9 +1,8 @@
 name: Release
 
-#on:
-#  push:
-#    tags: [ v\d+\.\d+\.\d+ ]
-on: push
+on:
+  push:
+    tags: [ v\d+\.\d+\.\d+ ]
 
 jobs:
   create-release:
