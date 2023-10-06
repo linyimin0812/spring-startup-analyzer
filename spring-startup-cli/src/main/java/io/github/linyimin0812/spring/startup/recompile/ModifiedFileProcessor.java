@@ -69,7 +69,7 @@ public class ModifiedFileProcessor {
 
     }
 
-    private boolean check() {
+    public boolean check() {
 
         if (FILE_WATCH_EVENTS.isEmpty()) {
             OUT.println("There are no file changes, don't need to hotswap.");
