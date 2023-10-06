@@ -32,6 +32,10 @@ public class Reload implements Runnable {
     @Override
     public void run() {
 
+        if (!parent.getProcessor().check()) {
+            return;
+        }
+
         OUT.printf("[INFO] branch: %s, remote jvm host: %s, remote jvm port: %s\n", parent.getBranch(), parent.getHost(), parent.getPort());
 
         String originBranch = GitUtil.currentBranch();
