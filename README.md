@@ -22,8 +22,10 @@
         - [Application Startup](#application-startup)
         - [Custom extension](#custom-extension)
     - [🚀Optimization of Spring Startup](#optimization-of-spring-startup-1)
-        - [Types of Bean for Async](#types-of-bean-for-async)
-        - [Usage](#usage)
+        - [Optimization of Prod Env Startup Time](#optimization-of-prod-env-startup-time)
+            - [Types of Bean for Async](#types-of-bean-for-async)
+            - [Usage](#usage)
+        - [Optimization of Daily and Pre Env Startup Time](#optimization-of-daily-and-pre-env-startup-time)
 - [🔗Reference](#Reference)
 
 # Spring Startup Ananlyzer
@@ -283,6 +285,8 @@ Once you have installed this project by following the steps in the [Installation
 
 ## 🚀Optimization of Spring Startup
 
+### Optimization of Prod Env Startup Time
+
 From the [Application startup data collection](#spring-startup-analysis-report)section, you can obtain the Beans that have long initialization time. Since the Spring startup process is single-threaded, to optimize the application startup time, you can consider making the initialization methods of these time-consuming Beans asynchronous.
 
 
@@ -293,7 +297,7 @@ NOTE:
 - **For Beans that are not dependent on other Beans, you can confidently proceed with asynchronous initialization**，You can determine if a Bean is dependent on other Beans by examining the `Root Bean` in  [Loading time of Beans](#11-application-startup-data-collection) session
 - **Careful analysis is required for Beans that are dependent on other Beans. They should not be called by other Beans during the application startup process, as it may lead to issues**
 
-### Types of Bean for Async
+#### Types of Bean for Async
 
 Supports initialization of beans through @Bean, @PostConstruct, and @ImportResource. demo: [spring-boot-async-bean-demo](https://github.com/linyimin0812/spring-boot-async-bean-demo)
 
@@ -320,7 +324,7 @@ public class TestComponent {
 ```
 
 
-### Usage
+#### Usage
 
 1. Import Dependency
 
@@ -352,6 +356,25 @@ View the log in the `$HOME/spring-startup-analyzer/logs/async-init-bean.log` fil
 ```
 async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 ```
+
+### Optimization of Daily and Pre Env Startup Time
+
+To optimize the startup time for daily and pre, we can consider hotswap. The project provides a command-line tool to implement hotswap for modified code.
+
+1. Download `spring-startup-cli` from [release](https://github.com/linyimin0812/spring-startup-analyzer/releases/tag/v3.0.0)
+2. Execute the command-line tool in the project's working directory
+
+```shell
+java -jar spring-startup-cli.jar
+```
+
+3. Configure information using `config` command.
+
+```shell
+config -b <deployed branch> -h <host of JVM> -p <port of JVM>
+```
+
+4. Execute `reload` command 
 
 # 🔗Reference
 - [arthas](https://github.com/alibaba/arthas)
