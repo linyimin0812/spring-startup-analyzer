@@ -130,7 +130,7 @@ jobs:
           - os: macos-12
             name: 'macos'
             binaryExt: ''
-          - os: windows-2019
+          - os: windows-latest
             name: 'windows'
             binaryExt: '.exe'
     steps:
