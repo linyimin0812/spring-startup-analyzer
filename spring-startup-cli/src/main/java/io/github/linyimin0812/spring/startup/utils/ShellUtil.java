@@ -35,7 +35,7 @@ public class ShellUtil {
                     }
                 }
 
-                String content = !sb.isEmpty() ? sb.substring(0, sb.length() - 1) : Constants.EMPTY_STRING;
+                String content = sb.length() > 0 ? sb.substring(0, sb.length() - 1) : Constants.EMPTY_STRING;
 
                 return new Result(code, content);
             }
