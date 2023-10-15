@@ -64,20 +64,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
-        <configuration>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>info.picocli</groupId>
-              <artifactId>picocli-codegen</artifactId>
-              <version>4.7.5</version>
-            </path>
-          </annotationProcessorPaths>
-          <compilerArgs>
-            <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
-          </compilerArgs>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.source}</target>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -172,39 +158,6 @@
               </agent>
               <imageName>${imageName}</imageName>
             </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <id>java-agent</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>java</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                  <arguments>
-                    <argument>-classpath</argument>
-                    <classpath/>
-                    <argument>${mainClass}</argument>
-                    <argument>exec:exec@java-agent</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>native</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>${project.build.directory}/${imageName}</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>
