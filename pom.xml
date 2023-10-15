@@ -26,6 +26,7 @@
         <module>spring-profiler-starter</module>
         <module>spring-async-bean-core</module>
         <module>spring-async-bean-starter</module>
+        <module>spring-startup-cli</module>
         <module>coverage-report-aggregate</module>
     </modules>
 
