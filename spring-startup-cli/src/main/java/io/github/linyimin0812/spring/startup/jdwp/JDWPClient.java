@@ -91,40 +91,4 @@ public class JDWPClient {
 
         return buffer;
     }
-
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        JDWPClient client = new JDWPClient("127.0.0.1", 5005);
-
-        if (!client.start()) {
-            OUT.println("start error.");
-            return;
-        }
-
-        AllClassesCommand<Void> allClassesCommand = new AllClassesCommand<>();
-
-        ByteBuffer buffer = client.execute(allClassesCommand.toBytes());
-
-        AllClassesReplyPackage replyPackage = new AllClassesReplyPackage(buffer);
-
-        OUT.println(JSON.toJSONString(replyPackage, true));
-
-        AllClassesReplyPackage.Data data = replyPackage.getData().stream().filter(data1 -> data1.getSignature().contains("MainController$Test;")).findFirst().get();
-
-        byte[] bytes = Files.readAllBytes(Paths.get("/Users/banzhe/IdeaProjects/project/spring-boot-async-bean-demo/target/classes/io/github/linyimin0812/controller/MainController$Test.class"));
-
-        RedefineClassesCommand.RedefineClass redefineClass = new RedefineClassesCommand.RedefineClass(data.getReferenceTypeId(), bytes);
-
-
-        List<RedefineClassesCommand.RedefineClass> list = Collections.singletonList(redefineClass);
-
-        RedefineClassesCommand redefineClassesCommand = new RedefineClassesCommand(new RedefineClassesCommand.Data(list));
-
-        buffer = client.execute(redefineClassesCommand.toBytes());
-
-        RedefineClassesReplyPackage redefineClassesReplyPackage = new RedefineClassesReplyPackage(buffer);
-
-
-    }
 }

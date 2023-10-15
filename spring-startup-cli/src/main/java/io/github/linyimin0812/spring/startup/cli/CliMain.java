@@ -97,6 +97,11 @@ public class CliMain {
                 String line = reader.readLine(prompt(), null, (MaskingCallback) null, null);
 
                 systemRegistry.execute(line);
+
+                if ("exit".equalsIgnoreCase(line)) {
+                    break;
+                }
+
             } catch (UserInterruptException | EndOfFileException e) {
                 commands.close();
                 return;
@@ -137,6 +142,7 @@ public class CliMain {
                     Files.deleteIfExists(file);
 
                 } catch (IOException ignored) {
+                    Thread.currentThread().interrupt();
                 }
             }
         }).start();
