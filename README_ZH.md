@@ -356,6 +356,8 @@ async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 
 为了优化日常/预发的启动时长，可以考虑热加载。本项目提供了一个命令行工具，实现一个命令完成已修改代码的热加载。
 
+![](./docs/spring-startup-cli_ZH.svg)
+
 1. 在[release](https://github.com/linyimin0812/spring-startup-analyzer/releases/tag/v3.0.0)下载`spring-startup-cli`
 2. 在项目的工作目录(HOME)下执行此命令行工具
 ```shell
