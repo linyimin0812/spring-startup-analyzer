@@ -361,6 +361,8 @@ async-init-bean, beanName: ${beanName}, async init method: ${initMethodName}
 
 To optimize the startup time for daily and pre, we can consider hotswap. The project provides a command-line tool to implement hotswap for modified code.
 
+![](./docs/spring-startup-cli_EN.svg)
+
 1. Download `spring-startup-cli` from [release](https://github.com/linyimin0812/spring-startup-analyzer/releases/tag/v3.0.0)
 2. Execute the command-line tool in the project's working directory
 
