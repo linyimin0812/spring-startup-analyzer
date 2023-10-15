@@ -19,6 +19,7 @@ import picocli.shell.jline3.PicocliCommands;
 import picocli.shell.jline3.PicocliCommands.PicocliCommandsFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -42,7 +43,7 @@ public class CliMain {
 
             // only for run mvn -Pnative -Dagent exec:exec@java-agent
             if (args.length > 0 && "exec:exec@java-agent".equals(args[0])) {
-                commands.close();
+                forNativeTracingAgent();
                 return;
             }
 
@@ -114,5 +115,30 @@ public class CliMain {
         }
 
         return Constants.CLI_NAME + " (" + currentBranch + ") > ";
+    }
+
+    private static void forNativeTracingAgent() {
+
+        Path file = Paths.get(System.getProperty(Constants.USER_DIR), Constants.SOURCE_DIR, "forNativeTracingAgent.java");
+
+        new Thread(() -> {
+            try {
+
+                Files.deleteIfExists(file);
+
+                Files.createFile(file);
+
+                Thread.sleep(1000);
+
+            } catch (IOException | InterruptedException ignored) {
+            } finally {
+                try {
+                    commands.close();
+                    Files.deleteIfExists(file);
+
+                } catch (IOException ignored) {
+                }
+            }
+        }).start();
     }
 }

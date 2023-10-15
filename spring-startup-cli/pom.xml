@@ -11,8 +11,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <mainClass>io.github.linyimin0812.spring.startup.cli.CliMain</mainClass>
     <native.maven.plugin.version>0.9.27</native.maven.plugin.version>
     <imageName>spring-startup-cli</imageName>
@@ -44,7 +44,14 @@
       <version>2.0.40</version>
     </dependency>
 
-      <dependency>
+    <!-- https://mvnrepository.com/artifact/io.methvin/directory-watcher -->
+    <dependency>
+      <groupId>io.methvin</groupId>
+      <artifactId>directory-watcher</artifactId>
+      <version>0.18.0</version>
+    </dependency>
+
+    <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter</artifactId>
           <version>RELEASE</version>
@@ -57,20 +64,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
-        <configuration>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>info.picocli</groupId>
-              <artifactId>picocli-codegen</artifactId>
-              <version>4.7.5</version>
-            </path>
-          </annotationProcessorPaths>
-          <compilerArgs>
-            <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
-          </compilerArgs>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.source}</target>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -165,39 +158,6 @@
               </agent>
               <imageName>${imageName}</imageName>
             </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <id>java-agent</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>java</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                  <arguments>
-                    <argument>-classpath</argument>
-                    <classpath/>
-                    <argument>${mainClass}</argument>
-                    <argument>exec:exec@java-agent</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>native</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>${project.build.directory}/${imageName}</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

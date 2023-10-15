@@ -8,6 +8,7 @@ import io.github.linyimin0812.spring.startup.jdwp.command.AllClassesReplyPackage
 import io.github.linyimin0812.spring.startup.jdwp.command.RedefineClassesCommand;
 import io.github.linyimin0812.spring.startup.jdwp.command.RedefineClassesReplyPackage;
 import io.github.linyimin0812.spring.startup.utils.ModuleUtil;
+import io.methvin.watcher.DirectoryChangeEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,30 +21,29 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.github.linyimin0812.spring.startup.constant.Constants.OUT;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 /**
  * @author linyimin
  **/
 public class ModifiedFileProcessor {
 
-    private final Map<String, WatchEvent.Kind<Path>> FILE_WATCH_EVENTS = new ConcurrentHashMap<>();
+    private final Map<String, DirectoryChangeEvent> FILE_WATCH_EVENTS = new ConcurrentHashMap<>();
     private final Map<String /* class qualifier */, Path> RECOMIPLED_FILE_MAP = new ConcurrentHashMap<>();
 
     public ModifiedFileProcessor() {
         // TODO: 初始化时从git获取所有修改文件
     }
 
-    public void onEvent(Path dir, WatchEvent.Kind<Path> eventKind) {
+    public void onEvent(DirectoryChangeEvent event) {
 
-        String path = dir.toString();
+        String path = event.path().toString();
 
         if (!FILE_WATCH_EVENTS.containsKey(path)) {
-            OUT.printf("\n[INFO] - [%s] %s\n", eventKind.name().replace("ENTRY_", Constants.EMPTY_STRING), path);
+            OUT.printf("\n[INFO] - [%s] %s\n", event.eventType().name(), path);
             OUT.printf(CliMain.prompt());
         }
 
-        FILE_WATCH_EVENTS.put(path, eventKind);
+        FILE_WATCH_EVENTS.put(path, event);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ModifiedFileProcessor {
             return false;
         }
 
-        boolean anyAdded = FILE_WATCH_EVENTS.values().stream().anyMatch(kind -> kind == ENTRY_CREATE);
+        boolean anyAdded = FILE_WATCH_EVENTS.values().stream().anyMatch(event -> event.eventType() == DirectoryChangeEvent.EventType.CREATE);
 
         if (anyAdded) {
             OUT.println("Hotswap does not support adding new files, please restart the application");
@@ -176,7 +176,7 @@ public class ModifiedFileProcessor {
 
             String fileNameWithoutPrefix = changeFile.getFileName().toString().replace(Constants.SOURCE_PREFIX, Constants.EMPTY_STRING);
 
-            Files.walkFileTree(Paths.get(compilePath), new SimpleFileVisitor<>() {
+            Files.walkFileTree(Paths.get(compilePath), new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
 

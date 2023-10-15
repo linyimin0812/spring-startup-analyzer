@@ -147,7 +147,7 @@ jobs:
         run: |
           cd ./spring-startup-cli
           mvn clean package
-          mvn -Pnative -Dagent exec:exec@java-agent
+          java -agentlib:native-image-agent=config-output-dir=./target/native/agent-output/main/ -jar ./target/spring-startup-cli-1.0-SNAPSHOT-jar-with-dependencies.jar exec:exec@java-agent
           mvn -DskipTests=true -Pnative -Dagent package
           cp ./target/spring-startup-cli${{ matrix.binaryExt }} ./target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
 
