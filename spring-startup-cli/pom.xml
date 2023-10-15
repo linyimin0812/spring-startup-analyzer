@@ -57,7 +57,7 @@
     <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter</artifactId>
-          <version>RELEASE</version>
+          <version>5.10.0</version>
           <scope>test</scope>
       </dependency>
   </dependencies>
@@ -122,7 +122,7 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
-          <finalName>${artifactId}</finalName>
+          <finalName>${project.artifactId}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>

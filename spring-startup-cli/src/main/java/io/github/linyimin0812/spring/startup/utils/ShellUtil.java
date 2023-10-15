@@ -41,6 +41,9 @@ public class ShellUtil {
             }
 
         } catch (IOException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             return new Result(-1, e.getMessage());
         }
     }

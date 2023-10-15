@@ -25,6 +25,9 @@ public class ModifiedFileWatcher {
 
     /**
      * Creates a WatchService and registers the given directory
+     * @param dir watch directory
+     * @param processor ModifiedFileProcessor
+     * @throws IOException IO Exception
      */
     public ModifiedFileWatcher(String dir, ModifiedFileProcessor processor) throws IOException {
 
@@ -53,13 +56,5 @@ public class ModifiedFileWatcher {
     public void close() throws IOException {
         running = false;
         this.watcher.close();
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        ModifiedFileWatcher recompileFileWatcher = new ModifiedFileWatcher("/Users/banzhe/IdeaProjects/project/spring-boot-async-bean-demo/", new ModifiedFileProcessor());
-
-        Thread.sleep(20 * 1000);
-
-        recompileFileWatcher.close();
     }
 }
