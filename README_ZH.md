@@ -366,7 +366,7 @@ java -jar spring-startup-cli.jar
 3. 使用config命令配置相关信息
 
 ```shell
-config -b 部署的分支 -h JVM所在的host -p JVM指定的port
+config set
 ```
 4. 编码完成后执行`reload`命令，即可完成热加载
 
