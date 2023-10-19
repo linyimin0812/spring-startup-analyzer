@@ -373,7 +373,7 @@ java -jar spring-startup-cli.jar
 3. Configure information using `config` command.
 
 ```shell
-config -b <deployed branch> -h <host of JVM> -p <port of JVM>
+config set
 ```
 
 4. Execute `reload` command 
