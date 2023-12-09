@@ -59,11 +59,6 @@
             <artifactId>okio</artifactId>
             <version>3.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.kohsuke.metainf-services</groupId>
@@ -76,6 +71,18 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.testable</groupId>
+            <artifactId>testable-all</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -1,28 +1,26 @@
-package io.github.linyimin0812.profiler.core.monitor.check;
+package io.github.linyimin0812.profiler.core.monitor.check
 
-import com.sun.net.httpserver.HttpServer;
-import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import com.sun.net.httpserver.HttpServer
+import io.github.linyimin0812.profiler.common.settings.ProfilerSettings
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Stepwise
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.InetSocketAddress;
-import java.net.URL;
-import java.util.List;
+import java.lang.reflect.Field
 
 /**
  * @author linyimin
- **/
-class EndpointCheckServiceTest {
+ * */
+@Stepwise
+class EndpointCheckServiceSpec extends Specification {
 
-    private static HttpServer server;
-    private final EndpointCheckService endpointCheckService = new EndpointCheckService();
+    @Shared
+    static HttpServer server;
+    @Shared
+    EndpointCheckService endpointCheckService = new EndpointCheckService();
 
-    @Test
-    @Order(0)
-    void init() throws NoSuchFieldException, IllegalAccessException {
+    def "test init"() {
+        when:
         URL configUrl = EndpointCheckServiceTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configUrl != null;
         ProfilerSettings.loadProperties(configUrl.getPath());
@@ -33,24 +31,35 @@ class EndpointCheckServiceTest {
         @SuppressWarnings("unchecked")
         List<String> healthEndpoints = (List<String>) healthEndpointsField.get(endpointCheckService);
 
-        Assertions.assertNotNull(healthEndpoints);
-        Assertions.assertEquals(1, healthEndpoints.size());
-        Assertions.assertEquals("http://localhost:12346", healthEndpoints.get(0));
+        then:
+        healthEndpoints != null
+        healthEndpoints.size() == 1
+        healthEndpoints.get(0) == 'http://localhost:12346'
     }
 
-    @Test
-    @Order(1)
-    void check() {
+
+    def "test check after init"() {
+        when:
         endpointCheckService.init();
-        Assertions.assertEquals(AppStatus.initializing, endpointCheckService.check());
 
-        start();
-        Assertions.assertEquals(AppStatus.running, endpointCheckService.check());
+        then:
+        AppStatus.initializing == endpointCheckService.check()
+    }
 
-        stop();
+    def "test check after start"() {
+        when:
+        start()
 
-        Assertions.assertEquals(AppStatus.initializing, endpointCheckService.check());
+        then:
+        AppStatus.running == endpointCheckService.check()
+    }
 
+    def "test check after stop"() {
+        when:
+        stop()
+
+        then:
+        AppStatus.initializing == endpointCheckService.check()
     }
 
     private static void start() {
@@ -78,4 +87,5 @@ class EndpointCheckServiceTest {
     private static void stop() {
         server.stop(0);
     }
+
 }
