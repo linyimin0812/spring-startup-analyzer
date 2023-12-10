@@ -8,11 +8,19 @@
         <version>${revision}</version>
     </parent>
     <dependencies>
+
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.testable</groupId>
+            <artifactId>testable-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <modelVersion>4.0.0</modelVersion>
 
