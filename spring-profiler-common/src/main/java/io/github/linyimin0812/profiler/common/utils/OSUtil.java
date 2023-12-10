@@ -44,14 +44,6 @@ public class OSUtil {
         return platform == PlatformEnum.MACOS;
     }
 
-    public static boolean isCygwinOrMinGW() {
-        if (isWindows()) {
-            return (System.getenv("MSYSTEM") != null && System.getenv("MSYSTEM").startsWith("MINGW"))
-                    || "/bin/bash".equals(System.getenv("SHELL"));
-        }
-        return false;
-    }
-
     public static boolean isMuslLibc() {
         File ld_musl_x86_64_file = new File("/lib/ld-musl-x86_64.so.1");
         File ld_musl_aarch64_file = new File("/lib/ld-musl-aarch64.so.1");
@@ -149,7 +141,7 @@ public class OSUtil {
         return value.toLowerCase(Locale.US).replaceAll("[^a-z0-9]+", "");
     }
 
-    private enum PlatformEnum {
+    public enum PlatformEnum {
         /**
          * Microsoft Windows
          */
