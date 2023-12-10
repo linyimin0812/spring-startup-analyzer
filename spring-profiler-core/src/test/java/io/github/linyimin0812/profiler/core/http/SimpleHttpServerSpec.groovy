@@ -38,7 +38,7 @@ class SimpleHttpServerSpec extends Specification {
 
     def "test getPort from properties"() {
         when:
-        URL configurationURL = SimpleHttpServerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
+        URL configurationURL = SimpleHttpServerSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
@@ -57,7 +57,7 @@ class SimpleHttpServerSpec extends Specification {
 
     def "test endpoint from properties"() {
         when:
-        URL configurationURL = SimpleHttpServerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
+        URL configurationURL = SimpleHttpServerSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configurationURL != null;
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
@@ -75,7 +75,7 @@ class SimpleHttpServerSpec extends Specification {
             connection.setReadTimeout(3_000);
 
             return connection.getResponseCode() == HttpURLConnection.HTTP_OK;
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             return false;
         }
     }

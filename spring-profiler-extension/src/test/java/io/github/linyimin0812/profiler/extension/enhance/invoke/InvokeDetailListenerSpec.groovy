@@ -17,7 +17,7 @@ class InvokeDetailListenerSpec extends Specification {
     final InvokeDetailListener invokeDetailListener = new InvokeDetailListener()
 
     def setup() {
-        URL configurationURL = InvokeDetailListenerTest.class.getClassLoader().getResource("spring-startup-analyzer.properties")
+        URL configurationURL = InvokeDetailListenerSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
         assert configurationURL != null
         ProfilerSettings.loadProperties(configurationURL.getPath())
 

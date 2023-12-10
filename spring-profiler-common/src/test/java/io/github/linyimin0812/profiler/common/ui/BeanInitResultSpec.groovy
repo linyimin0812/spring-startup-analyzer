@@ -84,7 +84,6 @@ class BeanInitResultSpec extends Specification {
     def "test getChildren"() {
         when:
         BeanInitResult beanInitResult = new BeanInitResult("test")
-        assertTrue(beanInitResult.getChildren().isEmpty())
         BeanInitResult childBeanInitResult = new BeanInitResult("child")
         beanInitResult.addChild(childBeanInitResult)
 

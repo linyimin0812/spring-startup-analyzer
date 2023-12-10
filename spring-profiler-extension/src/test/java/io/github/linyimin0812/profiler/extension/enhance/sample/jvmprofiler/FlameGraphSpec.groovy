@@ -16,7 +16,7 @@ class FlameGraphSpec extends Specification {
     final Map<String, Integer> TRACE_MAP = new HashMap<>()
 
     def setup() {
-        URL profilerURL = FlameGraphTest.class.getClassLoader().getResource("profiler.txt")
+        URL profilerURL = FlameGraphSpec.class.getClassLoader().getResource("profiler.txt")
         assert profilerURL != null
 
         InputStreamReader input = new InputStreamReader(Files.newInputStream(Paths.get(profilerURL.getPath())));
@@ -38,7 +38,7 @@ class FlameGraphSpec extends Specification {
     def "test parse"() {
         when:
         FlameGraph fg = new FlameGraph()
-        URL templateURL = FlameGraphTest.class.getClassLoader().getResource("flame-graph.html")
+        URL templateURL = FlameGraphSpec.class.getClassLoader().getResource("flame-graph.html")
         assert templateURL != null
         String destPath = Paths.get(templateURL.toURI()).getParent().toString() + "/result-flame-graph.html"
         fg.parse(templateURL.getPath(), destPath, TRACE_MAP)

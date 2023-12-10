@@ -145,7 +145,7 @@ class AsyncBeanPropertiesSpec extends Specification {
         private final Properties properties = new Properties();
 
         CustomEnvironment() throws IOException {
-            InputStream inputStream = AsyncBeanPropertiesTest.class.getClassLoader().getResourceAsStream("application.properties");
+            InputStream inputStream = AsyncBeanPropertiesSpec.class.getClassLoader().getResourceAsStream("application.properties");
             properties.load(inputStream);
         }
 

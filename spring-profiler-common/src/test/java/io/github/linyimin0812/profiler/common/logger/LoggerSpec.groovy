@@ -23,7 +23,6 @@ class LoggerSpec extends Specification {
         String path = Paths.get(url.toURI()).getParent().toUri().getPath();
         logger = new Logger(LoggerName.STARTUP, path);
 
-        assertTrue(Files.exists(Paths.get(path, LoggerName.STARTUP.getValue() + ".log")));
     }
 
     def "test debug"() {

@@ -35,7 +35,7 @@ class LogFactorySpec extends Specification {
     def "test createLogger"() {
         when:
         Logger logger = LogFactory.getStartupLogger();
-        URL url = LogFactoryTest.class.getClassLoader().getResource("spring-startup-analyzer.properties")
+        URL url = LogFactorySpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
         Path path = Paths.get(url.toURI());
         LogFactory.createLogger(LoggerName.STARTUP, path.getParent().toUri().getPath())
 

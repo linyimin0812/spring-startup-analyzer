@@ -21,7 +21,7 @@ class EndpointCheckServiceSpec extends Specification {
 
     def "test init"() {
         when:
-        URL configUrl = EndpointCheckServiceTest.class.getClassLoader().getResource("spring-startup-analyzer.properties");
+        URL configUrl = EndpointCheckServiceSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
         assert configUrl != null;
         ProfilerSettings.loadProperties(configUrl.getPath());
         endpointCheckService.init();
