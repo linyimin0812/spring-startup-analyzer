@@ -14,7 +14,20 @@ import java.util.List;
 public class EventListenerTest implements EventListener {
     @Override
     public boolean filter(String className) {
-        return false;
+        return "org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory".equals(className);
+    }
+
+    @Override
+    public boolean filter(String methodName, String[] methodTypes) {
+        if (!"createBean".equals(methodName)) {
+            return false;
+        }
+
+        if (methodTypes == null || methodTypes.length != 3) {
+            return false;
+        }
+
+        return "java.lang.String".equals(methodTypes[0]) && "org.springframework.beans.factory.support.RootBeanDefinition".equals(methodTypes[1]) && "java.lang.Object[]".equals(methodTypes[2]);
     }
 
     @Override
