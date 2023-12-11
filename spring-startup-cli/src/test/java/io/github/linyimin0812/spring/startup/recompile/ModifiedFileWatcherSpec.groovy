@@ -34,5 +34,6 @@ class ModifiedFileWatcherSpec extends Specification {
 
         then:
         !runningField.getBoolean(watcher)
+        
     }
 }
