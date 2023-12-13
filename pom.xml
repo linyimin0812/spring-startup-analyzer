@@ -77,7 +77,6 @@
             ${project.basedir}/report-aggregate/target/site/
             jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
-        <testable.version>0.7.9</testable.version>
     </properties>
 
     <dependencyManagement>

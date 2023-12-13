@@ -10,9 +10,13 @@ import java.lang.reflect.Field
 class OSUtilSpec extends Specification {
 
     def "test platform"() {
-        when:
+
+        given:
         setStatic(OSUtil, 'platform', platform)
+
+        when:
         def os = OSUtil.platform()
+
         then:
         os == result
 
@@ -47,6 +51,7 @@ class OSUtilSpec extends Specification {
     def "test arch"() {
         when:
         setStatic(OSUtil, 'arch', arch)
+
         then:
         OSUtil.arch() == result
 
@@ -62,6 +67,7 @@ class OSUtilSpec extends Specification {
     def "test isArm32"() {
         when:
         setStatic(OSUtil, 'arch', "arm_32")
+
         then:
         OSUtil.isArm32()
     }
@@ -69,6 +75,7 @@ class OSUtilSpec extends Specification {
     def "test isArm64"() {
         when:
         setStatic(OSUtil, 'arch', "aarch_64")
+
         then:
         OSUtil.isArm64()
     }
@@ -76,6 +83,7 @@ class OSUtilSpec extends Specification {
     def "test isX86"() {
         when:
         setStatic(OSUtil, 'arch', "x86_32")
+
         then:
         OSUtil.isX86()
     }
@@ -83,6 +91,7 @@ class OSUtilSpec extends Specification {
     def "test isX86_64"() {
         when:
         setStatic(OSUtil, 'arch', "x86_64")
+
         then:
         OSUtil.isX86_64()
     }

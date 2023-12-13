@@ -10,27 +10,37 @@ class StringUtilSpec extends Specification {
 
     def "test isEmpty"() {
         when:
-        def empty = '';
-        def content = 'text'
+        def isEmpty = StringUtil.isEmpty(text)
 
         then:
-        StringUtil.isEmpty(empty)
-        !StringUtil.isEmpty(content)
+        isEmpty == result
+
+        where:
+        text || result
+        '' || true
+        'text' || false
+
     }
 
     def "test isNotEmpty"() {
         when:
-        def empty = '';
-        def content = 'text'
+        def isNotEmpty = StringUtil.isNotEmpty(text)
 
         then:
-        !StringUtil.isNotEmpty(empty)
-        StringUtil.isNotEmpty(content)
+        isNotEmpty == reuslt
+
+        where:
+        text || reuslt
+        '' || false
+        'text' || true
     }
 
     def "test rightPad"() {
-        when:
+
+        given:
         String content = "test"
+
+        when:
         String rightPad = StringUtil.rightPad(content + Constants.SPACE, 10, ".")
 
         then:

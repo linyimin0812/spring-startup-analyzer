@@ -20,15 +20,16 @@ class EndpointCheckServiceSpec extends Specification {
     EndpointCheckService endpointCheckService = new EndpointCheckService();
 
     def "test init"() {
-        when:
+
+        given:
         URL configUrl = EndpointCheckServiceSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
-        assert configUrl != null;
+
+        when:
         ProfilerSettings.loadProperties(configUrl.getPath());
         endpointCheckService.init();
         Field healthEndpointsField = endpointCheckService.getClass().getDeclaredField("healthEndpoints");
         healthEndpointsField.setAccessible(true);
 
-        @SuppressWarnings("unchecked")
         List<String> healthEndpoints = (List<String>) healthEndpointsField.get(endpointCheckService);
 
         then:
@@ -52,6 +53,9 @@ class EndpointCheckServiceSpec extends Specification {
 
         then:
         AppStatus.running == endpointCheckService.check()
+
+        cleanup:
+        stop()
     }
 
     def "test check after stop"() {

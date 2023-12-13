@@ -17,8 +17,11 @@ class AsyncBeanAutoConfigurationSpec extends Specification {
             .withConfiguration(AutoConfigurations.of(AsyncBeanAutoConfiguration.class));
 
     def "test autoConfigurationProperties"() {
-        when:
+
+        given:
         AsyncSpringBeanProperties properties = null
+
+        when:
         this.contextRunner.run(context -> properties = context.getBean(AsyncSpringBeanProperties.class))
 
         then:
@@ -26,8 +29,11 @@ class AsyncBeanAutoConfigurationSpec extends Specification {
     }
 
     def "test asyncTaskExecutionListener"() {
-        when:
+
+        given:
         AsyncTaskExecutionListener listener = null
+
+        when:
         this.contextRunner.run(context -> listener = context.getBean(AsyncTaskExecutionListener.class))
 
         then:
@@ -35,8 +41,11 @@ class AsyncBeanAutoConfigurationSpec extends Specification {
     }
 
     def "test asyncBeanPriorityLoadPostProcessor"() {
-        when:
+
+        given:
         AsyncBeanPriorityLoadPostProcessor processor = null
+
+        when:
         this.contextRunner.run(context -> processor = context.getBean(AsyncBeanPriorityLoadPostProcessor.class))
 
         then:
@@ -44,8 +53,11 @@ class AsyncBeanAutoConfigurationSpec extends Specification {
     }
 
     def "test asyncProxyBeanPostProcessor"() {
-        when:
+
+        given:
         AsyncProxyBeanPostProcessor processor = null
+
+        when:
         this.contextRunner.run(context -> processor = context.getBean(AsyncProxyBeanPostProcessor.class))
 
         then:

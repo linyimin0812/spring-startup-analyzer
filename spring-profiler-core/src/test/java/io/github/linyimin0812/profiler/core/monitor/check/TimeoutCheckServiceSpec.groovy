@@ -16,10 +16,12 @@ class TimeoutCheckServiceSpec extends Specification {
     final TimeoutCheckService timeoutCheckService = new TimeoutCheckService();
 
     def "test init"() {
-        when:
+
+        given:
         URL configUrl = TimeoutCheckServiceSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
-        assert configUrl != null
         ProfilerSettings.loadProperties(configUrl.getPath())
+
+        when:
         timeoutCheckService.init()
 
         Field durationField = timeoutCheckService.getClass().getDeclaredField("duration")

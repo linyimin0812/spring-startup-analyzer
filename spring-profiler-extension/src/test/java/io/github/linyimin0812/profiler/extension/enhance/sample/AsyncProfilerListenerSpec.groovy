@@ -30,7 +30,7 @@ class AsyncProfilerListenerSpec extends Specification {
 
     def "test listen"() {
         when:
-        def List<Event.Type> list = asyncProfilerListener.listen()
+        List<Event.Type> list = asyncProfilerListener.listen()
 
         then:
         list.isEmpty()

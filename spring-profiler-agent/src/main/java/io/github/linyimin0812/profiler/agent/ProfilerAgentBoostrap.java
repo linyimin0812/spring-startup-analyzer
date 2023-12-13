@@ -128,13 +128,4 @@ public class ProfilerAgentBoostrap {
         return System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator + "lib" + File.separator;
 
     }
-
-    public static void main(String[] args) throws IOException {
-        String text = "-javaagent:C:\\runner\\spring-startup-analyzer\\lib\\spring-profiler-agent.jar";
-
-        int index= text.indexOf(":");
-        System.out.println(text.substring(0, index));
-        System.out.println(text.substring(index + 1));
-    }
-
 }

@@ -11,12 +11,11 @@ class ProfilerAgentClassLoaderSpec extends Specification {
     @Shared
     ProfilerAgentClassLoader classLoader
 
-    def setup() {
+    def "test loadClass"() {
+
+        given:
         URL testJarUrl = ProfilerAgentClassLoaderSpec.class.getClassLoader().getResource("spring-profiler-api.jar")
         classLoader = new ProfilerAgentClassLoader(new URL[] {testJarUrl})
-    }
-
-    def "test loadClass"() {
 
         when:
         Class<?> clazz = classLoader.loadClass(className, true)

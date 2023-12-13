@@ -10,9 +10,13 @@ import spock.lang.Stepwise
 class ProfilerSettingsSpec extends Specification {
 
    def "get getProperty"() {
-       when:
+
+       given:
        URL configurationURL = ProfilerSettingsSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
+
+       when:
        ProfilerSettings.loadProperties(configurationURL.getPath())
+
        then:
        ProfilerSettings.getProperty("key") == null
        'default' == ProfilerSettings.getProperty("key", "default")
@@ -22,8 +26,11 @@ class ProfilerSettingsSpec extends Specification {
     }
 
     def "test contains"() {
-        when:
+
+        given:
         URL configurationURL = ProfilerSettingsSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
+
+        when:
         ProfilerSettings.loadProperties(configurationURL.getPath())
 
         then:
@@ -31,8 +38,11 @@ class ProfilerSettingsSpec extends Specification {
         !ProfilerSettings.contains("key")
     }
     def "test isNotBlank"() {
-        when:
+
+        given:
         URL configurationURL = ProfilerSettingsSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties")
+
+        when:
         ProfilerSettings.loadProperties(configurationURL.getPath())
 
         then:

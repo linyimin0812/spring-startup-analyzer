@@ -12,8 +12,11 @@ import spock.lang.Stepwise
 class StartupVOSpec extends Specification {
 
     def "test addBeanInitResult"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
+
+        when:
         beanInitResult.duration()
         StartupVO.addBeanInitResult(beanInitResult)
 
@@ -23,8 +26,11 @@ class StartupVOSpec extends Specification {
     }
 
     def "test addStatistics"() {
-        when:
+
+        given:
         Statistics statistics = new Statistics(0, "Startup Time(s)", String.format("%.2f", 180.28))
+
+        when:
         StartupVO.addStatistics(statistics)
 
         then:
@@ -32,10 +38,13 @@ class StartupVOSpec extends Specification {
     }
 
     def "test addUnusedJar"() {
-        when:
+
+        given:
         URLClassLoader classLoader = new URLClassLoader(new URL[]{})
         Map<ClassLoader, Set<String>> unusedJarMap = new HashMap<>();
         Set<String> jars = new HashSet<>()
+
+        when:
         jars.add("file:/Users/yiminlin/.m2/repository/org/webjars/swagger-ui/3.25.0/swagger-ui-3.25.0.jar")
         unusedJarMap.put(classLoader, jars)
         for (Map.Entry<ClassLoader, Set<String>> entry : unusedJarMap.entrySet()) {
@@ -47,8 +56,11 @@ class StartupVOSpec extends Specification {
     }
 
     def "test addMethodInvokeDetail"() {
-        when:
+
+        given:
         MethodInvokeDetail invokeDetail = new MethodInvokeDetail("io.github.linyimin0812.profiler.common.ui.StartupVOTest.addMethodInvokeDetail", System.currentTimeMillis(), 10)
+
+        when:
         StartupVO.addMethodInvokeDetail(invokeDetail)
 
         then:
@@ -58,8 +70,11 @@ class StartupVOSpec extends Specification {
     }
 
     def "test getMethodInvokeDetailList"() {
-        when:
+
+        given:
         String text = StartupVO.toJSONString()
+
+        when:
         Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {})
 
         then:
@@ -67,8 +82,11 @@ class StartupVOSpec extends Specification {
     }
 
     def "test toJSONString"() {
-        when:
+
+        given:
         String text = StartupVO.toJSONString()
+
+        when:
         Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {})
 
         then:

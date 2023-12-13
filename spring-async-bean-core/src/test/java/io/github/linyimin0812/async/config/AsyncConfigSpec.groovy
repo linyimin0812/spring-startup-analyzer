@@ -12,12 +12,15 @@ class AsyncConfigSpec extends Specification {
         AsyncConfig instance = AsyncConfig.getInstance()
 
         then:
-        AsyncConfig.getInstance()
+        instance
     }
 
     def "test getAsyncBeanProperties"() {
-        when:
+
+        given:
         AsyncBeanProperties asyncBeanProperties = AsyncBeanPropertiesSpec.parsePropertiesFromFile()
+
+        when:
         AsyncConfig.getInstance().setAsyncBeanProperties(asyncBeanProperties)
 
         then:
@@ -25,8 +28,11 @@ class AsyncConfigSpec extends Specification {
     }
 
    def "test setAsyncBeanProperties"() {
-       when:
+
+       given:
        AsyncBeanProperties asyncBeanProperties = AsyncBeanPropertiesSpec.parsePropertiesFromFile()
+
+       when:
        AsyncConfig.getInstance().setAsyncBeanProperties(asyncBeanProperties)
 
        then:

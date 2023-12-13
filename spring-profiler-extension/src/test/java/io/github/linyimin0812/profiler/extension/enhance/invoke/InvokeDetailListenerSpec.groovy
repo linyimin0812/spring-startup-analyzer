@@ -52,7 +52,7 @@ class InvokeDetailListenerSpec extends Specification {
 
     def "test listen"() {
         when:
-        def List<Event.Type> list = invokeDetailListener.listen()
+        List<Event.Type> list = invokeDetailListener.listen()
 
         then:
         list.size() == 2

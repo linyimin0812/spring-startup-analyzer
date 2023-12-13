@@ -17,49 +17,78 @@ import java.nio.file.Paths
 class IocContainerSpec extends Specification {
 
     def "test copyFile"() {
-        when:
+
+        given:
         URL srcURL = IocContainerSpec.class.getClassLoader().getResource("src/empty.txt")
         Path destPath = Paths.get(srcURL.toURI()).getParent().getParent()
         Path destFilePath = Paths.get(destPath.toString(), "empty.txt")
         Files.deleteIfExists(destFilePath)
+
+        when:
         IocContainer.copyFile(srcURL.getPath(), destPath.toString() + '/empty.txt')
 
         then:
         Files.exists(destFilePath)
+
+        cleanup:
+        Files.deleteIfExists(destFilePath)
     }
 
     def "test start"() {
         when:
         IocContainer.start()
+
         then:
         IocContainer.getComponent(LifecycleTest.class) != null
         SimpleHttpServerSpec.isURLAvailable(SimpleHttpServer.endpoint() + "/hello")
         IocContainer.isStarted()
+
+        cleanup:
+        try {
+            IocContainer.stop()
+        } catch (Exception ignored) {
+
+        }
+
     }
 
     def "test getComponent"() {
         when:
         LifecycleTest lifecycleTest = IocContainer.getComponent(LifecycleTest.class)
-        EventListenerTest eventListenerTest = IocContainer.getComponent(EventListenerTest.class)
 
         then:
         lifecycleTest != null
+
+        when:
+        EventListenerTest eventListenerTest = IocContainer.getComponent(EventListenerTest.class)
+
+        then:
         eventListenerTest != null
     }
 
     def "test getComponents"() {
         when:
         List<Lifecycle> lifecycleList = IocContainer.getComponents(Lifecycle.class)
-        List<EventListener> eventListeners = IocContainer.getComponents(EventListener.class)
 
         then:
         lifecycleList.size() == 2
+
+        when:
+        List<EventListener> eventListeners = IocContainer.getComponents(EventListener.class)
+
+        then:
         eventListeners.size() == 2
     }
 
     def "test stop"() {
         when:
         LifecycleTest lifecycleTest = IocContainer.getComponent(LifecycleTest.class)
+
+
+        then:
+        lifecycleTest != null
+
+        when:
         try {
             IocContainer.stop()
         } catch (Exception ignored) {
@@ -67,7 +96,6 @@ class IocContainerSpec extends Specification {
         }
 
         then:
-        lifecycleTest != null
         IocContainer.isStopped()
     }
 
