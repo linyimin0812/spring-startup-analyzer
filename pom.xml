@@ -77,7 +77,6 @@
             ${project.basedir}/report-aggregate/target/site/
             jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
-        <testable.version>0.7.9</testable.version>
     </properties>
 
     <dependencyManagement>
@@ -151,13 +150,6 @@
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
                 <version>2.4-M1-groovy-4.0</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.testable</groupId>
-                <artifactId>testable-all</artifactId>
-                <version>${testable.version}</version>
                 <scope>test</scope>
             </dependency>
 
