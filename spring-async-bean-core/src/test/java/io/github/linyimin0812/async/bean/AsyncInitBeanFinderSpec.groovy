@@ -17,17 +17,18 @@ import spock.lang.Specification
 @ContextConfiguration("classpath:bean-context.xml")
 @TestPropertySource(locations = "classpath:application.properties")
 class AsyncInitBeanFinderSpec extends Specification {
+
     @Autowired
     private ApplicationContext applicationContext;
 
-    def setup() {
+    def "test getAsyncInitMethodName"() {
+
+        given:
         AsyncBeanProperties properties = AsyncBeanProperties.parse(applicationContext.getEnvironment())
         AsyncConfig.getInstance().setAsyncBeanProperties(properties)
-    }
-
-    def "test getAsyncInitMethodName"() {
-        when:
         String beanName = "testComponentBean"
+
+        when:
 
         BeanDefinition beanDefinition = ((GenericApplicationContext) applicationContext)
                 .getBeanFactory()

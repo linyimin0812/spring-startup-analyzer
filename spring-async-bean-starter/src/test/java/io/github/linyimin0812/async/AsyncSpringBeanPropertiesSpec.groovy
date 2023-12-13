@@ -14,8 +14,11 @@ class AsyncSpringBeanPropertiesSpec extends Specification {
             .withPropertyValues("spring-startup-analyzer.boost.spring.async.bean-names=testBean");
 
     def "test propertiesLoading"() {
-        when:
+
+        given:
         AsyncSpringBeanProperties properties = null
+
+        when:
         this.contextRunner.run(context -> properties = context.getBean(AsyncSpringBeanProperties.class))
 
         then:

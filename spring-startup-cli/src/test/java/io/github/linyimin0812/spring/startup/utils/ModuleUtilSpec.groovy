@@ -19,25 +19,26 @@ class ModuleUtilSpec extends Specification {
     def "test getModulePaths"() {
         when:
         List<Path> paths = ModuleUtil.getModulePaths()
-        String module = paths.get(0).getFileName().toString()
 
         then:
-        module == 'spring-startup-cli'
         paths.size() == 1
+        paths.get(0).getFileName().toString() == 'spring-startup-cli'
     }
 
     def "test compile"() {
         when:
         def isCompile = ModuleUtil.compile(home.getParent())
 
-        then: isCompile
+        then:
+        isCompile
     }
 
     def "test isMaven"() {
         when:
         def isMaven = ModuleUtil.isMaven(home)
 
-        then: isMaven
+        then:
+        isMaven
     }
 
     def "test isGradle"() {
@@ -45,35 +46,39 @@ class ModuleUtilSpec extends Specification {
         def isGradle = ModuleUtil.isGradle(home)
 
 
-        then: !isGradle
+        then:
+        !isGradle
     }
 
     def "test hasMvnW"() {
         when:
-
         def isMvnW = ModuleUtil.hasGradleW(home)
 
-        then: !isMvnW
+        then:
+        !isMvnW
     }
 
     def "test hasGradleW"() {
         when:
         def hasGradleW = ModuleUtil.hasGradleW(home)
 
-        then: !hasGradleW
+        then:
+        !hasGradleW
     }
 
     def "test buildWithMaven"() {
         when:
         def isBuildWithMaven = ModuleUtil.buildWithMaven(home.getParent())
 
-        then: isBuildWithMaven
+        then:
+        isBuildWithMaven
     }
 
     def "test buildWithGradle"() {
         when:
         def isBuildWithGradle = ModuleUtil.buildWithGradle(home.getParent())
 
-        then: !isBuildWithGradle
+        then:
+        !isBuildWithGradle
     }
 }

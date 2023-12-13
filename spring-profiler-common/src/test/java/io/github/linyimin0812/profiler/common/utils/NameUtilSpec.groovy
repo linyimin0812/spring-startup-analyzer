@@ -58,9 +58,7 @@ class NameUtilSpec extends Specification {
         then:
         instanceName != null
 
-        String regex = '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)$'
-
-        instanceName ==~ regex
+        instanceName ==~ '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)$'
     }
 
     def "test getFlameGraphHtmlName"() {
@@ -70,10 +68,7 @@ class NameUtilSpec extends Specification {
 
         then:
         flameGraphHtmlName != null
-
-        String regex = '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)-flame-graph.html$'
-
-        flameGraphHtmlName ==~ regex
+        flameGraphHtmlName ==~ '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)-flame-graph.html$'
     }
 
     def "test getAnalysisHtmlName"() {
@@ -84,9 +79,7 @@ class NameUtilSpec extends Specification {
         then:
         analysisHtmlName != null
 
-        String regex = '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)-analyzer.html$'
-
-        analysisHtmlName ==~ regex
+        analysisHtmlName ==~ '^application-(\\d{14})-(\\d+\\.\\d+\\.\\d+\\.\\d+)-analyzer.html$'
     }
 
     def "test getOutputPath"() {

@@ -15,9 +15,12 @@ class BeanInitResultSpec extends Specification {
     }
 
     def "test getParentId"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
         BeanInitResult childBeanInitResult = new BeanInitResult("child")
+
+        when:
         beanInitResult.addChild(childBeanInitResult)
 
         then:
@@ -34,8 +37,11 @@ class BeanInitResultSpec extends Specification {
 
 
     def "test getDuration"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
+
+        when:
         beanInitResult.duration()
 
         then:
@@ -43,11 +49,13 @@ class BeanInitResultSpec extends Specification {
     }
 
     def "test getActualDuration"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
         BeanInitResult childBeanInitResult = new BeanInitResult("child")
         beanInitResult.addChild(childBeanInitResult)
-        // child finish first
+
+        when:
         childBeanInitResult.duration()
         beanInitResult.duration()
 
@@ -56,11 +64,13 @@ class BeanInitResultSpec extends Specification {
     }
 
     def "test duration"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
         BeanInitResult childBeanInitResult = new BeanInitResult("child")
         beanInitResult.addChild(childBeanInitResult)
-        // child finish first
+
+        when:
         childBeanInitResult.duration()
         beanInitResult.duration()
 
@@ -70,10 +80,13 @@ class BeanInitResultSpec extends Specification {
     }
 
     def "test getTags"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
         Map<String, String> tags = new HashMap<>()
         tags.put("class", "Test")
+
+        when:
         beanInitResult.setTags(tags)
 
         then:
@@ -82,9 +95,12 @@ class BeanInitResultSpec extends Specification {
     }
 
     def "test getChildren"() {
-        when:
+
+        given:
         BeanInitResult beanInitResult = new BeanInitResult("test")
         BeanInitResult childBeanInitResult = new BeanInitResult("child")
+
+        when:
         beanInitResult.addChild(childBeanInitResult)
 
         then:

@@ -11,12 +11,18 @@ import spock.lang.Stepwise
 class SimpleHttpServerSpec extends Specification {
 
     def "test start"() {
-        when:
+
+        given:
         SimpleHttpServer.stop()
+
+        when:
         SimpleHttpServer.start()
 
         then:
         isURLAvailable(SimpleHttpServer.endpoint() + "/hello")
+
+        cleanup:
+        SimpleHttpServer.stop()
     }
 
     def "test stop"() {
@@ -25,6 +31,9 @@ class SimpleHttpServerSpec extends Specification {
 
         then:
         !isURLAvailable(SimpleHttpServer.endpoint() + "/hello")
+
+        cleanup:
+        SimpleHttpServer.stop()
 
     }
 
@@ -37,9 +46,12 @@ class SimpleHttpServerSpec extends Specification {
     }
 
     def "test getPort from properties"() {
-        when:
+
+        given:
         URL configurationURL = SimpleHttpServerSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
-        assert configurationURL != null;
+
+
+        when:
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
         then:
@@ -56,9 +68,11 @@ class SimpleHttpServerSpec extends Specification {
    }
 
     def "test endpoint from properties"() {
-        when:
+
+        given:
         URL configurationURL = SimpleHttpServerSpec.class.getClassLoader().getResource("spring-startup-analyzer.properties");
-        assert configurationURL != null;
+
+        when:
         ProfilerSettings.loadProperties(configurationURL.getPath());
 
         then:

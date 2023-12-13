@@ -15,12 +15,15 @@ class ApplicationRunMonitorSpec extends Specification {
 
     def "test filter with class name"() {
         when:
-        def className1 = 'org.springframework.boot.SpringApplication'
-        def className2 = 'org.springframework.boot.ApplicationContext'
+        def filter = applicationRunMonitor.filter(className)
 
         then:
-        applicationRunMonitor.filter(className1)
-        !applicationRunMonitor.filter(className2)
+        filter == result
+
+        where:
+        className || result
+        'org.springframework.boot.SpringApplication' || true
+        'org.springframework.boot.ApplicationContext' || false
     }
 
     def "test filter both with class name and method name"() {
@@ -42,8 +45,11 @@ class ApplicationRunMonitorSpec extends Specification {
 
 
     def "test onEvent"() {
-        when:
+
+        given:
         AtEnterEvent event = new AtEnterEvent(0L, 0L, null, null, null, null, null)
+
+        when:
         applicationRunMonitor.onEvent(event)
 
         then:

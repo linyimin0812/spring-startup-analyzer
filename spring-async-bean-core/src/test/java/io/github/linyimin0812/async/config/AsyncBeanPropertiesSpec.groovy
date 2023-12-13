@@ -12,26 +12,40 @@ import spock.lang.Specification
 class AsyncBeanPropertiesSpec extends Specification {
 
     def "test isBeanPriorityLoadEnable"() {
-        when:
+
+        given:
         AsyncBeanProperties properties = new AsyncBeanProperties()
+
+        when:
         def isBeanPriorityLoadEnableDefault = properties.isBeanPriorityLoadEnable()
-        properties = parsePropertiesFromFile()
-        def isBeanPriorityLoadEnableFromFile = properties.isBeanPriorityLoadEnable()
+
         then:
         !isBeanPriorityLoadEnableDefault
-        isBeanPriorityLoadEnableFromFile
+
+        when:
+        properties = parsePropertiesFromFile()
+
+        then:
+        properties.isBeanPriorityLoadEnable()
     }
 
     def "test setBeanPriorityLoadEnable"() {
-        when:
+
+        given:
         AsyncBeanProperties properties = new AsyncBeanProperties()
-        def before = properties.isBeanPriorityLoadEnable()
-        properties.setBeanPriorityLoadEnable(true)
-        def after = properties.isBeanPriorityLoadEnable()
+
+        when:
+        def result = properties.isBeanPriorityLoadEnable()
 
         then:
-        !before
-        after
+        !result
+
+        when:
+        properties.setBeanPriorityLoadEnable(true)
+
+        then:
+        properties.isBeanPriorityLoadEnable()
+
     }
 
     def "test getBeanNames"() {
@@ -48,71 +62,100 @@ class AsyncBeanPropertiesSpec extends Specification {
     }
 
     def "test setBeanNames"() {
-        when:
-        AsyncBeanProperties properties = new AsyncBeanProperties()
-        def beforeIsEmpty = properties.getBeanNames().isEmpty()
 
-        properties.setBeanNames(Collections.singletonList("testBean"))
+        given:
+        AsyncBeanProperties properties = new AsyncBeanProperties()
+
+        when:
+        def beforeIsEmpty = properties.getBeanNames().isEmpty()
 
         then:
         beforeIsEmpty
+
+        when:
+        properties.setBeanNames(Collections.singletonList("testBean"))
+
+        then:
         properties.getBeanNames().size() == 1
         String.join(",", properties.getBeanNames()) == 'testBean'
     }
 
     def "test getInitBeanThreadPoolCoreSize"() {
-        when:
-        AsyncBeanProperties properties = new AsyncBeanProperties()
-        def defaultValue = properties.getInitBeanThreadPoolCoreSize()
 
-        properties = parsePropertiesFromFile()
-        def afterLoadFromFile = properties.getInitBeanThreadPoolCoreSize()
+        given:
+        AsyncBeanProperties properties = new AsyncBeanProperties()
+
+        when:
+        def defaultValue = properties.getInitBeanThreadPoolCoreSize()
 
         then:
         defaultValue == Runtime.getRuntime().availableProcessors() + 1
-        afterLoadFromFile == 8
+
+        when:
+        properties = parsePropertiesFromFile()
+
+        then:
+        properties.getInitBeanThreadPoolCoreSize() == 8
     }
 
     def "test setInitBeanThreadPoolCoreSize"() {
-        when:
+
+        given:
         AsyncBeanProperties properties = new AsyncBeanProperties()
+
+        when:
         def defaultValue = properties.getInitBeanThreadPoolCoreSize()
-        properties.setInitBeanThreadPoolCoreSize(100)
-        def afterSetting = properties.getInitBeanThreadPoolCoreSize()
 
         then:
         defaultValue == Runtime.getRuntime().availableProcessors() + 1
-        afterSetting == 100
+
+        when:
+        properties.setInitBeanThreadPoolCoreSize(100)
+
+        then:
+        properties.getInitBeanThreadPoolCoreSize() == 100
     }
 
     def "test getInitBeanThreadPoolMaxSize"() {
-        when:
+
+        given:
         AsyncBeanProperties properties = new AsyncBeanProperties()
+
+        when:
         def defaultValue = properties.getInitBeanThreadPoolMaxSize()
-        properties = parsePropertiesFromFile()
-        def valueLoadFromFile = properties.getInitBeanThreadPoolMaxSize()
 
         then:
         defaultValue == Runtime.getRuntime().availableProcessors() + 1
-        valueLoadFromFile == 16
+
+        when:
+        properties = parsePropertiesFromFile()
+
+        then:
+        properties.getInitBeanThreadPoolMaxSize() == 16
     }
 
     def "test setInitBeanThreadPoolMaxSize"() {
-        when:
-        AsyncBeanProperties properties = new AsyncBeanProperties()
-        def defaultValue = properties.getInitBeanThreadPoolMaxSize()
 
-        properties.setInitBeanThreadPoolMaxSize(100)
-        def afterSetting = properties.getInitBeanThreadPoolMaxSize()
+        given:
+        AsyncBeanProperties properties = new AsyncBeanProperties()
+        when:
+        def defaultValue = properties.getInitBeanThreadPoolMaxSize()
 
         then:
         defaultValue == Runtime.getRuntime().availableProcessors() + 1
-        afterSetting == 100
+
+        when:
+        properties.setInitBeanThreadPoolMaxSize(100)
+
+        then:
+        properties.getInitBeanThreadPoolMaxSize() == 100
     }
     
     def "test parse default"() {
+
         when:
         AsyncBeanProperties properties = new AsyncBeanProperties()
+
         then:
         !properties.isBeanPriorityLoadEnable()
         properties.getBeanNames().isEmpty()

@@ -65,9 +65,11 @@ class MatcherSpec extends Specification {
 
     def "test isMatchMethod with access"() {
 
-        when:
+        given:
         ClassNode classNode = new ClassNode();
         MethodNode methodNode = new MethodNode()
+
+        when:
         methodNode.access = access
 
         then:

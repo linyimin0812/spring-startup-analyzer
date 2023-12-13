@@ -28,10 +28,14 @@ class EventDispatcherSpec extends Specification {
     def "test atEnter and atExit"() {
         when:
         eventDispatcher.atEnter(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null)
-        eventDispatcher.atExit(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null, null)
 
         then:
         EventListenerTest.atEnterEvent != null
+
+        when:
+        eventDispatcher.atExit(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null, null)
+
+        then:
         EventListenerTest.atExitEvent != null
         EventListenerTest.atExitEvent.invokeId == EventListenerTest.atEnterEvent.invokeId
 
@@ -40,10 +44,14 @@ class EventDispatcherSpec extends Specification {
     def "test atEnter and atExceptionExit"() {
         when:
         eventDispatcher.atEnter(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null)
-        eventDispatcher.atExceptionExit(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null, null)
 
         then:
         EventListenerTest.atEnterEvent != null
+
+        then:
+        eventDispatcher.atExceptionExit(URLClassLoader, null, 'findResource', '(Ljava/lang/String;)Ljava/net/URL;', null, null)
+
+        then:
         EventListenerTest.atExceptionExitEvent != null
         EventListenerTest.atEnterEvent.invokeId == EventListenerTest.atExceptionExitEvent.invokeId
 

@@ -36,11 +36,13 @@ class FlameGraphSpec extends Specification {
     }
 
     def "test parse"() {
-        when:
+
+        given:
         FlameGraph fg = new FlameGraph()
         URL templateURL = FlameGraphSpec.class.getClassLoader().getResource("flame-graph.html")
-        assert templateURL != null
         String destPath = Paths.get(templateURL.toURI()).getParent().toString() + "/result-flame-graph.html"
+
+        when:
         fg.parse(templateURL.getPath(), destPath, TRACE_MAP)
         Path resultPath = Paths.get(destPath)
 

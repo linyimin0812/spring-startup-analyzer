@@ -6,9 +6,9 @@ import spock.lang.Specification
  * @author linyimin
  * */
 class BridgeSpec extends Specification {
+
     private static boolean atEnter = false
     private static boolean atExit = false
-
     private static boolean atException = false
     
     def "test getBridge"() {
@@ -21,8 +21,11 @@ class BridgeSpec extends Specification {
 
    
     def "test setBridge"() {
-        when:
+
+        given:
         BridgeImplTest bridgeImplTest = new BridgeImplTest()
+
+        when:
         Bridge.setBridge(bridgeImplTest)
         
         then:
@@ -30,9 +33,15 @@ class BridgeSpec extends Specification {
     }
     
     def "test atEnter"() {
+
         when:
         Bridge.setBridge(Bridge.NOP_BRIDGE)
         Bridge.atEnter(null, null, null, null, null)
+
+        then:
+        !atEnter
+
+        when:
         Bridge.setBridge(new BridgeImplTest())
         Bridge.atEnter(null, null, null, null, null)
         
@@ -42,9 +51,15 @@ class BridgeSpec extends Specification {
     }
 
     def "test atExit"() {
+
         when:
         Bridge.setBridge(Bridge.NOP_BRIDGE)
         Bridge.atExit(null, null, null, null, null, null)
+
+        then:
+        !atExit
+
+        when:
         Bridge.setBridge(new BridgeImplTest())
         Bridge.atExit(null, null, null, null, null, null)
         
@@ -53,9 +68,16 @@ class BridgeSpec extends Specification {
     }
 
     def "test atExceptionExit"() {
+
         when:
         Bridge.setBridge(Bridge.NOP_BRIDGE)
         Bridge.atExceptionExit(null, null, null, null, null, null)
+
+        then:
+        !atException
+
+        when:
+
         Bridge.setBridge(new BridgeImplTest())
         Bridge.atExceptionExit(null, null, null, null, null, null)
         
