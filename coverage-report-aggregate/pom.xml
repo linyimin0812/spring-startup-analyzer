@@ -71,6 +71,12 @@
             <artifactId>spring-async-bean-starter</artifactId>
             <version>${revision}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>io.github.linyimin0812</groupId>
+            <artifactId>spring-profiler-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
     </dependencies>
     <build>
