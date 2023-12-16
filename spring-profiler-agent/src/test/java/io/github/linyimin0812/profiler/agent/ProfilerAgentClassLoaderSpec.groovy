@@ -1,6 +1,5 @@
 package io.github.linyimin0812.profiler.agent
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 /**
@@ -8,14 +7,11 @@ import spock.lang.Specification
  * */
 class ProfilerAgentClassLoaderSpec extends Specification {
 
-    @Shared
-    ProfilerAgentClassLoader classLoader
-
     def "test loadClass"() {
 
         given:
         URL testJarUrl = ProfilerAgentClassLoaderSpec.class.getClassLoader().getResource("spring-profiler-api.jar")
-        classLoader = new ProfilerAgentClassLoader(new URL[] {testJarUrl})
+        ProfilerAgentClassLoader classLoader = new ProfilerAgentClassLoader(new URL[] {testJarUrl})
 
         when:
         Class<?> clazz = classLoader.loadClass(className, true)
