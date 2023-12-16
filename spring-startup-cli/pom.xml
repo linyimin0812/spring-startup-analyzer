@@ -53,12 +53,13 @@
 			<artifactId>directory-watcher</artifactId>
 		  	<version>0.18.0</version>
 		</dependency>
-    
-    	<dependency>
-      		<groupId>org.spockframework</groupId>
-      		<artifactId>spock-core</artifactId>
-      		<scope>test</scope>
-    	</dependency>
+		
+		<dependency>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-core</artifactId>
+			<version>2.4-M1-groovy-4.0</version>
+			<scope>test</scope>
+		</dependency>
   
   	</dependencies>
   	<build>
