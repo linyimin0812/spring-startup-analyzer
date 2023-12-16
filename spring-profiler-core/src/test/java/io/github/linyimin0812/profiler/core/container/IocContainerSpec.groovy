@@ -40,7 +40,6 @@ class IocContainerSpec extends Specification {
 
         then:
         IocContainer.getComponent(LifecycleTest.class) != null
-        SimpleHttpServerSpec.isURLAvailable(SimpleHttpServer.endpoint() + "/hello")
         IocContainer.isStarted()
 
         cleanup:

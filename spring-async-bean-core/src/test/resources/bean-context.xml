@@ -11,4 +11,5 @@
     <context:component-scan base-package="io.github.linyimin0812.async.springbeans" />
     <bean id="testXmlBean" init-method="init" class="io.github.linyimin0812.async.springbeans.TestXmlBean" />
     <bean id="asyncTaskExecutionListener" class="io.github.linyimin0812.async.listener.AsyncTaskExecutionListener" />
+    <bean id="asyncProxyBeanPostProcessor" class="io.github.linyimin0812.async.processor.AsyncProxyBeanPostProcessor" />
 </beans>
