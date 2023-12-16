@@ -1,7 +1,6 @@
 package io.github.linyimin0812.profiler.agent
 
 import spock.lang.Specification
-
 import java.lang.instrument.Instrumentation
 
 /**
@@ -18,6 +17,6 @@ class ProfilerAgentBoostrapSpec extends Specification {
         ProfilerAgentBoostrap.premain(null, instrumentation)
 
         then:
-        thrown(NoClassDefFoundError)
+        0 * instrumentation.appendToBootstrapClassLoaderSearch(_)
     }
 }
