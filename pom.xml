@@ -70,13 +70,6 @@
         <output.directory>${user.home}/spring-startup-analyzer/lib</output.directory>
         <config.directory>${user.home}/spring-startup-analyzer/config</config.directory>
         <template.directory>${user.home}/spring-startup-analyzer/template</template.directory>
-        <sonar.organization>linyimin-bupt</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <revision>3.0.0</revision>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${project.basedir}/report-aggregate/target/site/
-            jacoco-aggregate/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
