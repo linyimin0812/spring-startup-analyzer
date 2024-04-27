@@ -1,6 +1,7 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
@@ -116,7 +117,8 @@ public class BeanCreateListener implements EventListener {
         }
 
         if (!remainInitResult.isEmpty()) {
-            logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", JSON.toJSONString(remainInitResult));
+            logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}",
+                    JSON.toJSONString(remainInitResult, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
         }
     }
 }
