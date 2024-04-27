@@ -1,7 +1,7 @@
 package io.github.linyimin0812.profiler.common.ui;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
@@ -48,11 +48,11 @@ public class StartupVO {
 
     public static String toJSONString() {
         Map<String, String> map = new HashMap<>();
-        map.put("statisticsList", JSON.toJSONString(statisticsList));
-        map.put("beanInitResultList", JSON.toJSONString(beanInitResultList));
-        map.put("unusedJarMap", JSON.toJSONString(unusedJarMap));
+        map.put("statisticsList", JSON.toJSONString(statisticsList, JSONWriter.Feature.LargeObject));
+        map.put("beanInitResultList", JSON.toJSONString(beanInitResultList, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
+        map.put("unusedJarMap", JSON.toJSONString(unusedJarMap, JSONWriter.Feature.LargeObject));
 
-        map.put("methodInvokeDetailList", JSON.toJSONString(calculateInvokeMetrics(), SerializerFeature.IgnoreNonFieldGetter));
+        map.put("methodInvokeDetailList", JSON.toJSONString(calculateInvokeMetrics(), JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
 
         // fix Use JSONObject#toJSONString to serialize a Map. The Map contains a large string and OOM appears
         return JSONObject.toJSONString(map, JSONWriter.Feature.LargeObject);
@@ -76,7 +76,7 @@ public class StartupVO {
             }
         } catch (Exception ex) {
             List<MethodInvokeDetail> copies = methodInvokeDetailList.stream().map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration())).collect(Collectors.toList());
-            logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, SerializerFeature.IgnoreNonFieldGetter), ex);
+            logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject), ex);
         }
 
         return metricsList;

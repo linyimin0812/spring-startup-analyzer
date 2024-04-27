@@ -12,9 +12,9 @@ import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.ClassUtils;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author linyimin
@@ -52,7 +52,10 @@ public class AsyncInitBeanFinder {
         List<Method> candidateMethods = new ArrayList<>();
 
         for (Method method : beanClassType.getDeclaredMethods()) {
-            if (AnnotatedElementUtils.hasAnnotation(method, PostConstruct.class)) {
+
+            List<String> annotations= Arrays.stream(method.getAnnotations()).map(annotation -> annotation.annotationType().getName()).collect(Collectors.toList());
+
+            if (annotations.contains("javax.annotation.PostConstruct") || annotations.contains("jakarta.annotation.PostConstruct")) {
                 candidateMethods.add(method);
             }
         }
