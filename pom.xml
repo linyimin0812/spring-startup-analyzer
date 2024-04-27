@@ -26,8 +26,8 @@
         <module>spring-profiler-starter</module>
         <module>spring-async-bean-core</module>
         <module>spring-async-bean-starter</module>
-<!--        <module>spring-startup-cli</module>-->
-<!--        <module>coverage-report-aggregate</module>-->
+        <module>spring-startup-cli</module>
+        <module>coverage-report-aggregate</module>
     </modules>
 
     <url>https://github.com/linyimin5208/spring-startup-analyzer</url>
@@ -72,7 +72,7 @@
         <template.directory>${user.home}/spring-startup-analyzer/template</template.directory>
         <sonar.organization>linyimin-bupt</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <revision>3.0.1-SNAPSHOT</revision>
+        <revision>3.1.0</revision>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${project.basedir}/report-aggregate/target/site/
             jacoco-aggregate/jacoco.xml
