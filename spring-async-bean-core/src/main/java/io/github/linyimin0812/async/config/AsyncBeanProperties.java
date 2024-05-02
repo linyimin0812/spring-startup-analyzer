@@ -110,4 +110,14 @@ public class AsyncBeanProperties {
 
     }
 
+    @Override
+    public String toString() {
+        return "AsyncBeanProperties{" +
+                "beanPriorityLoadEnable=" + beanPriorityLoadEnable +
+                ", beanNames=" + beanNames +
+                ", CPU_COUNT=" + CPU_COUNT +
+                ", initBeanThreadPoolCoreSize=" + initBeanThreadPoolCoreSize +
+                ", initBeanThreadPoolMaxSize=" + initBeanThreadPoolMaxSize +
+                '}';
+    }
 }

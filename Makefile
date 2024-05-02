@@ -15,10 +15,10 @@ endif
 .PHONY: package
 package: clean install
 ifeq ($(strip $(VERSION)),)
-	${MVN} package
+	${MVN} package -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} package
 else
-	${MVN} package -Drevision=$(VERSION)
+	${MVN} package -Drevision=$(VERSION) -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} package -Drevision=$(VERSION)
 endif
 	mkdir -p ./build && rm -rf ./build/* && cp -r ~/${PROJECT_NAME}/* ./build/ && rm -rf ./build/${PROJECT_NAME}.tar.gz
@@ -27,17 +27,17 @@ endif
 .PHONY: install
 install: clean
 ifeq ($(strip $(VERSION)),)
-	${MVN} install
+	${MVN} install -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} install
 else
-	${MVN} install -Drevision=$(VERSION)
+	${MVN} install -Drevision=$(VERSION) -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} install -Drevision=$(VERSION)
 endif
 
 .PHONY: deploy
 deploy: clean
 ifeq ($(strip $(VERSION)),)
-	${MVN} deploy -pl !coverage-report-aggregate
+	${MVN} deploy -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} deploy
 else
 	${MVN} deploy -Drevision=$(VERSION)

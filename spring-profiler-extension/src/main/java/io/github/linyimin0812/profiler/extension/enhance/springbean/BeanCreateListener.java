@@ -1,7 +1,6 @@
 package io.github.linyimin0812.profiler.extension.enhance.springbean;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONWriter;
+import com.google.gson.Gson;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.event.AtEnterEvent;
 import io.github.linyimin0812.profiler.api.event.AtExitEvent;
@@ -10,9 +9,11 @@ import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.ui.BeanInitResult;
 import io.github.linyimin0812.profiler.common.ui.StartupVO;
+import io.github.linyimin0812.profiler.common.utils.GsonUtil;
 import org.kohsuke.MetaInfServices;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author linyimin
@@ -23,6 +24,8 @@ public class BeanCreateListener implements EventListener {
     private final Logger logger = LogFactory.getStartupLogger();
 
     private final PersistentThreadLocal<Stack<BeanInitResult>> profilerResultThreadLocal = new PersistentThreadLocal<Stack<BeanInitResult>>(Stack::new);
+
+    private final Gson GSON = GsonUtil.create();
 
     @Override
     public boolean filter(String className) {
@@ -117,8 +120,12 @@ public class BeanCreateListener implements EventListener {
         }
 
         if (!remainInitResult.isEmpty()) {
-            logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}",
-                    JSON.toJSONString(remainInitResult, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
+            try {
+                logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", GSON.toJson(remainInitResult));
+            } catch (Throwable ignored) {
+                List<String> beanNames = remainInitResult.stream().map(BeanInitResult::getName).collect(Collectors.toList());
+                logger.warn(BeanCreateListener.class, "profilerResultThreadLocal is not empty. There may be a problem with the initialization of the bean. {}", GSON.toJson(beanNames));
+            }
         }
     }
 }

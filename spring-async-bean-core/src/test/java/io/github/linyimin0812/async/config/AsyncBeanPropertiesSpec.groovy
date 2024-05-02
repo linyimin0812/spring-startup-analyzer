@@ -1,6 +1,7 @@
 package io.github.linyimin0812.async.config
 
 import com.google.gson.Gson
+import io.github.linyimin0812.profiler.common.utils.GsonUtil
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
 import org.springframework.util.StringUtils
@@ -150,7 +151,7 @@ class AsyncBeanPropertiesSpec extends Specification {
         then:
         properties.getInitBeanThreadPoolMaxSize() == 100
     }
-    
+
     def "test parse default"() {
 
         when:
@@ -183,7 +184,7 @@ class AsyncBeanPropertiesSpec extends Specification {
     @SuppressWarnings("NullableProblems")
     private static class CustomEnvironment implements Environment {
 
-        private final Gson GSON = new Gson();
+        private final Gson GSON = GsonUtil.create();
 
         private final Properties properties = new Properties();
 
