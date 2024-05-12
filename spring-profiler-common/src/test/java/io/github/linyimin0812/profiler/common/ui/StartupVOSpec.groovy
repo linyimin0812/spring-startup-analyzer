@@ -1,7 +1,8 @@
 package io.github.linyimin0812.profiler.common.ui
 
-import com.alibaba.fastjson.JSONObject
-import com.alibaba.fastjson.TypeReference
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.github.linyimin0812.profiler.common.utils.GsonUtil
 import spock.lang.Specification
 import spock.lang.Stepwise
 
@@ -72,10 +73,12 @@ class StartupVOSpec extends Specification {
     def "test getMethodInvokeDetailList"() {
 
         given:
+        Gson GSON = GsonUtil.create();
+        TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {}
         String text = StartupVO.toJSONString()
 
         when:
-        Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {})
+        Map<String, Object> map = GSON.fromJson(text, typeToken);
 
         then:
         map.containsKey("methodInvokeDetailList")
@@ -84,10 +87,11 @@ class StartupVOSpec extends Specification {
     def "test toJSONString"() {
 
         given:
+        Gson GSON = GsonUtil.create();
         String text = StartupVO.toJSONString()
 
         when:
-        Map<String, Object> map = JSONObject.parseObject(text, new TypeReference<Map<String, Object>>() {})
+        Map<String, Object> map = GSON.fromJson(text, new TypeToken<Map<String, Object>>() {})
 
         then:
         map.containsKey("beanInitResultList")

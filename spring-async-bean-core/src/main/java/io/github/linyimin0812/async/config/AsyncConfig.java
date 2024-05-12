@@ -30,4 +30,10 @@ public class AsyncConfig {
         return asyncBeanProperties.getBeanNames().contains(beanName);
     }
 
+    @Override
+    public String toString() {
+        return "AsyncConfig{" +
+                "asyncBeanProperties=" + asyncBeanProperties +
+                '}';
+    }
 }

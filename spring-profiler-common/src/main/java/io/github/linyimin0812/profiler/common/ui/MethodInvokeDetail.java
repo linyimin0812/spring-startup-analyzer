@@ -1,5 +1,8 @@
 package io.github.linyimin0812.profiler.common.ui;
 
+import com.google.gson.Gson;
+import io.github.linyimin0812.profiler.common.utils.GsonUtil;
+
 /**
  * @author linyimin
  **/
@@ -13,7 +16,23 @@ public class MethodInvokeDetail {
     public MethodInvokeDetail(String methodQualifier, Object[] args) {
         this.methodQualifier = methodQualifier;
         this.startMillis = System.currentTimeMillis();
-        this.args = args;
+
+        if (args == null) {
+            return;
+        }
+
+        Gson gson = GsonUtil.create();
+
+        Object[] argStrList = new String[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            try {
+                argStrList[i] = gson.toJson(args[i]);
+            } catch (Throwable ignored) {
+                argStrList[i] = args[i].toString();
+            }
+        }
+        this.args = argStrList;
     }
 
     public MethodInvokeDetail(String methodQualifier, long startMillis, long duration) {

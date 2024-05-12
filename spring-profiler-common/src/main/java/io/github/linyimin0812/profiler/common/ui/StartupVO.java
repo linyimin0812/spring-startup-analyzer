@@ -1,14 +1,16 @@
 package io.github.linyimin0812.profiler.common.ui;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import io.github.linyimin0812.profiler.common.logger.LogFactory;
 import io.github.linyimin0812.profiler.common.logger.Logger;
+import io.github.linyimin0812.profiler.common.utils.GsonUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.reflect.Modifier.TRANSIENT;
 
 /**
  * @author linyimin
@@ -21,6 +23,8 @@ public class StartupVO {
     private static final List<Statistics> statisticsList = new ArrayList<>();
     private static final Map<String, Set<String>> unusedJarMap = new HashMap<>();
     private static final List<MethodInvokeDetail> methodInvokeDetailList = new ArrayList<>();
+
+    private static final Gson GSON = GsonUtil.create();
 
     public static void addBeanInitResult(BeanInitResult beanInitResult) {
         beanInitResultList.add(beanInitResult);
@@ -48,14 +52,16 @@ public class StartupVO {
 
     public static String toJSONString() {
         Map<String, String> map = new HashMap<>();
-        map.put("statisticsList", JSON.toJSONString(statisticsList, JSONWriter.Feature.LargeObject));
-        map.put("beanInitResultList", JSON.toJSONString(beanInitResultList, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
-        map.put("unusedJarMap", JSON.toJSONString(unusedJarMap, JSONWriter.Feature.LargeObject));
 
-        map.put("methodInvokeDetailList", JSON.toJSONString(calculateInvokeMetrics(), JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject));
+
+
+        map.put("statisticsList", GSON.toJson(statisticsList, new TypeToken<List<Statistics>>(){}.getType()));
+        map.put("beanInitResultList", GSON.toJson(beanInitResultList));
+        map.put("unusedJarMap", GSON.toJson(unusedJarMap));
+        map.put("methodInvokeDetailList", GSON.toJson(calculateInvokeMetrics()));
 
         // fix Use JSONObject#toJSONString to serialize a Map. The Map contains a large string and OOM appears
-        return JSONObject.toJSONString(map, JSONWriter.Feature.LargeObject);
+        return GSON.toJson(map);
     }
 
     private static List<MethodInvokeMetrics> calculateInvokeMetrics() {
@@ -76,7 +82,7 @@ public class StartupVO {
             }
         } catch (Exception ex) {
             List<MethodInvokeDetail> copies = methodInvokeDetailList.stream().map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration())).collect(Collectors.toList());
-            logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", JSON.toJSONString(copies, JSONWriter.Feature.IgnoreNonFieldGetter, JSONWriter.Feature.LargeObject), ex);
+            logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", GSON.toJson(copies), ex);
         }
 
         return metricsList;
