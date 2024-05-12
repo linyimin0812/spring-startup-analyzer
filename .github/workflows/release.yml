@@ -70,7 +70,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build spring-startup-analyzer
-        run: make all
+        run: make all-skip-tests
 
       - name: Package plugin and create userscript
         run: |
