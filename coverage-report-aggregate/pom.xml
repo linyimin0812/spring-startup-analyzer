@@ -62,12 +62,6 @@
 
         <dependency>
             <groupId>io.github.linyimin0812</groupId>
-            <artifactId>spring-startup-cli</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.linyimin0812</groupId>
             <artifactId>spring-async-bean-starter</artifactId>
             <version>${revision}</version>
         </dependency>
