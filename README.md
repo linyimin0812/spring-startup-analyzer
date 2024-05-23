@@ -112,14 +112,16 @@ The criteria for determining a successful application startup are as follows:
 For non-Spring Boot applications, it is necessary to configure the health check URL using `spring-startup-analyzer.app.health.check.endpoints`.
 
 
-| configuration option | description                           | default value                         |
-| ---- | ----------- |---------------------------------------|
-| spring-startup-analyzer.app.health.check.timeout   | application startup check timeout time in minutes  | 20                                    |
-| **spring-startup-analyzer.app.health.check.endpoints**         | application startup success check URL(s), multiple URLs can be configured, separated by commas   | http://127.0.0.1:7002/actuator/health |
-| spring-startup-analyzer.admin.http.server.port                 | management port      | 8065                                  |
-| spring-startup-analyzer.async.profiler.sample.thread.names     | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
-| **spring-startup-analyzer.async.profiler.interval.millis**     | async profiler sample interval (ms) | 5                                     |
-| spring-startup-analyzer.linux.and.mac.profiler | specify linux/mac flame graph profiler：async_profiler/jvm_profiler |     jvm_profiler   |
+| configuration option                                       | description                                                                                    | default value                         |
+|------------------------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------|
+| spring-startup-analyzer.app.health.check.timeout           | application startup check timeout time in minutes                                              | 20                                    |
+| **spring-startup-analyzer.app.health.check.endpoints**     | application startup success check URL(s), multiple URLs can be configured, separated by commas | http://127.0.0.1:7002/actuator/health |
+| spring-startup-analyzer.admin.http.server.port             | management port                                                                                | 8065                                  |
+| spring-startup-analyzer.async.profiler.sample.thread.names | thread names collected by Async Profiler, supports multiple configurations separated by commas | main                                  |
+| **spring-startup-analyzer.async.profiler.interval.millis** | async profiler sample interval (ms)                                                            | 5                                     |
+| spring-startup-analyzer.linux.and.mac.profiler             | specify linux/mac flame graph profiler：async_profiler/jvm_profiler                             | jvm_profiler                          |
+| spring-startup-analyzer.log.path                           | Path of logs<br/>- startup.log: log of startup<br/>- transform.log: log of re-transform class  | $HOME/spring-startup-analyzer/logs    |
+
 
 ### Application Startup
 
@@ -139,10 +141,7 @@ java -javaagent:/Users/runner/spring-startup-analyzer/lib/spring-profiler-agent.
 
 ![](./docs/startup-using-idea.png)
 
-Path of logs：`$HOME/spring-startup-analyzer/logs`
 
-- startup.log: log of startup
-- transform.log: log of re-transform class
 
 After the application has finished starting, the message `======= spring-startup-analyzer finished, click http://localhost:xxxx to visit details. ======` will be printed in the console and startup.log file. You can use this output to determine if the profiling has completed successfully
 

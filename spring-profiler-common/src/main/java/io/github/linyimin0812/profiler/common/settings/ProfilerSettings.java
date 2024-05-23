@@ -1,20 +1,20 @@
 package io.github.linyimin0812.profiler.common.settings;
 
-import io.github.linyimin0812.profiler.common.logger.LogFactory;
-import io.github.linyimin0812.profiler.common.logger.Logger;
 import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * @author linyimin
  **/
 public class ProfilerSettings {
+    // Due to circular dependency issues with LogFactory, java.util.logging.Logger was used.
+    private final static Logger logger = Logger.getLogger(ProfilerSettings.class.getName());
 
-    private final static Logger logger = LogFactory.getStartupLogger();
     private final static Properties properties = new Properties();
 
     static {
@@ -23,16 +23,17 @@ public class ProfilerSettings {
 
     public static String getProperty(String key, String defaultValue) {
         if (isNotBlank(System.getProperty(key))) {
-            logger.info(ProfilerSettings.class, "Key: {} from command line, value is {}", key, System.getProperty(key));
+            logger.info("Key: " + key + " from command line, value is " + System.getProperty(key));
             return System.getProperty(key);
         }
 
-        if(properties.containsKey(key)) {
-            logger.info(ProfilerSettings.class, "Key: {} from configuration file, value is {}", key, properties.getProperty(key));
-            return properties.getProperty(key);
+        if (properties.containsKey(key)) {
+            String value = isNotBlank(properties.getProperty(key)) ? properties.getProperty(key) : defaultValue;
+            logger.info("Key: " + key + " from configuration file, value is " + value);
+            return value;
         }
 
-        logger.info(ProfilerSettings.class, "Key: {} from default value, value is {}", key, defaultValue);
+        logger.info("Key: " + key + " not found, use default value: " + defaultValue);
 
         return defaultValue;
     }
@@ -53,19 +54,17 @@ public class ProfilerSettings {
     }
 
     public static void loadProperties(String path) {
-
         clear();
 
         try (FileInputStream fileInputStream = new FileInputStream(path)) {
             properties.load(fileInputStream);
-            logger.info(ProfilerSettings.class, "loaded settings from {}", path);
+            logger.info("loaded settings from " + path);
         } catch (IOException e) {
-            logger.error(ProfilerSettings.class, "load settings from {} error.", path, e);
+            logger.severe("load settings from " + path + " error.");
         }
     }
 
     public static void clear() {
         properties.clear();
     }
-
 }

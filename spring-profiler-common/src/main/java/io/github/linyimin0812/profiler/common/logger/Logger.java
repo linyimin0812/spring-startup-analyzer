@@ -14,18 +14,19 @@ import java.time.format.DateTimeFormatter;
  * @author linyimin
  **/
 public class Logger {
+    private final String LOG_PATH;
     private final PrintWriter LOGGER_WRITER;
 
     public Logger(LoggerName loggerName, String path) {
-        
-        String file = path + File.separator + loggerName.getValue() + ".log";
+
+        this.LOG_PATH = path + File.separator + loggerName.getValue() + ".log";
         try {
-            Path filePath = Paths.get(file);
+            Path filePath = Paths.get(this.LOG_PATH);
             if (!Files.exists(filePath)) {
                 Files.createDirectories(filePath.getParent());
                 Files.createFile(filePath);
             }
-            FileWriter fileWriter = new FileWriter(file, true);
+            FileWriter fileWriter = new FileWriter(this.LOG_PATH, true);
             LOGGER_WRITER = new PrintWriter(fileWriter);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -108,5 +109,9 @@ public class Logger {
         }
 
         LOGGER_WRITER.close();
+    }
+
+    String path() {
+        return LOG_PATH;
     }
 }
