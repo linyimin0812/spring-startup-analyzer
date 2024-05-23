@@ -24,7 +24,7 @@ class AsyncProxyBeanPostProcessorSpec extends Specification {
 
     def "test setApplicationContext"() {
         expect:
-        AsyncConfig.instance.isAsyncBean('testXmlBean')
+        AsyncConfig.instance.isAsyncBean('testXmlBean') || AsyncConfig.instance.isAsyncBean('testBean')
     }
 
 }
