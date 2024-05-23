@@ -1,7 +1,6 @@
 package io.github.linyimin0812.profiler.common.logger;
 
 import io.github.linyimin0812.profiler.common.settings.ProfilerSettings;
-import io.github.linyimin0812.profiler.common.utils.AgentHomeUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,16 +17,15 @@ public class LogFactory {
     }
 
     static void initialize() {
-        LOGGER_MAP.clear();
-        createLogger(LoggerName.STARTUP);
-        createLogger(LoggerName.TRANSFORM);
-
         String defaultLogPath = System.getProperty("user.home") + File.separator + "spring-startup-analyzer" + File.separator + "logs" + File.separator;
         String logPath = ProfilerSettings.getProperty("spring-startup-analyzer.log.path", defaultLogPath);
         if (!logPath.endsWith(File.separator)) {
             logPath = logPath + File.separator;
         }
 
+        LOGGER_MAP.clear();
+        createLogger(LoggerName.STARTUP, logPath);
+        createLogger(LoggerName.TRANSFORM, logPath);
         createLogger(LoggerName.ASYNC_INIT_BEAN, logPath);
     }
 
@@ -53,9 +51,4 @@ public class LogFactory {
         Logger logger = new Logger(loggerName, path);
         LOGGER_MAP.put(loggerName, logger);
     }
-
-    private static void createLogger(LoggerName loggerName) {
-        createLogger(loggerName, AgentHomeUtil.home() + "logs");
-    }
-
 }
