@@ -28,8 +28,9 @@ public class ProfilerSettings {
         }
 
         if (properties.containsKey(key)) {
-            logger.info("Key: " + key + " from configuration file, value is " + properties.getProperty(key));
-            return properties.getProperty(key);
+            String value = isNotBlank(properties.getProperty(key)) ? properties.getProperty(key) : defaultValue;
+            logger.info("Key: " + key + " from configuration file, value is " + value);
+            return value;
         }
 
         logger.info("Key: " + key + " not found, use default value: " + defaultValue);

@@ -11,19 +11,20 @@ import java.nio.file.Paths
  * */
 class LogFactorySpec extends Specification {
 
-    Path tempDir
+    Path customPathDir = Paths.get(System.getProperty("user.home"), "spring-startup-analyzer", "customlogs", File.separator)
 
     def setup() {
         System.clearProperty("spring-startup-analyzer.log.path")
-        tempDir = Files.createTempDirectory("test-logs")
         LogFactory.initialize()
     }
 
     def cleanup() {
-        Files.walk(tempDir)
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete)
+        if (Files.exists(customPathDir)) {
+            Files.walk(customPathDir)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete)
+        }
     }
 
     def "test getStartupLogger"() {
@@ -53,15 +54,14 @@ class LogFactorySpec extends Specification {
 
     def "test getAsyncInitBeanLogger - custom path"() {
         given:
-        String customLogPath = tempDir.toString() + File.separator
-        System.setProperty("spring-startup-analyzer.log.path", customLogPath)
+        System.setProperty("spring-startup-analyzer.log.path", customPathDir.toString())
         LogFactory.initialize()
 
         when:
         Logger logger = LogFactory.getAsyncBeanLogger()
         then:
         logger != null
-        logger.path().startsWith(customLogPath)
+        logger.path().startsWith(customPathDir.toString())
     }
 
     def "test createLogger"() {
