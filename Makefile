@@ -72,7 +72,7 @@ ifeq ($(strip $(VERSION)),)
 	${MVN} deploy -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} deploy
 else
-	${MVN} deploy -Drevision=$(VERSION)
+	${MVN} deploy -Drevision=$(VERSION) -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} deploy -Drevision=$(VERSION)
 endif
 
@@ -82,7 +82,7 @@ ifeq ($(strip $(VERSION)),)
 	${MVN} deploy -pl '!coverage-report-aggregate,!spring-startup-cli' -Dmaven.test.skip=true
 	cd ./spring-profiler-extension && ${MVN} deploy -Dmaven.test.skip=true
 else
-	${MVN} deploy -Drevision=$(VERSION)
+	${MVN} deploy -Drevision=$(VERSION) -pl '!coverage-report-aggregate,!spring-startup-cli'
 	cd ./spring-profiler-extension && ${MVN} deploy -Drevision=$(VERSION) -Dmaven.test.skip=true
 endif
 
