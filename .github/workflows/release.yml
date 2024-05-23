@@ -116,57 +116,11 @@ jobs:
           asset_name: spring-startup-analyzer.tar.gz
           asset_content_type: application/tar+gzip
 
-  build-graalvm-native-image:
-    needs: create-release
-    name: build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-20.04
-            name: 'linux'
-            binaryExt: ''
-          - os: macos-12
-            name: 'macos'
-            binaryExt: ''
-          - os: windows-latest
-            name: 'windows'
-            binaryExt: '.exe'
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '17'
-          distribution: 'graalvm'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          native-image-job-reports: 'true'
-
-      - name: Build native image
-        run: |
-          cd ./spring-startup-cli
-          mvn clean package
-          java -agentlib:native-image-agent=config-output-dir=./target/native/agent-output/main/ -jar ./target/spring-startup-cli.jar exec:exec@java-agent
-          mvn -DskipTests=true -Pnative -Dagent package
-          cp ./target/spring-startup-cli${{ matrix.binaryExt }} ./target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
-
-      - name: Upload native image binary
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.release_upload_url }}
-          asset_path: spring-startup-cli/target/spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
-          asset_name: spring-startup-cli-${{ matrix.name }}${{ matrix.binaryExt }}
-          asset_content_type: application/octet-stream
-
   publish-release:
     permissions:
       contents: write
     runs-on: ubuntu-20.04
-    needs: [create-release, build, build-graalvm-native-image]
+    needs: [create-release, build]
 
     steps:
       - name: publish release
