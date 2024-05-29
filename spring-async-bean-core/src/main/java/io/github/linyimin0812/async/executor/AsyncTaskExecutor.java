@@ -62,13 +62,13 @@ public class AsyncTaskExecutor {
     private static ThreadPoolExecutor createThreadPoolExecutor() {
         int threadPoolCoreSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolCoreSize();
 
-        int threadPollMaxSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolMaxSize();
+        int threadPoolMaxSize = AsyncConfig.getInstance().getAsyncBeanProperties().getInitBeanThreadPoolMaxSize();
 
-        logger.info(AsyncTaskExecutor.class, "create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.", threadPoolCoreSize, threadPoolCoreSize);
+        logger.info(AsyncTaskExecutor.class, "create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.", threadPoolCoreSize, threadPoolMaxSize);
 
         NamedThreadFactory threadFactory = new NamedThreadFactory("async-init-bean");
 
-        return new ThreadPoolExecutor(threadPoolCoreSize, threadPollMaxSize, 30, TimeUnit.SECONDS, new SynchronousQueue<>(),  threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
+        return new ThreadPoolExecutor(threadPoolCoreSize, threadPoolMaxSize, 30, TimeUnit.SECONDS, new SynchronousQueue<>(),  threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
 
     }
 
