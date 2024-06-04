@@ -51,9 +51,8 @@ public class StartupVO {
     }
 
     public static String toJSONString() {
+
         Map<String, String> map = new HashMap<>();
-
-
 
         map.put("statisticsList", GSON.toJson(statisticsList, new TypeToken<List<Statistics>>(){}.getType()));
         map.put("beanInitResultList", GSON.toJson(beanInitResultList));
@@ -81,7 +80,10 @@ public class StartupVO {
 
             }
         } catch (Exception ex) {
-            List<MethodInvokeDetail> copies = methodInvokeDetailList.stream().map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration())).collect(Collectors.toList());
+            List<MethodInvokeDetail> copies = methodInvokeDetailList.stream()
+                    .filter(Objects::nonNull)
+                    .map(invokeDetail -> new MethodInvokeDetail(invokeDetail.getMethodQualifier(), invokeDetail.getStartMillis(), invokeDetail.getDuration()))
+                    .collect(Collectors.toList());
             logger.error(StartupVO.class, "calculateInvokeMetrics error. methodInvokeDetailList: {}", GSON.toJson(copies), ex);
         }
 

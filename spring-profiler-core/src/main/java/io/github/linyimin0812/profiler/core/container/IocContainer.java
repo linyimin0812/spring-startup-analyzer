@@ -156,6 +156,14 @@ public class IocContainer {
     }
 
     public static boolean isStopped() {
-        return started.get();
+        return stopped.get();
+    }
+
+    /**
+     * only for internal test
+     */
+    public static void clean() {
+
+        stopped.set(false);
     }
 }

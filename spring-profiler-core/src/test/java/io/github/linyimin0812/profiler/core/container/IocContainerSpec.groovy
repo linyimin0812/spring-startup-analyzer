@@ -16,6 +16,10 @@ import java.nio.file.Paths
 @Stepwise
 class IocContainerSpec extends Specification {
 
+    def setupSpec() {
+        IocContainer.clean()
+    }
+
     def "test copyFile"() {
 
         given:
