@@ -27,11 +27,20 @@ public class ApplicationRunMonitor implements EventListener {
     @Override
     public boolean filter(String methodName, String[] methodTypes) {
 
-        if (!"run".equals(methodName) || methodTypes == null || methodTypes.length != 2) {
+        if (!"run".equals(methodName) || methodTypes == null) {
             return false;
         }
 
-        return ("java.lang.Class[]".equals(methodTypes[0]) || "java.lang.Object[]".equals(methodTypes[0])) && "java.lang.String[]".equals(methodTypes[1]);
+        if (methodTypes.length == 1) {
+            return "java.lang.String[]".equals(methodTypes[1]);
+        }
+
+        if (methodTypes.length == 2) {
+            return ("java.lang.Class[]".equals(methodTypes[0]) || "java.lang.Object[]".equals(methodTypes[0])) && "java.lang.String[]".equals(methodTypes[1]);
+        }
+
+        return false;
+
     }
 
     @Override

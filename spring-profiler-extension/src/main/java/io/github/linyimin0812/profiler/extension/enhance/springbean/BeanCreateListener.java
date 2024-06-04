@@ -41,7 +41,7 @@ public class BeanCreateListener implements EventListener {
             String beanName = (String) atEnterEvent.args[0];
             createBeanInitResult(beanName);
 
-        } else if (event.type == Event.Type.AT_EXIT) {
+        } else if (event.type == Event.Type.AT_EXIT || event.type == Event.Type.AT_EXCEPTION_EXIT) {
             // bean初始化结束, 出栈
 
             AtExitEvent atExitEvent = (AtExitEvent) event;

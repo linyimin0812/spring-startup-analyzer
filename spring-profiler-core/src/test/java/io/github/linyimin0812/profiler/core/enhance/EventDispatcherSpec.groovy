@@ -14,6 +14,7 @@ class EventDispatcherSpec extends Specification {
     EventDispatcher eventDispatcher = new EventDispatcher()
 
     def setupSpec() {
+        IocContainer.clean()
         IocContainer.start()
     }
 

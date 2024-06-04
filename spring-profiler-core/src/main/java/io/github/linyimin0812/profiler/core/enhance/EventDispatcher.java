@@ -77,6 +77,10 @@ public class EventDispatcher extends Bridge.AbstractBridge {
 
     private void handleEvent(InvokeEvent event) {
 
+        if (IocContainer.isStopped()) {
+            return;
+        }
+
         for (EventListener listener : IocContainer.getComponents(EventListener.class)) {
 
             if (!listener.listen().contains(event.type)) {
