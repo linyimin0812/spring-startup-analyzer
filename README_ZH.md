@@ -1,11 +1,6 @@
 [![license](https://img.shields.io/github/license/linyimin0812/spring-startup-analyzer)](https://github.com/linyimin0812/spring-startup-analyzer)
 [![maven](https://img.shields.io/maven-central/v/io.github.linyimin0812/spring-profiler-starter.svg)](https://search.maven.org/search?q=g:io.github.linyimin0812)
-[![](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=alert_status)](https://sonarcloud.io/project/overview?id=linyimin0812_spring-startup-analyzer)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=bugs)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=linyimin0812_spring-startup-analyzer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=linyimin0812_spring-startup-analyzer)
 [![GitHub all releases download](https://img.shields.io/github/downloads/linyimin0812/spring-startup-analyzer/total?logo=github)](https://github.com/linyimin0812/spring-startup-analyzer/releases)
 
 [中文](README_ZH.md) |
