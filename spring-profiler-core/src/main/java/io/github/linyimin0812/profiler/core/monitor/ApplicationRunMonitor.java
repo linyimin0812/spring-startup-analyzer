@@ -32,7 +32,7 @@ public class ApplicationRunMonitor implements EventListener {
         }
 
         if (methodTypes.length == 1) {
-            return "java.lang.String[]".equals(methodTypes[1]);
+            return "java.lang.String[]".equals(methodTypes[0]);
         }
 
         if (methodTypes.length == 2) {
