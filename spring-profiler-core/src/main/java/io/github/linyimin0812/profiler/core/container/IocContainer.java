@@ -129,7 +129,9 @@ public class IocContainer {
     }
     
     private static void printToCsv(CSVPrinter printer, BeanInitResult beanInitResult) throws IOException {
-        printer.printRecord(toList(beanInitResult));
+        if(StartupVO.isNotContainThenAdd(beanInitResult.getName())) {
+            printer.printRecord(toList(beanInitResult));
+        }
         for (BeanInitResult child : beanInitResult.getChildren()) {
             printToCsv(printer, child);
         }
