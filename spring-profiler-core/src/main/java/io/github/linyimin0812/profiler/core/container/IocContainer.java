@@ -11,16 +11,20 @@ import io.github.linyimin0812.profiler.core.monitor.StartupMonitor;
 import io.github.linyimin0812.profiler.api.EventListener;
 import io.github.linyimin0812.profiler.api.Lifecycle;
 import io.github.linyimin0812.profiler.core.monitor.check.AppStatusCheckService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -91,6 +95,7 @@ public class IocContainer {
         acquireNumOfBean(StartupVO.getBeanInitResultList());
         StartupVO.addStatistics(new Statistics(1, "Num of Bean", String.valueOf(numOfBean)));
 
+        writeBeanInitResultListToCsv();
         writeStartupVOToHtml();
 
         String prompt = String.format("======= spring-startup-analyzer finished, click %s to visit details. ======", SimpleHttpServer.endpoint());
@@ -98,6 +103,49 @@ public class IocContainer {
         startupLogger.info(IocContainer.class, prompt);
         System.out.println(prompt);
 
+    }
+    
+    private static void writeBeanInitResultListToCsv() {
+        try {
+            String path = NameUtil.getOutputPath() + NameUtil.getAnalysisCsvName();
+            
+            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                    .setHeader("id", "parentId", "name", "duration", "actualDuration", "threadName", "classloader", "class")
+                    .build();
+            try (final CSVPrinter printer = new CSVPrinter(new FileWriter(path), csvFormat)) {
+                StartupVO.getBeanInitResultList().forEach(beanInitResult -> {
+                    try {
+                        printToCsv(printer, beanInitResult);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            
+            
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private static void printToCsv(CSVPrinter printer, BeanInitResult beanInitResult) throws IOException {
+        printer.printRecord(toList(beanInitResult));
+        for (BeanInitResult child : beanInitResult.getChildren()) {
+            printToCsv(printer, child);
+        }
+        
+    }
+    private static List<String> toList(BeanInitResult bean){
+        List<String> list = new ArrayList<>();
+        list.add(String.valueOf(bean.getId()));
+        list.add(String.valueOf(bean.getParentId()));
+        list.add(bean.getName());
+        list.add(String.valueOf(bean.getDuration()));
+        list.add(String.valueOf(bean.getActualDuration()));
+        list.add(bean.getTags().get("threadName"));
+        list.add(bean.getTags().get("classloader"));
+        list.add(bean.getTags().get("class"));
+        return list;
     }
 
     private static void writeStartupVOToHtml() {
@@ -138,7 +186,7 @@ public class IocContainer {
             acquireNumOfBean(beanInitResult.getChildren());
         }
     }
-
+    
     public  static void copyFile(String sourceFilePath, String targetFilePath) throws IOException {
 
         Path targetPath = Paths.get(targetFilePath);
