@@ -20,6 +20,7 @@ public class StartupVO {
     private static final Logger logger = LogFactory.getStartupLogger();
 
     private static final List<BeanInitResult> beanInitResultList = new ArrayList<>();
+    private static final Set<String> beanNameSet = new HashSet<>();
     private static final List<Statistics> statisticsList = new ArrayList<>();
     private static final Map<String, Set<String>> unusedJarMap = new HashMap<>();
     private static final List<MethodInvokeDetail> methodInvokeDetailList = new ArrayList<>();
@@ -28,6 +29,15 @@ public class StartupVO {
 
     public static void addBeanInitResult(BeanInitResult beanInitResult) {
         beanInitResultList.add(beanInitResult);
+    }
+    
+    public static boolean isNotContainThenAdd(String beanName){
+        if(beanNameSet.contains(beanName)){
+            return false;
+        }else{
+            beanNameSet.add(beanName);
+            return true;
+        }
     }
 
     public static void addStatistics(Statistics statistics) {

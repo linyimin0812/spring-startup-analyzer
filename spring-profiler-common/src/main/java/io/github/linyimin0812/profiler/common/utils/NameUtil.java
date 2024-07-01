@@ -74,6 +74,11 @@ public class NameUtil {
     public static String getAnalysisHtmlName() {
         return getStartupInstanceName() + "-analyzer.html";
     }
+    
+    public static String getAnalysisCsvName() {
+        return getStartupInstanceName() + "-analyzer-bean-list.csv";
+    }
+    
 
     public static String getOutputPath() {
         return AgentHomeUtil.home() + File.separator + "output" + File.separator;
