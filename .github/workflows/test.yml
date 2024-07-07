@@ -71,7 +71,7 @@ jobs:
           sleep 30
           
           file_count=$(ls -al /Users/runner/spring-startup-analyzer/output/ | grep -c "mac-demo")
-          if [ "$file_count" -eq 2 ]; then
+          if [ "$file_count" -eq 3 ]; then
             echo "mac-test success"
             echo "================startup log================"
             cat /Users/runner/spring-startup-analyzer/logs/startup.log
@@ -106,7 +106,7 @@ jobs:
           sleep 30
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-x64-demo")
-          if [ "$file_count" -eq 2 ]; then
+          if [ "$file_count" -eq 3 ]; then
             echo "mac-test success"
             echo "================startup log================"
             cat /home/runner/spring-startup-analyzer/logs/startup.log
@@ -145,7 +145,7 @@ jobs:
           
           $file_count = (Get-ChildItem -Path C:\runner\spring-startup-analyzer\output\*).Count
           
-          if ($file_count -eq 4) {
+          if ($file_count -eq 5) {
             Write-Host "windows-test success"
             Write-Host "================startup log================"
             Get-Content C:\runner\spring-startup-analyzer\logs\startup.log
@@ -191,7 +191,7 @@ jobs:
             sleep 60
   
             file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "generic-linux-arm64-demo")
-            if [ "$file_count" -eq 2 ]; then
+            if [ "$file_count" -eq 3 ]; then
             echo "mac-test success"
             echo "================startup log================"
             cat /home/runner/spring-startup-analyzer/logs/startup.log
@@ -234,7 +234,7 @@ jobs:
           sleep 30
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-x64-demo")
-          if [ "$file_count" -eq 2 ]; then
+          if [ "$file_count" -eq 3 ]; then
             echo "mac-test success"
             echo "================startup log================"
             cat /home/runner/spring-startup-analyzer/logs/startup.log
@@ -279,7 +279,7 @@ jobs:
           sleep 120
 
           file_count=$(ls -al /home/runner/spring-startup-analyzer/output/ | grep -c "alpine-linux-arm64-demo")
-          if [ "$file_count" -eq 2 ]; then
+          if [ "$file_count" -eq 3 ]; then
             echo "mac-test success"
             echo "================startup log================"
             cat /home/runner/spring-startup-analyzer/logs/startup.log
