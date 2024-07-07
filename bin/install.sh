@@ -3,7 +3,7 @@
 set -euxf -o pipefail
 
 PRODUCT_NAME=spring-startup-analyzer
-LAST_TAG=${1:-v3.1.3}
+LAST_TAG=${1:-v3.1.4}
 PROFILER_HOME=${HOME}/spring-startup-analyzer
 
 check_permission() {
