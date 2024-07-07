@@ -19,7 +19,6 @@ import org.picocontainer.PicoBuilder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -117,7 +116,7 @@ public class IocContainer {
                     try {
                         printToCsv(printer, beanInitResult);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        startupLogger.error(IocContainer.class, e);
                     }
                 });
             }
