@@ -178,7 +178,8 @@ jobs:
             uname -m
             yum -y update && yum install -y java-11-openjdk-devel which
             JAVA_HOME=/usr/lib/jvm/java-11-openjdk
-            java -version
+            whereis java
+            /usr/lib/jvm/java-11-openjdk/bin/java -version
             which java
             echo $HOME
             ls -lrt
