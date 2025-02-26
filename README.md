@@ -23,7 +23,7 @@
         - [Optimization of Daily and Pre Env Startup Time](#optimization-of-daily-and-pre-env-startup-time)
 - [🔗Reference](#Reference)
 
-# Spring Startup Ananlyzer
+# Spring Startup Analyzer
 
 **Spring Startup Analyzer** generates an interactive Spring application startup report that lets you understand what contributes to the application startup time and helps to optimize it. UI referenced [spring-boot-startup-report](https://github.com/maciejwalkowiak/spring-boot-startup-report).
 
