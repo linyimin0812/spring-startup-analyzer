@@ -112,8 +112,13 @@ public class ProfilerClassFileTransformer implements ClassFileTransformer {
 
         }
 
-        return AsmUtils.toBytes(classNode, loader, classReader);
-
+        // 生成增强的字节码有可能失败,日志方便排查
+        try {
+            return AsmUtils.toBytes(classNode, loader, classReader);
+        } catch (Exception e) {
+            logger.error(ProfilerClassFileTransformer.class, "generate bytecode error, className: {}, error:", className, e);
+            return null;
+        }
     }
 
     // NOTE: Reflective call, DON'T REMOVE
